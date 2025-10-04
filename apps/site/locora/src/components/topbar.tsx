@@ -1,8 +1,5 @@
-import React from "react";
-
 // Assets
 import Locora from "../assets/BorderedLocora.png";
-import CheckBox from "../assets/check.png";
 
 // Comps
 import BaseButton from "./button";
