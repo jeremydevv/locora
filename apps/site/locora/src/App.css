@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+@layer base {
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Inter", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+}
+
+@theme {
+    --color-bay-of-many-50: #f2f4fc;
+    --color-bay-of-many-100: #e1e7f8;
+    --color-bay-of-many-200: #cad6f3;
+    --color-bay-of-many-300: #a6bbea;
+    --color-bay-of-many-400: #7c99de;
+    --color-bay-of-many-500: #5d77d4;
+    --color-bay-of-many-600: #495cc7;
+    --color-bay-of-many-700: #3f4bb6;
+    --color-bay-of-many-800: #363d8f;
+    --color-bay-of-many-900: #323876;
+    --color-bay-of-many-950: #222549;
+}
