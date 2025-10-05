@@ -1,5 +1,4 @@
 import React from "react";
-import ButtonOverlay from "../assets/ButtonOverlay.svg";
 import Embossed from "./embossed";
 
 interface buttonProps {

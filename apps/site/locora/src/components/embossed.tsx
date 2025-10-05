@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function Embossed() {
     const ShadowEffect =
         "shadow-[inset_1.5px_1.5px_4.25px_rgba(255,255,255,0.6),_1.25px_1.25px_0_rgba(50,56,118,0.6),_1.65px_1.65px_3.6px_rgba(50,56,118,0.5)]";

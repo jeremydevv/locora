@@ -3,7 +3,6 @@ import Locora from "../assets/BorderedLocora.png";
 
 // Comps
 import BaseButton from "./button";
-import Embossed from "./embossed";
 import WaitlistButton from "./waitlistbutton";
 
 export default function TopBar() {
