@@ -5,7 +5,7 @@ const router = Router();
 // services
 import {handleAuth} from "./routes/auth";
 
-router.get("/", () => new Response("Locora API is running 🚀", { status: 200 }));
+router.get("/", () => new Response("Locora API is running! 🚀", { status: 200 }));
 
 router.all("/auth/*", handleAuth);
 router.all("*", () => new Response("Not Found", { status: 404 }));
