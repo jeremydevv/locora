@@ -1,14 +1,14 @@
 import './App.css'
+
+// assets
+import Window from "./assets/window.png";
+
+// comps
+import Seacher from './components/seacher';
 import BaseButton from './components/button'
 import TopBar from './components/topbar';
 
-import Window from "./assets/window.png";
-import Seacher from './components/seacher';
-
 function App() {
-
-
-
   return (
     <>
 
@@ -19,7 +19,6 @@ function App() {
         <BaseButton text="Download for Windows" type="black" shape="square" preChildren={
           <img src={Window} alt="Windows Logo for Download" className="h-5 gap-1 mr-2" />
         } />
-
 
         <div>
           <Seacher />

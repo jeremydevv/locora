@@ -1,0 +1,12 @@
+# Firebase / API secrets
+.env
+.env.local
+.env.*.local
+
+
+.pnpm-store/
+node_modules/
+dist/
+build/
+/apps/site/locora/dist/
+/apps/application/build/
