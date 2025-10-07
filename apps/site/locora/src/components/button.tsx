@@ -25,7 +25,7 @@ export default function BaseButton({
     var BaseStyle = "text-white py-2 px-4 rounded-lg drop-shadow-lg font-semibold flex items-center justify-center ";
 
     var SizeAnimations =
-        "hover:scale-105 active:scale-97 transition-transform duration-200 ease-in-out style-smooth ";
+        "hover:scale-105 active:scale-97 transition-transform duration-10 ease-in-out style-smooth ";
 
     BaseStyle += SizeAnimations;
 
