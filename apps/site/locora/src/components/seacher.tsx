@@ -1,7 +1,6 @@
 import Embossed from "./embossed";
 
 import searchIcon from "../assets/search-tool.png";
-import BaseButton from "./button";
 
 interface seacherProps {
     otherProps?: string;

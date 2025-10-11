@@ -1,11 +1,6 @@
 import './App.css'
 
-// assets
-import Window from "./assets/window.png";
-
 // comps
-import Seacher from './components/seacher';
-import BaseButton from './components/button'
 import TopBar from './components/topbar';
 
 function App() {
