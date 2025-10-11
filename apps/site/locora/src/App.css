@@ -6,6 +6,12 @@
     }
 }
 
+@utility text-stroke-* {
+    -webkit-text-stroke-width: calc(--value(integer) * 1px);
+    -webkit-text-stroke-color: --value(--color-*);
+    -webkit-text-stroke-color: --value([*]);
+}
+
 @theme {
     --color-bay-of-many-50: #f2f4fc;
     --color-bay-of-many-100: #e1e7f8;

@@ -1,18 +1,23 @@
 import Embossed from "./embossed";
 
+import searchIcon from "../assets/search-tool.png";
+
 interface seacherProps {
     otherProps?: string;
 }
 
 export default function Seacher({otherProps}: seacherProps) {
 
-    var BaseStyle = "bg-gray-300 border border-gray-300 text-white text-stroke-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  ";
+    var BaseStyle = "flex items-center gap-2 bg-gray-200 drop-shadow-xl border-2 border-gray-300 text-black text-stroke-black text-sm rounded-lg block w-full p-3.5 ";
 
     return (
-        <>
-            <div className={BaseStyle + otherProps + Embossed()}>
-                <p>What's something Crazy?</p>
+        <div>
+            <div className={BaseStyle + otherProps + Embossed(false)}>
+                <button>
+                    <img src={searchIcon} alt="Search Icon" className="m-2 h-5 gap-1 mr-2 inline" />
+                </button>
+                <p className="text-white text-stroke-black font-bold">What's something <b>CRAZY?</b></p>
             </div>
-        </> 
+        </div>
     );
 }
