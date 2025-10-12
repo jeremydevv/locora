@@ -6,12 +6,6 @@
     }
 }
 
-@utility text-stroke-* {
-    -webkit-text-stroke-width: calc(--value(integer) * 1px);
-    -webkit-text-stroke-color: --value(--color-*);
-    -webkit-text-stroke-color: --value([*]);
-}
-
 @theme {
     --color-bay-of-many-50: #f2f4fc;
     --color-bay-of-many-100: #e1e7f8;
@@ -24,10 +18,27 @@
     --color-bay-of-many-800: #363d8f;
     --color-bay-of-many-900: #323876;
     --color-bay-of-many-950: #222549;
+}
 
-    --animate-float: float 10s ease-in-out infinite;
+@layer utilities {
+    @keyframes blink {
+
+        0%,
+        100% {
+            opacity: 0.3;
+        }
+
+        50% {
+            opacity: 1;
+        }
+    }
+
+    .animate-blink {
+        animation: blink 1s step-end infinite;
+    }
 
     @keyframes float {
+
         0%,
         100% {
             transform: translateY(0);
@@ -36,5 +47,9 @@
         50% {
             transform: translateY(-10px);
         }
+    }
+
+    .animate-float {
+        animation: float 10s ease-in-out infinite;
     }
 }

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const Items = [
     "Toys",
@@ -103,43 +103,65 @@ const Items = [
     "Repair Services",
     "Printing & Sign Shops",
 ]
-export default function TypeWriter() {
 
-    const [currentText, setCurrentText] = React.useState('');
+interface Props {
+    children?: React.ReactNode
+}
 
-    let BaseText = "Search for "
+export default function TypeWriter({children}: Props) {
+    const [display, setDisplay] = useState("");
+    const indexRef = useRef(0);
+    const deletingRef = useRef(false);
+    const wordRef = useRef(Items[Math.floor(Math.random() * Items.length)]);
+    const timeoutRef = useRef<number | null>(null);
 
-    {/* effect will type the random choice in and then delete it with a "typing effect" delay */ }
+    const baseText = "Search for ";
+
     useEffect(() => {
-        let i = 0;
-        let isDeleting = false;
-        let currentWord = Items[Math.floor(Math.random() * Items.length)];
-        let timeout : any;
+        const loop = () => {
+            const word = wordRef.current;
+            const fullText = baseText + word;
 
-        const type = () => {
-            const fullText = BaseText + currentWord;
-            const displayLength = isDeleting ? i-- : i++;
-
-            setCurrentText(fullText.slice(0, displayLength));
-
-            if (!isDeleting && i === currentWord.length) {
-                timeout = setTimeout(() => (isDeleting = true), 1500);
-            } else if (isDeleting && i <= 10) {
-                isDeleting = false;
-                currentWord = Items[Math.floor(Math.random() * Items.length)];
+            if (deletingRef.current) {
+                indexRef.current = Math.max(0, indexRef.current - 1);
+            } else {
+                indexRef.current = Math.min(fullText.length, indexRef.current + 1);
             }
 
-            timeout = setTimeout(type, isDeleting ? 50 : 100);
+            setDisplay(fullText.slice(0, indexRef.current));
+
+            if (!deletingRef.current && indexRef.current === fullText.length) {
+                timeoutRef.current = window.setTimeout(() => {
+                    deletingRef.current = true;
+                    loop();
+                }, 1000);
+                return;
+            }
+
+            if (deletingRef.current && indexRef.current === baseText.length) {
+                deletingRef.current = false;
+                wordRef.current = Items[Math.floor(Math.random() * Items.length)];
+                timeoutRef.current = window.setTimeout(loop, 200);
+                return;
+            }
+
+            const delay = deletingRef.current ? 50 : 100;
+            timeoutRef.current = window.setTimeout(loop, delay);
         };
 
-        type();
+        loop();
 
-        return () => clearTimeout(timeout);
-    }, [BaseText, Items]);
-
+        return () => {
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+        };
+    }, [baseText]);
 
     return (
-        <p>{currentText}</p>
-    )
-
+        <div className="flex items-center gap-1">
+            <h1 className="text-xxl font-black">{display}</h1>
+            {children}
+        </div>
+    );
 }
