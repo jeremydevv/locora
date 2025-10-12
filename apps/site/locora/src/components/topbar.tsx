@@ -12,7 +12,7 @@ export default function TopBar() {
 
     return (
         <>
-            <header className="fixed top-0 left-0 w-full z-20 bg-gradient-to-b from-bay-of-many-400 to drop-shadow-xl">
+            <header className="fixed top-0 left-0 w-full z-20 bg-bay-of-many-400 border-b-3 shadow-xl border-bay-of-many-600 drop-shadow-xl">
                 <div className="mx-auto flex max-w-5xl items-center px-5 md:px-8 py-2">
                     {/* Left Logo */}
                     <div className="flex items-center gap-3">

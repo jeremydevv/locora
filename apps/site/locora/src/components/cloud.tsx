@@ -9,6 +9,7 @@ export default function cloud({otherProps , image} : cloudProps) {
     return (
         <>
             <img src={CloudBubble} alt="Clouds" className={otherProps + "select-none"}></img>
+            <img src={image} alt="Company branding" className={"select-none"}></img>
         </>
     )
 }

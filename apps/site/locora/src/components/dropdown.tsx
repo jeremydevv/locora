@@ -36,9 +36,9 @@ export default function Dropdown({ label, options }: dropdownProps) {
     return (
         <>
             <div className = "items-center inline-block relative" onClick={toggleDropdown} onMouseEnter={hoveringDropdown} onMouseLeave={notHoveringDropdown}>
-                <div className={"inline-flex align-middle bg-white rounded-md drop-shadow-lg z-50" + Embossed(true)}>
+                <div className={"inline-flex align-middle bg-bay-of-many-100 rounded-md drop-shadow-lg z-50" + Embossed(true)}>
                     <span className="block px-5 py-2 text-sm text-bay-of-many-900 font-bold">{label}</span>
-                    <img src={arrowDown} alt="Arrow Down Icon" className={`transition-all duration-150 rotate-${isOpen ? "0" : "180"} h-4 w-4 m-2 inline`} />
+                    <img src={arrowDown} alt="Arrow Down Icon" className={`transition-transform duration-150 inline ease-in-out rotate-${isOpen ? "0" : "180"} h-4 w-4 m-2 inline`} />
                 </div>
 
                 <div
