@@ -24,4 +24,17 @@
     --color-bay-of-many-800: #363d8f;
     --color-bay-of-many-900: #323876;
     --color-bay-of-many-950: #222549;
+
+    --animate-float: float 10s ease-in-out infinite;
+
+    @keyframes float {
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-10px);
+        }
+    }
 }
