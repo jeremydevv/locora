@@ -42,7 +42,7 @@ export default function Dropdown({ label, options }: dropdownProps) {
                 </div>
 
                 <div
-                    className={`mt-2 absolute bg-white rounded-md shadow-lg transition-all duration-300 ease-in-out origin-top 
+                    className={`mt-2 absolute bg-white rounded-md text-nowrap shadow-lg transition-all duration-300 ease-in-out origin-top 
                         ${isOpen ? "opacity-100 scale-y-100" : "opacity-0 scale-y-0"}`
                     }
                 >

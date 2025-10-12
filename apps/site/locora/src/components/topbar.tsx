@@ -6,6 +6,8 @@ import BaseButton from "./button";
 import WaitlistButton from "./waitlistbutton";
 import Dropdown from "./dropdown";
 
+import GoToSection from "../effects/GoToSection";
+
 export default function TopBar() {
 
     return (
@@ -14,10 +16,10 @@ export default function TopBar() {
                 <div className="mx-auto flex max-w-5xl items-center px-5 md:px-8 py-2">
                     {/* Left Logo */}
                     <div className="flex items-center gap-3">
-                        <BaseButton hasBackground={false} shape="circle">
+                        <BaseButton hasBackground={false} otherProps="gap-5" shape="circle" onClick={() => {GoToSection("landing")}}>
                             <img src={Locora} alt="Locora Logo" className="h-8" />
+                            <h1 className="text-white text-xl font-bold drop-shadow-2xl">Locora</h1>
                         </BaseButton>
-                        <h1 className="text-white text-xl font-bold drop-shadow-2xl">Locora</h1>
                     </div>
 
                     {/* Middle dropdown */}

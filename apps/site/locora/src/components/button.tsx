@@ -10,7 +10,7 @@ interface buttonProps {
     preChildren?: React.ReactNode;
     children?: React.ReactNode;
     hasBackground?: boolean;
-    onClick?: () => void;
+    onClick?: (...args : any) => void;
 }
 
 const sizesToText = {
