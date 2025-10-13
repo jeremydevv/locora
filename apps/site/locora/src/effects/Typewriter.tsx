@@ -160,7 +160,7 @@ export default function TypeWriter({children}: Props) {
 
     return (
         <div className="flex items-center gap-1">
-            <h1 className="text-xxl font-black">{display}</h1>
+            <h1 className="text-5xl font-black">{display}</h1>
             {children}
         </div>
     );

@@ -26,7 +26,7 @@ function LandingPage() {
                     <h2 className="z-1 text-2xl text-bay-of-many-800 font-black">
                         {
                             <TypeWriter>
-                                <p className="animate-blink text-bay-of-many-800">|</p>
+                                <p className='animate-blink text-bay-of-many-800'>|</p>
                             </TypeWriter>
                         }
                     </h2>
@@ -37,7 +37,7 @@ function LandingPage() {
                     </div>
                 </div>
 
-                <div className="z-1">
+                <div className='z-1'>
                     <Cloud otherProps="absolute w-32 h-32 z-0 left-0" image="" />
                 </div>
 
@@ -49,34 +49,8 @@ function LandingPage() {
             </section>
 
             {/* Section 2 */}
-            <section
-                id="features-1"
-                className="flex flex-col items-center justify-center h-screen bg-transparent"
-            >
-                {/*informational (left side)*/}
-                <div className="flex m-5">
-                    <div className="flex-col gap-4">
-                        <h1 className="font-black inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-bay-of-many-500 text-5xl whitespace-nowrap">
-                            AI Powered Searchs
-                        </h1>
-                        <p className="font-bold text-5xl">
-                            Our system uses AI to power your search to create<br></br>
-                            an intelligent query to our data to find what you<br></br>
-                            truely want using keywords and customer feedback.
-                        </p>
-                    </div>
+            <section id="features-1" className='flex flex-col items-center justify-center h-screen bg-transparent'>
 
-                </div>
-                
-                <div className="inline-flex gap-2">
-                    <BaseButton text="Learn more" size = "extra-large" type="black" onClick={() => GoToSection("features-2")} />
-                    <WaitlistButton size="extra-large" />
-                </div>
-
-            </section>
-
-            <section id="features-2" className="flex flex-col items-center justify-center h-screen bg-transparent">
-            
             </section>
         </>
     );
