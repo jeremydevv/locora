@@ -41,7 +41,7 @@ export default function BaseButton({
 
     if (hasBackground) {
         if (type === "default") {
-            BaseStyle += "bg-gradient-to-b from-bay-of-many-700 to-bay-of-many-400 transition-colors ";
+            BaseStyle += "bg-gradient-to-b from-blue-700 to-bay-of-many-500 transition-colors ";
         } else if (type === "black") {
             BaseStyle += "bg-gradient-to-b from-gray-900 to-gray-600 transition-colors ";
         } else if (type === "white") {

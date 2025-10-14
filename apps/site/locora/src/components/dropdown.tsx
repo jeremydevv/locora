@@ -5,8 +5,22 @@ interface dropdownProps {
     options: string[]
 }
 
+
+// assets
 import arrowDown from "../assets/arrow-down.png"
+import GoToSection from "../effects/GoToSection";
+
+// effects
 import Embossed from "./embossed";
+
+const elementDirectors : {[key : string] : string} = {
+    [`What is this?`] : "info",
+}
+
+const sectionTranslation : {[key : string] : string} = {
+    [`What is this?`] : "info",
+    [`AI Search`] : "features-1",
+}
 
 export default function Dropdown({ label, options }: dropdownProps) {
 
@@ -35,8 +49,8 @@ export default function Dropdown({ label, options }: dropdownProps) {
 
     return (
         <>
-            <div className = "items-center inline-block relative" onClick={toggleDropdown} onMouseEnter={hoveringDropdown} onMouseLeave={notHoveringDropdown}>
-                <div className={"inline-flex align-middle bg-bay-of-many-100 rounded-md drop-shadow-lg z-50" + Embossed(true)}>
+            <div className ={`items-center inline-block relative rounded-lg ` + Embossed(true)} onClick={toggleDropdown} onMouseEnter={hoveringDropdown} onMouseLeave={notHoveringDropdown}>
+                <div className={"inline-flex align-middle bg-bay-of-many-50 rounded-md drop-shadow-lg z-50" + Embossed(true)}>
                     <span className="block px-5 py-2 text-sm text-bay-of-many-900 font-bold">{label}</span>
                     <img src={arrowDown} alt="Arrow Down Icon" className={`transition-transform duration-150 inline ease-in-out rotate-${isOpen ? "0" : "180"} h-4 w-4 m-2 inline`} />
                 </div>
@@ -49,7 +63,7 @@ export default function Dropdown({ label, options }: dropdownProps) {
                     {options.map((option) => (
                         <a
                             key={option}
-                            href="#"
+                            onClick={() => GoToSection(elementDirectors[option] || sectionTranslation[option])}
                             className={"block px-4 py-2 rounded-md text-sm text-bay-of-many-800 hover:bg-gray-100" + Embossed(true)}
                         >
                             {option}

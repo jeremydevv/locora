@@ -159,7 +159,7 @@ export default function TypeWriter({children}: Props) {
     }, [baseText]);
 
     return (
-        <div className="flex items-center gap-1">
+        <div className="flex text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-indigo-300 to-bay-of-many-700 items-center gap-1">
             <h1 className="text-5xl font-black">{display}</h1>
             {children}
         </div>

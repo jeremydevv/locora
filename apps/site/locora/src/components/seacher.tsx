@@ -32,7 +32,7 @@ export default function Seacher({otherProps}: seacherProps) {
                 </button>
             </div>
             <div className="flex gap-15 justify-between max-w-lg ml-2 mr-2 mt-2">
-                <BaseButton text="Learn more" type="black" onClick={() => GoToSection("features-1")} />
+                <BaseButton text="Learn more" type="black" onClick={() => GoToSection("info")} />
                 <WaitlistButton size="small" />
             </div>
         </div>

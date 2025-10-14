@@ -50,6 +50,6 @@
     }
 
     .animate-float {
-        animation: float 10s ease-in-out infinite;
+        animation: float 5s ease-in-out infinite;
     }
 }
