@@ -45,7 +45,7 @@ function LandingPage() {
                 <img
                     src={clouds}
                     alt="Clouds"
-                    className="absolute z-0 top-45 left-0 animate-float"
+                    className="absolute w-full z-0 left-0 animate-float"
                 />
             </section>
 
@@ -133,7 +133,22 @@ function LandingPage() {
                     <div className="bg-gray-900 overflow-hidden">
 
                         <svg
-                            className="absolute inset-0 w-full h-full"
+                            id="star_left"
+                            className="absolute right-375 w-full h-full"
+                            viewBox="-5 0 15 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M -1 0 C 5 1 6 3 7 7 Q 6 12 -1 14"
+                                stroke="url(#gradient)"
+                                strokeWidth="0.2"
+                                fill="none"
+                            />
+                        </svg>
+
+                        <svg
+                            id="star_right"
+                            className="absolute left-375 rotate-180     w-full h-full"
                             viewBox="-5 0 15 20"
                             xmlns="http://www.w3.org/2000/svg"
                         >
