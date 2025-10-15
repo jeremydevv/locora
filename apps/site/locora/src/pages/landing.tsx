@@ -1,12 +1,7 @@
 // comps
-import TopBar from "../components/topbar";
-import Seacher from "../components/seacher";
-import Cloud from "../components/cloud";
-import BaseButton from "../components/button";
-import WaitlistButton from "../components/waitlistbutton";
-import Checkbox from "../components/checkbox";
-import InformationContainer from "../components/informationcontainer";
-import InformationBlock from "../components/informationblock";
+import TopBar from '../components/topbar'
+import Seacher from '../components/seacher'
+import Checkbox from '../components/checkbox'
 
 // effects
 import TypeWriter from "../effects/Typewriter";
@@ -71,7 +66,7 @@ function LandingPage() {
                     className="flex flex-col gap-5"
                 >
                     <h2
-                        className="font-black inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-indigo-500 to-bay-of-many-500 text-4xl whitespace-nowrap text-center"
+                        className="font-black inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-500  via-indigo-500 to-bay-of-many-500 text-4xl whitespace-nowrap text-center"
                     >
                         Thats cool but.. what else can YOU do?
                     </h2>
@@ -123,42 +118,64 @@ function LandingPage() {
                             </h1>
 
                         </div>
-                        <p className="font-bold text-bay-of-many-950 text-4xl">
+                        <p className="font-bold flex-1 text-bay-of-many-950 text-4xl">
                             Our system uses <u>AI</u> to power your search to create<br></br>
                             an intelligent query to our data to find what you<br></br>
                             truly want using <u>keywords</u> and <u>customer feedback.</u>
                         </p>
                     </div>
 
-                    <div className="bg-gray-900 overflow-hidden">
+                    <div className="bg-gray-900 flex items-center justify-center overflow-hidden">
 
-                        <svg
-                            id="star_left"
-                            className="absolute right-375 w-full h-full"
-                            viewBox="-5 0 15 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path
-                                d="M -1 0 C 5 1 6 3 7 7 Q 6 12 -1 14"
-                                stroke="url(#gradient)"
-                                strokeWidth="0.2"
-                                fill="none"
-                            />
-                        </svg>
+                        <div className="relative flex items-center justify-between w-full h-full overflow-hidden">
 
-                        <svg
-                            id="star_right"
-                            className="absolute left-375 rotate-180     w-full h-full"
-                            viewBox="-5 0 15 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path
-                                d="M -1 0 C 5 1 6 3 7 7 Q 6 12 -1 14"
-                                stroke="url(#gradient)"
-                                strokeWidth="0.2"
-                                fill="none"
+                            {/* Left SVG */}
+                            <div className="flex justify-start items-center">
+                                <svg
+                                    id="star_left"
+                                    className="scale-x-[-1]"
+                                    viewBox="-5 0 15 20"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        d="M -1 0 C 5 1 6 3 7 7 Q 6 12 -1 14"
+                                        stroke="url(#gradient)"
+                                        strokeWidth="0.2"
+                                        fill="none"
+                                    />
+                                </svg>
+                            </div>
+
+                            {/* Right SVG */}
+                            <div className="flex justify-end items-center w-1/2 h-full relative">
+                                <svg
+                                    id="star_right"
+                                    viewBox="-5 0 15 20"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        d="M -1 0 C 5 1 6 3 7 7 Q 6 12 -1 14"
+                                        stroke="url(#gradient)"
+                                        strokeWidth="0.2"
+                                        fill="none"
+                                    />
+                                </svg>
+                            </div>
+
+                            {/* Optional Star Images */}
+                            <img
+                                src={BlueStar}
+                                alt="Blue Star"
+                                className="absolute left-20 w-92 h-92 rotate-5"
                             />
-                        </svg>
+                            <img
+                                src={BlueStar}
+                                alt="Blue Star"
+                                className="absolute right-20 w-92 h-92 rotate-[-6deg]"
+                            />
+
+                        </div>
+
 
                         <img src={BlueStar} alt="Blue Star" className="absolute w-92 h-92 rotate-5 left-20 z-0" />
                         <img src={BlueStar} alt="Blue Star" className="absolute w-92 h-92 rotate-[-6deg] right-20 z-0" />
@@ -166,14 +183,21 @@ function LandingPage() {
 
                 </div>
 
-                <div className="inline-flex gap-6">
-                    <BaseButton text="Learn more" size="extra-large" type="black" onClick={() => GoToSection("features-2")} />
-                    <WaitlistButton size="extra-large" />
+                <div className='z-1'>
+                    {/*<Cloud otherProps="absolute w-32 h-32 z-0 left-0" image="" />*/}
                 </div>
 
             </section>
 
+            {/* explain gameification, brag about roblox stats */}
             <section id="features-2" className="flex flex-col items-center justify-center h-screen bg-transparent">
+
+            </section>
+
+            {/* Summary Section
+                -this will include the downloads and the summary
+            */}
+            <section id="ending" className='flex flex-col items-center justify-center h-screen bg-transparent'>
 
             </section>
 
