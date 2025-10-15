@@ -1,6 +1,7 @@
+//comps
 import BaseButton from "./button";
-import list from "../assets/add.png";
 
+// assets
 import mail from "../assets/envelope.svg"
 
 interface waitlistbuttonProps {

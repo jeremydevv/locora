@@ -7,10 +7,10 @@ import WaitlistButton from "./waitlistbutton";
 import Dropdown from "./dropdown";
 
 // externals
-import { motion, useMotionValue, useScroll, useSpring } from "framer-motion";
+import { useScroll } from "framer-motion";
 
 import GoToSection from "../effects/GoToSection";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import clamp from "../utilities/clamp";
 
 export default function TopBar() {
@@ -55,7 +55,6 @@ export default function TopBar() {
                         <WaitlistButton />
                     </div>
                 </div>
-
             </header>
 
 

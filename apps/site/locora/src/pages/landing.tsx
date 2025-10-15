@@ -58,7 +58,7 @@ function LandingPage() {
                 <p className="text-2xl text-center font-bold text-bay-of-many-900">
                     Locora is a <a href="https://www.fbla.org/"><u>FBLA Project</u></a><sup>1</sup> that supports local businesses by providing<br></br>
                     an interface for consumers to find and review local businesses.<br></br>
-                    Other features such as favoriting businesses and providing services<br></br>
+                    Other features such as bookmarking businesses and providing services<br></br>
                     such as deals and coupons is also present in the requirements from FBLA<br></br>
                 </p>
 
@@ -147,7 +147,7 @@ function LandingPage() {
                             </div>
 
                             {/* Right SVG */}
-                            <div className="flex justify-end items-center w-1/2 h-full relative">
+                            <div className="flex justify-end items-center">
                                 <svg
                                     id="star_right"
                                     viewBox="-5 0 15 20"
@@ -162,18 +162,6 @@ function LandingPage() {
                                 </svg>
                             </div>
 
-                            {/* Optional Star Images */}
-                            <img
-                                src={BlueStar}
-                                alt="Blue Star"
-                                className="absolute left-20 w-92 h-92 rotate-5"
-                            />
-                            <img
-                                src={BlueStar}
-                                alt="Blue Star"
-                                className="absolute right-20 w-92 h-92 rotate-[-6deg]"
-                            />
-
                         </div>
 
 
@@ -181,10 +169,6 @@ function LandingPage() {
                         <img src={BlueStar} alt="Blue Star" className="absolute w-92 h-92 rotate-[-6deg] right-20 z-0" />
                     </div>
 
-                </div>
-
-                <div className='z-1'>
-                    {/*<Cloud otherProps="absolute w-32 h-32 z-0 left-0" image="" />*/}
                 </div>
 
             </section>
