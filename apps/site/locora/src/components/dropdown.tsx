@@ -20,6 +20,7 @@ const elementDirectors : {[key : string] : string} = {
 const sectionTranslation : {[key : string] : string} = {
     [`What is this?`] : "info",
     [`AI Search`] : "features-1",
+    ["Game-Based Experience"] : "features-2",
 }
 
 export default function Dropdown({ label, options }: dropdownProps) {

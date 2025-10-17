@@ -2,6 +2,8 @@
 import TopBar from '../components/topbar'
 import Seacher from '../components/seacher'
 import Checkbox from '../components/checkbox'
+import BaseButton from '../components/button';
+import Infobox from '../components/Infobox';
 
 // effects
 import TypeWriter from "../effects/Typewriter";
@@ -11,6 +13,8 @@ import GoToSection from "../effects/GoToSection";
 import clouds from "../assets/Clouds3.png";
 import BlueStar from "../assets/BlueStar.png";
 import DownArrow from "../assets/angle-down.svg"
+import WaitlistButton from '../components/waitlistbutton';
+import Footer from '../components/footer';
 
 function LandingPage() {
     return (
@@ -116,13 +120,19 @@ function LandingPage() {
                             <h1 className="font-black z-1 inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-bay-of-many-500 text-7xl whitespace-nowrap">
                                 AI Powered Searches
                             </h1>
-
                         </div>
-                        <p className="font-bold flex-1 text-bay-of-many-950 text-4xl">
-                            Our system uses <u>AI</u> to power your search to create<br></br>
-                            an intelligent query to our data to find what you<br></br>
-                            truly want using <u>keywords</u> and <u>customer feedback.</u>
-                        </p>
+
+                        <div className='flex-col items-center flex gap-3 m-2 p-2'>
+                            <p className="font-bold flex-1 text-bay-of-many-950 text-4xl">
+                                Our system uses <u>AI</u> to power your search to create<br></br>
+                                an intelligent query to our data to find what you<br></br>
+                                truly want using <u>keywords</u> and <u>customer feedback.</u>
+                            </p>
+
+                            <WaitlistButton />
+                            <BaseButton text="Learn more" type="black" onClick={() => GoToSection("features-2")} />
+                        </div>
+
                     </div>
 
                     <div className="bg-gray-900 flex items-center justify-center overflow-hidden">
@@ -174,8 +184,22 @@ function LandingPage() {
             </section>
 
             {/* explain gameification, brag about roblox stats */}
-            <section id="features-2" className="flex flex-col items-center justify-center h-screen bg-transparent">
-
+            <section id="features-2" className="flex flex-col items-center h-screen bg-transparent">
+                <h1
+                    className='font-black z-1 text-left align-left inline-block text-transparent bg-clip-text bg-gradient-to-r from-sky-500 via-purple-700 to-indigo-300 text-7xl whitespace-nowrap leading-20'
+                >
+                    Gameify your user experience
+                </h1>
+                <div>
+                    <p className="font-bold items-center text-center flex-1 text-bay-of-many-950 text-4xl">
+                        Our team has an experience with working with video games<br></br>
+                        Making an experience fun can increase user retention<br></br>
+                        and engagement, increasing chances of conversion to become a paying user.
+                    </p>
+                </div>
+                <div>
+                    <Infobox title='Users gain currency' info='People collect coins to exchange for deals and other benefits.' demonstration='' />
+                </div>
             </section>
 
             {/* Summary Section
@@ -185,12 +209,7 @@ function LandingPage() {
 
             </section>
 
-            {/* Summary Section
-                -this will include the downloads and the summary
-            */}
-            <section id="ending" className='flex flex-col items-center justify-center h-screen bg-transparent'>
-
-            </section>
+            <Footer/>
         </>
     );
 }
