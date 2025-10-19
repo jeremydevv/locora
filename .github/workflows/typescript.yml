@@ -1,4 +1,8 @@
-on: [push]
+on: 
+  push:
+    paths:
+      - 'apps/site/locora/**'
+      - '.github/workflows/typescript.yml'
 jobs:
   linter-action:
     runs-on: ubuntu-latest
@@ -11,4 +15,4 @@ jobs:
         id: linter
         uses: AntonKornus/TypeScript-Linter@1.0.0
         with:
-          folder: apps
+          folder: apps/site/locora
