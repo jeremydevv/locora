@@ -17,8 +17,6 @@ import WaitlistButton from '../components/waitlistbutton';
 import Footer from '../components/footer';
 import { useEffect, useState } from 'react';
 
-import Coupon from '../assets/voucher.png'
-
 function LandingPage() {
 
     const [currentBox, setCurrentBox] = useState(0);
