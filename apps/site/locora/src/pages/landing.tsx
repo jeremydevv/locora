@@ -15,8 +15,58 @@ import BlueStar from "../assets/BlueStar.png";
 import DownArrow from "../assets/angle-down.svg"
 import WaitlistButton from '../components/waitlistbutton';
 import Footer from '../components/footer';
+import { useEffect, useState } from 'react';
+
+import Coupon from '../assets/voucher.png'
 
 function LandingPage() {
+
+    const [currentBox, setCurrentBox] = useState(0);
+    const [infoBoxData, setInfoBoxData] = useState<{ [key: string]: number }>({
+        Box1: 350,
+        Box2: 350,
+        Box3: 350,
+        Box4: 350
+    });
+
+    const InfoBoxesData = [
+        {
+            id: 1,
+            Title: "Users gain currency",
+            Info: "People collect coins to exchange for deals and other benefits.",
+            Emoji: "🪙"
+        },
+        {
+            id: 2,
+            Title: "Customize a Profile",
+            Info: "Users can create a customized profile to demonstrate their creativity and display their favorites.",
+            Emoji: "🎨"
+        },
+        {
+            id: 3,
+            Title: "Purchase Deals & Coupons",
+            Info: "Local businesses can sell deals and coupons for coins so users purchase at their stores, in exchange, businesses can use those coins to advertise on the app.",
+            Emoji: "🛒"
+        },
+        {
+            id: 4,
+            Title: "Local Business Perks",
+            Info: "Businesses can use coins to advertise on the app and get more exposure to their customers. They can also receive discounts and other perks.",
+            Emoji: "🎁"
+        }
+    ]
+
+
+    useEffect(() => {
+        setInfoBoxData({
+            Box1: 350,
+            Box2: 350,
+            Box3: 350,
+            Box4: 350,
+            [`Box${currentBox}`]: 300
+        })
+    }, [currentBox]);
+
     return (
         <>
             <TopBar />
@@ -183,33 +233,71 @@ function LandingPage() {
 
             </section>
 
-            {/* explain gameification, brag about roblox stats */}
             <section id="features-2" className="flex flex-col items-center h-screen bg-transparent">
                 <h1
                     className='font-black z-1 text-left align-left inline-block text-transparent bg-clip-text bg-gradient-to-r from-sky-500 via-purple-700 to-indigo-300 text-7xl whitespace-nowrap leading-20'
                 >
-                    Gameify your user experience
+                    Gameify your users' experience
                 </h1>
-                <div>
+                <div className='flex-col items-center flex gap-3 m-2 p-2'>
                     <p className="font-bold items-center text-center flex-1 text-bay-of-many-950 text-4xl">
                         Our team has an experience with working with video games<br></br>
                         Making an experience fun can increase user retention<br></br>
                         and engagement, increasing chances of conversion to become a paying user.
                     </p>
+                    <p className="font-bold items-center text-center flex-1 text-bay-of-many-950 opacity-50 text-xl">
+                        Hover on us!
+                    </p>
                 </div>
-                <div>
-                    <Infobox title='Users gain currency' info='People collect coins to exchange for deals and other benefits.' demonstration='' />
+                <div className='flex items-center gap-10 m-15 p-2'>
+                    {
+                        InfoBoxesData.map((box) => {
+                            return (
+                                <Infobox
+                                    title={box.Title}
+                                    info={box.Info}
+                                    size={infoBoxData["Box" + box.id]}
+                                    emoji={box.Emoji}
+
+                                    onActive={() => { setCurrentBox(box.id) }}
+                                    onInactive={() => { setCurrentBox(0) }}
+                                />
+                            )
+                        })
+                    }
+                </div>
+                <div className='flex gap-5'>
+                    <BaseButton text="Learn more" type="black" onClick={() => GoToSection("ending")} />
+                    <WaitlistButton />
                 </div>
             </section>
 
             {/* Summary Section
                 -this will include the downloads and the summary
             */}
-            <section id="ending" className='flex flex-col items-center justify-center h-screen bg-transparent'>
-
+            <section id="ending" className='flex flex-col items-center justify-center h-[50vh] bg-transparent'>
+                <div
+                    className='flex flex-initial gap-5 p-3'
+                >
+                    <h1
+                        className={`text-5xl text-right text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-purple-400 to-indigo-300 font-black`}
+                    >
+                        Sadly, we are still in development... BUT!<br></br> Waitlist now for coins.
+                    </h1>
+                    <p
+                        className={`text-2xl text-bay-of-many-900 font-bold`}
+                    >
+                        Waitlist to be ready for our release!<br></br>
+                        You will receive a bonus for joining now.<br></br>
+                        Inviting friends to waitlist will also give you more coins on initial release.<br></br>
+                    </p>
+                </div>
+                <div>
+                    <WaitlistButton size='extra-large' />
+                </div>
             </section>
 
-            <Footer/>
+            <Footer />
         </>
     );
 }

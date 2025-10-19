@@ -20,6 +20,7 @@ const elementDirectors : {[key : string] : string} = {
 const sectionTranslation : {[key : string] : string} = {
     [`What is this?`] : "info",
     [`AI Search`] : "features-1",
+    [`Waitlist Now!`] : "ending",
     ["Game-Based Experience"] : "features-2",
 }
 
@@ -50,9 +51,9 @@ export default function Dropdown({ label, options }: dropdownProps) {
 
     return (
         <>
-            <div className ={`items-center inline-block relative rounded-lg ` + Embossed(true)} onClick={toggleDropdown} onMouseEnter={hoveringDropdown} onMouseLeave={notHoveringDropdown}>
-                <div className={"inline-flex align-middle bg-bay-of-many-50 rounded-md drop-shadow-lg z-50" + Embossed(true)}>
-                    <span className="block px-5 py-2 text-sm text-bay-of-many-900 font-bold">{label}</span>
+            <div className ={`items-center inline-block relative rounded-lg `} onClick={toggleDropdown} onMouseEnter={hoveringDropdown} onMouseLeave={notHoveringDropdown}>
+                <div className={"inline-flex align-middle bg-clip-padding backdrop-filter backdrop-blur-xl rounded-md drop-shadow-lg z-50" + Embossed(true)}>
+                    <span className="block px-5 py-2 text-sm text-white font-semibold">{label}</span>
                     <img src={arrowDown} alt="Arrow Down Icon" className={`transition-transform duration-150 inline ease-in-out rotate-${isOpen ? "0" : "180"} h-4 w-4 m-2 inline`} />
                 </div>
 

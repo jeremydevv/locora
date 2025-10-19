@@ -7,7 +7,7 @@ import WaitlistButton from "./waitlistbutton";
 import Dropdown from "./dropdown";
 
 // externals
-import { useScroll } from "framer-motion";
+import { useMotionValueEvent, useScroll } from "framer-motion";
 
 import GoToSection from "../effects/GoToSection";
 import { useState } from "react";
@@ -18,8 +18,8 @@ export default function TopBar() {
     const { scrollY } = useScroll();
     const [CurrentAlpha, setCurrentAlpha] = useState(0.9);
 
-    scrollY.on("change", () => {
-        console.log(clamp((0.9 - (scrollY.get() / 2750)), 0.6, 0.9))
+    useMotionValueEvent(scrollY, "change", (latest) => {
+        console.log(latest);
         const alpha = clamp((0.9 - (scrollY.get() / 2750)), 0.6, 0.9);
         setCurrentAlpha(alpha);
     })
@@ -46,8 +46,8 @@ export default function TopBar() {
 
                     {/* Middle dropdown */}
                     <div className="flex-1 gap-2 flex justify-center">
-                        <Dropdown label="Info" options={["What is this?", "How does it work?", "FAQ"]} />
-                        <Dropdown label="Features" options={["AI Search", "Game-Based Experience", "Review Businesses", "Community", "Deals & Discounts"]} />
+                        <Dropdown label="Info" options={["What is this?", "Waitlist Now!"]} />
+                        <Dropdown label="Features" options={["AI Search", "Game-Based Experience"]} />
                     </div>
 
                     {/* Right waitlist */}
