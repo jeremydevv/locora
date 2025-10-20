@@ -29,7 +29,7 @@ export default function Footer() {
     return (
         <>
             <footer
-                className='flex bg-clip-padding backdrop-filter backdrop-blur-xl flex-col h-[30vh] bg-gradient-to-t border-t-5 border-bay-of-many-300 items-center justify-center gap-5'
+                className='flex overflow-x-hidden bg-clip-padding backdrop-filter backdrop-blur-xl w-full flex-col h-[30vh] bg-gradient-to-t border-t-5 border-bay-of-many-300 items-center justify-center gap-5'
                 style={{
                     background: `linear-gradient(to bottom,
                         rgba(43, 127, 255, ${0.45}),
@@ -41,10 +41,10 @@ export default function Footer() {
                     <div className="flex flex-col p-2">
                         {<InfoHeader txt="Information" />}
                         {<WrappedLink txt="About Us" link="info" /> }
-                        {<WrappedLink txt="Privacy Policy" link="privacy" />}
+                        {<WrappedLink txt="Waitlist" link="ending" />}
                     </div>
 
-                    <div className="flex flex-col p-2">
+                    <div className="flex flex-col px-2 sm:px-4 md:px-6">
                         {<InfoHeader txt="Features" />}
                         {<WrappedLink txt="AI Search" link="features-1" />}
                         {<WrappedLink txt="Game-Based Experience" link="features-2" />}

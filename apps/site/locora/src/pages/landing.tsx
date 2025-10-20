@@ -11,10 +11,13 @@ import GoToSection from "../effects/GoToSection";
 
 // assets
 import clouds from "../assets/Clouds3.png";
-import BlueStar from "../assets/BlueStar.png";
+import BlueStarImage from "../assets/BlueStar.png";
 import DownArrow from "../assets/angle-down.svg"
 import WaitlistButton from '../components/waitlistbutton';
 import Footer from '../components/footer';
+import BlueStar from '../assets/bluestar';
+
+// libs
 import { useEffect, useState } from 'react';
 
 function LandingPage() {
@@ -72,14 +75,12 @@ function LandingPage() {
             {/* Section 1 */}
             <section
                 id="landing"
-                className="flex relative flex-col items-center justify-center h-screen bg-transparent"
+                className="flex relative flex-col items-center justify-center min-h-screen bg-transparent"
             >
                 <div className="relative z-1 flex flex-col items-center justify-center">
                     <h2 className="z-1 text-2xl text-bay-of-many-800 font-black">
                         {
-                            <TypeWriter>
-                                <p className="animate-blink text-5xl text-bay-of-many-800">|</p>
-                            </TypeWriter>
+                            <TypeWriter />
                         }
                     </h2>
 
@@ -92,33 +93,33 @@ function LandingPage() {
                 <img
                     src={clouds}
                     alt="Clouds"
-                    className="absolute w-full z-0 left-0 animate-float"
+                    className="absolute w-full top-150 sm:top-150 md:top-100 lg:top-10 xl:top-0 overflow-x-hidden z-0 left-0 animate-float"
                 />
             </section>
 
             {/*Information*/}
             <section
                 id="info"
-                className="flex flex-col items-center p-10 m-2 gap-5 justify-center h-screen bg-transparent"
+                className="flex flex-col items-center px-8 sm:px-16 md:px-32 lg:px-48 xl:px-60 m-2 gap-5 justify-center min-h-[60vh] bg-transparent"
             >
                 <h1
                     id="info-title"
-                    className="font-black inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-indigo-500 to-bay-of-many-500 text-7xl whitespace-nowrap "
+                    className="font-black inline-block text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-indigo-500 to-bay-of-many-500 text-7xl"
                 >
                     What is Locora?
                 </h1>
-                <p className="text-2xl text-center font-bold text-bay-of-many-900">
-                    Locora is a <a href="https://www.fbla.org/"><u>FBLA Project</u></a><sup>1</sup> that supports local businesses by providing<br></br>
-                    an interface for consumers to find and review local businesses.<br></br>
-                    Other features such as bookmarking businesses and providing services<br></br>
-                    such as deals and coupons is also present in the requirements from FBLA<br></br>
+                <p className="px-2 xl:text-3xl lg:text-2xl md:text-xl sm:text-lg sm:px-8 md:px-12 lg:px-16 xl:px-16 text-center font-bold text-bay-of-many-900">
+                    Locora is a <a href="https://www.fbla.org/"><u>FBLA Project</u></a><sup>1</sup> that supports local businesses by providing
+                    an interface for consumers to find and review local businesses.
+                    Other features such as bookmarking businesses and providing services
+                    such as deals and coupons is also present in the requirements from FBLA
                 </p>
 
                 <div
                     className="flex flex-col gap-5"
                 >
                     <h2
-                        className="font-black inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-500  via-indigo-500 to-bay-of-many-500 text-4xl whitespace-nowrap text-center"
+                        className="font-black inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-500  via-indigo-500 to-bay-of-many-500 text-4xl text-center"
                     >
                         Thats cool but.. what else can YOU do?
                     </h2>
@@ -147,33 +148,25 @@ function LandingPage() {
             {/* Section 3 */}
             <section
                 id="features-1"
-                className="flex flex-col items-center justify-center h-screen bg-transparent"
+                className="flex flex-col items-center justify-center min-h-screen bg-transparent"
             >
                 {/*informational (left side)*/}
-                <div className="flex m-5">
-                    <div className="flex-col gap-6 z-1">
-                        <div className="flex gap-2 z-1 p-3">
-
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="url(#gradient)" className="size-17">
-                                <defs>
-                                    <linearGradient id="gradient" x1="0" y1="0" x2="1" y2="0">
-                                        <stop offset="0%" stopColor="#3b82f6" />
-                                        <stop offset="50%" stopColor="#256cc9" />
-                                        <stop offset="100%" stopColor="#3b82f6" />
-                                    </linearGradient>
-                                </defs>
-                                <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clipRule="evenodd" />
-                            </svg>
-
-                            <h1 className="font-black z-1 inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-bay-of-many-500 text-7xl whitespace-nowrap">
+                <div className="flex w-full">
+                    <div className="gap-4 z-1">
+                        <div className="flex items-center justify-center gap-2 z-1 p-3">
+                            <BlueStar />
+                            <h1 className="font-black z-1 inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-bay-of-many-500 text-7xl md:text-6xl sm:text-3xl">
                                 AI Powered Searches
                             </h1>
                         </div>
 
-                        <div className='flex-col items-center flex gap-3 m-2 p-2'>
-                            <p className="font-bold flex-1 text-bay-of-many-950 text-4xl">
-                                Our system uses <u>AI</u> to power your search to create<br></br>
-                                an intelligent query to our data to find what you<br></br>
+                        <img src={BlueStarImage} alt="Blue Star" className="absolute hidden xl:block w-92 h-92 rotate-5 left-20 z-0" />
+                        <img src={BlueStarImage} alt="Blue Star" className="absolute hidden xl:block w-92 h-92 rotate-[-6deg] right-20 z-0" />
+
+                        <div className='flex flex-col justify-center items-center gap-3'>
+                            <p className="font-bold sm:px-12 md:px-24 lg:px-40 xl:px-80 flex-1 text-center z-1 text-bay-of-many-950 text-4xl">
+                                Our system uses <u>AI</u> to power your search to create
+                                an intelligent query to our data to find what you
                                 truly want using <u>keywords</u> and <u>customer feedback.</u>
                             </p>
 
@@ -183,71 +176,27 @@ function LandingPage() {
 
                     </div>
 
-                    <div className="bg-gray-900 flex items-center justify-center overflow-hidden">
-
-                        <div className="relative flex items-center justify-between w-full h-full overflow-hidden">
-
-                            {/* Left SVG */}
-                            <div className="flex justify-start items-center">
-                                <svg
-                                    id="star_left"
-                                    className="scale-x-[-1]"
-                                    viewBox="-5 0 15 20"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        d="M -1 0 C 5 1 6 3 7 7 Q 6 12 -1 14"
-                                        stroke="url(#gradient)"
-                                        strokeWidth="0.2"
-                                        fill="none"
-                                    />
-                                </svg>
-                            </div>
-
-                            {/* Right SVG */}
-                            <div className="flex justify-end items-center">
-                                <svg
-                                    id="star_right"
-                                    viewBox="-5 0 15 20"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        d="M -1 0 C 5 1 6 3 7 7 Q 6 12 -1 14"
-                                        stroke="url(#gradient)"
-                                        strokeWidth="0.2"
-                                        fill="none"
-                                    />
-                                </svg>
-                            </div>
-
-                        </div>
-
-
-                        <img src={BlueStar} alt="Blue Star" className="absolute w-92 h-92 rotate-5 left-20 z-0" />
-                        <img src={BlueStar} alt="Blue Star" className="absolute w-92 h-92 rotate-[-6deg] right-20 z-0" />
-                    </div>
-
                 </div>
 
             </section>
 
-            <section id="features-2" className="flex flex-col items-center h-screen bg-transparent">
+            <section id="features-2" className="flex flex-col items-center min-h-screen bg-transparent">
                 <h1
-                    className='font-black z-1 text-left align-left inline-block text-transparent bg-clip-text bg-gradient-to-r from-sky-500 via-purple-700 to-indigo-300 text-7xl whitespace-nowrap leading-20'
+                    className='font-black z-1 inline-block text-transparent bg-clip-text bg-gradient-to-r from-sky-500 via-purple-700 to-indigo-300 text-6xl xl:text-7xl md:text-6xl sm:text-4xl text-center leading-20'
                 >
                     Gameify your users' experience
                 </h1>
                 <div className='flex-col items-center flex gap-3 m-2 p-2'>
-                    <p className="font-bold items-center text-center flex-1 text-bay-of-many-950 text-4xl">
-                        Our team has an experience with working with video games<br></br>
-                        Making an experience fun can increase user retention<br></br>
+                    <p className="font-bold items-center text-center flex-1 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-56 text-bay-of-many-950 text-3xl">
+                        Our team has an experience with working with video games
+                        Making an experience fun can increase user retention
                         and engagement, increasing chances of conversion to become a paying user.
                     </p>
                     <p className="font-bold items-center text-center flex-1 text-bay-of-many-950 opacity-50 text-xl">
                         Hover on us!
                     </p>
                 </div>
-                <div className='flex items-center gap-10 m-15 p-2'>
+                <div className='flex flex-wrap justify-center items-center gap-10 m-2 sm:m-4 md:m-8 lg:m-[60px] p-2'>
                     {
                         InfoBoxesData.map((box) => {
                             return (
@@ -273,24 +222,24 @@ function LandingPage() {
             {/* Summary Section
                 -this will include the downloads and the summary
             */}
-            <section id="ending" className='flex flex-col items-center justify-center h-[50vh] bg-transparent'>
+            <section id="ending" className='flex flex-col items-center justify-center min-h-[50vh] m-2 sm:m-4 md:m-8 bg-transparent'>
                 <div
-                    className='flex flex-initial gap-5 p-3'
+                    className='flex md:flex-col gap-5 p-5'
                 >
                     <h1
                         className={`text-5xl text-right text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-purple-400 to-indigo-300 font-black`}
                     >
-                        Sadly, we are still in development... BUT!<br></br> Waitlist now for coins.
+                        Sadly, we are still in development... BUT! Waitlist now for coins.
                     </h1>
                     <p
-                        className={`text-2xl text-bay-of-many-900 font-bold`}
+                        className={`text-2xl text-bay-of-many-900 p-5 font-bold`}
                     >
                         Waitlist to be ready for our release!<br></br>
                         You will receive a bonus for joining now.<br></br>
                         Inviting friends to waitlist will also give you more coins on initial release.<br></br>
                     </p>
                 </div>
-                <div>
+                <div className='flex p-4 gap-5'>
                     <WaitlistButton size='extra-large' />
                 </div>
             </section>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import  { useEffect, useRef, useState } from "react";
 
 const Items = [
     "Toys",
@@ -104,11 +104,7 @@ const Items = [
     "Printing & Sign Shops",
 ]
 
-interface Props {
-    children?: React.ReactNode
-}
-
-export default function TypeWriter({children}: Props) {
+export default function TypeWriter() {
     const [display, setDisplay] = useState("");
     const indexRef = useRef(0);
     const deletingRef = useRef(false);
@@ -159,9 +155,11 @@ export default function TypeWriter({children}: Props) {
     }, [baseText]);
 
     return (
-        <div className="flex leading-40 m-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-indigo-300 to-bay-of-many-700 items-center gap-1">
-            <h1 className="text-5xl font-black">{display}</h1>
-            {children}
+        <div className="inline-flex text-center flex-wrap leading-40 m-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-indigo-300 to-bay-of-many-700 items-center gap-1">
+            <h1 className="text-5xl text-center font-black">
+                {display}
+                <span className="animate-blink inline text-5xl text-bay-of-many-800">|</span>
+            </h1>
         </div>
     );
 }

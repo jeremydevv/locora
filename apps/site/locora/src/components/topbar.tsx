@@ -18,8 +18,7 @@ export default function TopBar() {
     const { scrollY } = useScroll();
     const [CurrentAlpha, setCurrentAlpha] = useState(0.9);
 
-    useMotionValueEvent(scrollY, "change", (latest) => {
-        console.log(latest);
+    useMotionValueEvent(scrollY, "change", (_) => {
         const alpha = clamp((0.9 - (scrollY.get() / 2750)), 0.6, 0.9);
         setCurrentAlpha(alpha);
     })
@@ -45,7 +44,7 @@ export default function TopBar() {
                     </div>
 
                     {/* Middle dropdown */}
-                    <div className="flex-1 gap-2 flex justify-center">
+                    <div className="flex flex-1 invisible lg:visible items-center gap-2 justify-center">
                         <Dropdown label="Info" options={["What is this?", "Waitlist Now!"]} />
                         <Dropdown label="Features" options={["AI Search", "Game-Based Experience"]} />
                     </div>

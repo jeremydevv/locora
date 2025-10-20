@@ -45,7 +45,7 @@ export default function Infobox({ children, title, info, size, onActive, onInact
     function ShowEmoji() {
         setShowEmoji(true);
         const randomCorner = Math.floor(Math.random() * 4);
-        const randomRotation = Math.floor(Math.random() * 80) - 35;
+        const randomRotation = Math.floor(Math.random() * 60) - 25;
         setCorner(randomCorner);
         setRotation(randomRotation);
     }
