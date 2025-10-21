@@ -5,6 +5,10 @@ on:
     paths:
       - 'apps/site/locora/**'
       - '.github/workflows/typescript.yml'
+  pull_request:
+    paths:
+      - 'apps/site/locora/**'
+      - '.github/workflows/typescript.yml'
 
 jobs:
   linter:
@@ -24,6 +28,7 @@ jobs:
         run: npm ci
 
       - name: Run TypeScript Linter
+        working-directory: apps/site/locora
         uses: AntonKornus/TypeScript-Linter@1.0.0
         with:
-          folder: apps/site/locora
+          folder: .
