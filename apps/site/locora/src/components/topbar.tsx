@@ -26,7 +26,7 @@ export default function TopBar() {
     return (
         <>
             <header
-                className={`fixed bg-clip-padding backdrop-filter backdrop-blur-xl top-0 left-0 w-full z-20 border-b-3 shadow-xl border-bay-of-many-300 drop-shadow-xl`}
+                className={`fixed bg-clip-padding backdrop-filter backdrop-blur-xl top-0 left-0 min-w-full z-20 border-b-3 shadow-xl border-bay-of-many-300 drop-shadow-xl`}
                 style={{
                     background: `linear-gradient(to bottom,
                         rgba(0, 66, 244, ${CurrentAlpha}),
@@ -34,7 +34,7 @@ export default function TopBar() {
                         rgba(124, 134, 255, ${CurrentAlpha}))`,
                 }}
             >
-                <div className="mx-auto flex max-w-5xl items-center px-5 md:px-8 py-2">
+                <div className="flex items-center justify-between px-5 md:px-8 py-2">
                     {/* Left Logo */}
                     <div className="flex items-center gap-3">
                         <BaseButton hasBackground={false} otherProps="gap-5" shape="circle" onClick={() => { GoToSection("landing") }}>
@@ -44,14 +44,14 @@ export default function TopBar() {
                     </div>
 
                     {/* Middle dropdown */}
-                    <div className="flex flex-1 invisible lg:visible items-center gap-2 justify-center">
+                    <div className="flex-1 md:visible lg:flex xl:flex hidden items-center gap-2 justify-center">
                         <Dropdown label="Info" options={["What is this?", "Waitlist Now!"]} />
                         <Dropdown label="Features" options={["AI Search", "Game-Based Experience"]} />
                     </div>
 
                     {/* Right waitlist */}
                     <div className="flex items-center gap-3">
-                        <WaitlistButton />
+                        <WaitlistButton otherProps="align-right" />
                     </div>
                 </div>
             </header>

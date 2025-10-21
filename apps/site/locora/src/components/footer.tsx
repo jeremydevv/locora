@@ -6,7 +6,7 @@ function InfoHeader({txt} : {txt : string}) {
     return (
         <div>
             <h2
-                className="text-3xl text-center font-bold leading-tight tracking-tight text-gray-900 dark:text-white"
+                className="text-xl lg:text-2xl xl:text-5xl text-center font-bold leading-tight tracking-tight text-gray-900 dark:text-white"
             >
                 {txt}
             </h2>
@@ -18,7 +18,7 @@ function WrappedLink({txt, link} : {txt : string, link : string}) {
     return (
         <a
             onClick={() => GoToSection(link)}
-            className="text-lg text-center underline font-semibold leading-tight tracking-tight text-gray-900 dark:text-white"
+            className="text-md lg:text-lg xl:text-2xl text-center underline font-semibold leading-tight tracking-tight text-gray-900 dark:text-white"
         >
             {txt}
         </a>
@@ -29,7 +29,7 @@ export default function Footer() {
     return (
         <>
             <footer
-                className='flex overflow-x-hidden bg-clip-padding backdrop-filter backdrop-blur-xl w-full flex-col h-[30vh] bg-gradient-to-t border-t-5 border-bay-of-many-300 items-center justify-center gap-5'
+                className='flex overflow-x-hidden bg-clip-padding backdrop-filter backdrop-blur-xl w-full flex-col h-[40vh] bg-gradient-to-t border-t-5 border-bay-of-many-300 items-center justify-center gap-5'
                 style={{
                     background: `linear-gradient(to bottom,
                         rgba(43, 127, 255, ${0.45}),
@@ -52,11 +52,11 @@ export default function Footer() {
 
                     <div>
                         {<InfoHeader txt="Contact" />}
-                        <p className="text-lg text-center font-semibold leading-tight tracking-tight text-gray-900 dark:text-white">
+                        <p className="xl:text-2xl text-lg text-center font-semibold leading-tight tracking-tight text-gray-900 dark:text-white">
                             Contact us at {
                                 <a
                                     href="mailto:contact@locora.org"
-                                    className="text-lg text-center underline font-semibold leading-tight tracking-tight text-gray-900 dark:text-white"
+                                    className="xl:text-2xl text-lg text-center underline font-semibold leading-tight tracking-tight text-gray-900 dark:text-white"
                                 >
                                     contact@locora.org
                                 </a>

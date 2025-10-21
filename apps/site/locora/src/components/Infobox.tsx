@@ -58,11 +58,11 @@ export default function Infobox({ children, title, info, size, onActive, onInact
         <>
             <div 
                 className="relative transition-all aspect-square duration-200 ease-in-out"
-                style={{ width: size, height: size }}
+                style={{ maxWidth: size }}
             >
                 {
                     <span 
-                        className={`absolute z-2 ${cornerPositions[corner]} pointer-events-none transition-all duration-150 ease-in-out drop-shadow-xl rounded-lg p-2.5 ${showEmoji ? "scale-100" : "scale-0"}`}
+                        className={`absolute z-2 ${cornerPositions[corner]} pointer-events-none transition-all duration-150 ease-in-out drop-shadow-xl rounded-lg p-2.5 ${showEmoji ? "scale-100" : "scale-0"} ${showEmoji ? "opacity-100" : "opacity-0"}`}
                         style = {{ fontSize: size / 2, rotate: rotation + "deg" }}
                     >
 
@@ -74,7 +74,7 @@ export default function Infobox({ children, title, info, size, onActive, onInact
                     onMouseLeave={OnInactiveMain}
                     className="flex flex-col z-1 w-full h-full justify-between items-center gap-2 bg-bay-of-many-50 drop-shadow-xl border-2 border-bay-of-many-300 rounded-lg p-2.5"
                 >
-                    <div className="flex flex-row items-center justify-center w-full h-full overflow-clip">
+                    <div className="flex flex-row gap-2 items-center justify-center w-full h-full overflow-clip">
                         <h2 className="text-3xl font-bold text-center">{title}</h2>
                         <p className="text-lg text-center">{info}</p>
                     </div>

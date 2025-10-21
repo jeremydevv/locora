@@ -5,12 +5,13 @@ import BaseButton from "./button";
 import mail from "../assets/envelope.svg"
 
 interface waitlistbuttonProps {
+    otherProps? : string,
     size?: "xs" | "small" | "medium" | "large" | "extra-large" | undefined
 }
 
 import { Link } from "react-router-dom";
 
-export default function WaitlistButton({ size = "medium" }: waitlistbuttonProps) {
+export default function WaitlistButton({ size = "medium" , otherProps }: waitlistbuttonProps) {
     return (
         <>
             <Link to="/waitlist">
@@ -18,7 +19,7 @@ export default function WaitlistButton({ size = "medium" }: waitlistbuttonProps)
                     size={size}
                     text="Join Waitlist"
                     hasBackground={true}
-                    otherProps="gap-1"
+                    otherProps={"gap-1 " + otherProps}
                     shape="circle"
                     preChildren={
                         <img
