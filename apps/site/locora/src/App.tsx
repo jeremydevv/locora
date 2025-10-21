@@ -1,21 +1,22 @@
 import './App.css'
+// pages
+import Landing from './pages/landing';
+import Waitlist from './pages/waitlist';
 
-// comps
-import TopBar from './components/topbar';
+import { Routes , Route } from 'react-router-dom';
 
 function App() {
+
   return (
     <>
-
-      <TopBar />
-
-      <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100'>
-
-        <div>
-          
-        </div>
-
-      </div>
+      <Routes>
+        <Route path="/" element={
+          <Landing />
+        } />
+        <Route path="/waitlist" element={
+          <Waitlist />
+        } />
+      </Routes>
     </>
   )
 }

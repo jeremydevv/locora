@@ -2,21 +2,38 @@ import Embossed from "./embossed";
 
 import searchIcon from "../assets/search-tool.png";
 
+import WaitlistButton from "./waitlistbutton";
+import BaseButton from "./button";
+
+import GoToSection from "../effects/GoToSection";
+
 interface seacherProps {
     otherProps?: string;
-}
+};
 
 export default function Seacher({otherProps}: seacherProps) {
 
-    var BaseStyle = "flex items-center gap-2 bg-gray-200 drop-shadow-xl border-2 border-gray-300 text-black text-stroke-black text-sm rounded-lg block w-full p-3.5 ";
+    var BaseStyle : string = "flex items-center bg-bay-of-many-50 drop-shadow-xl border-2 border-bay-of-many-600 text-black text-stroke-black text-sm rounded-lg block w-full p-3.5 ";
+
+    const input = document.querySelector("input");
+
+    input?.addEventListener("keyup", (e) => {
+        if (e.key === "Enter") {
+            GoToSection("ending");
+        }
+    });
 
     return (
         <div>
-            <div className={BaseStyle + otherProps + Embossed(false)}>
-                <button>
-                    <img src={searchIcon} alt="Search Icon" className="m-2 h-5 gap-1 mr-2 inline" />
+            <div className={BaseStyle + otherProps + Embossed(true)}>
+                <input type="text" placeholder="What's the closest place with labubus?" className="bg-transparent focus:outline-none w-full " />
+                <button onClick={() => {GoToSection("ending")}} className="z-2 hover:scale-108 active:scale-92 transition-transform duration-10 ease-in-out style-smooth">
+                    <img src={searchIcon} alt="Search Icon" className="drop-shadow-lg/35 m-2 h-5 gap-1 mr-2 inline " />
                 </button>
-                <p className="text-white text-stroke-black font-bold">What's something <b>CRAZY?</b></p>
+            </div>
+            <div className="flex gap-15 justify-between max-w-lg ml-2 mr-2 mt-2">
+                <WaitlistButton size="small" />
+                <BaseButton text="Learn more" type="black" onClick={() => GoToSection("info")} />
             </div>
         </div>
     );
