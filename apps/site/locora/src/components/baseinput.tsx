@@ -3,10 +3,10 @@ interface inputProps {
     inputType? : "" | "Password"
 }
 
-export default function input({placeholder} : inputProps) {
+export default function BaseInput({placeholder} : inputProps) {
 
     return (
-        <div className="flex rounded-xl bg-bay-of-many-300">
+        <div className="flex rounded-xl cursor-text bg-bay-of-many-300">
             <input
                 className="p-3 text-black w-full h-full"
                 placeholder={placeholder}

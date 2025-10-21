@@ -52,11 +52,11 @@ export default function Footer() {
 
                     <div>
                         {<InfoHeader txt="Contact" />}
-                        <p className="xl:text-2xl text-lg text-center font-semibold leading-tight tracking-tight text-gray-900 dark:text-white">
+                        <p className="xl:text-2xl text-white text-lg text-center font-semibold leading-tight tracking-tight text-gray-900 dark:text-white">
                             Contact us at {
                                 <a
                                     href="mailto:contact@locora.org"
-                                    className="xl:text-2xl text-lg text-center underline font-semibold leading-tight tracking-tight text-gray-900 dark:text-white"
+                                    className="xl:text-2xl text-white text-lg text-center underline font-semibold leading-tight tracking-tight text-gray-900 dark:text-white"
                                 >
                                     contact@locora.org
                                 </a>
@@ -67,7 +67,7 @@ export default function Footer() {
 
                 <div className="flex p-2 gap-10 items-center">
                     <img src={Locora} alt="Locora Logo" className="h-8 w-8" />
-                    <p className="text-md text-center font-semibold leading-tight tracking-tight dark:text-white">
+                    <p className="text-md text-white text-center font-semibold leading-tight tracking-tight dark:text-white">
                         © 2025 Locora. All rights aren't reserved.
                     </p>
                 </div>
