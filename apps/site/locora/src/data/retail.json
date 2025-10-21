@@ -1,0 +1,2006 @@
+{
+    "companies": [
+        {
+            "name": "Walmart",
+            "logo_png": "https://logo.clearbit.com/walmart.com?size=512",
+            "keywords": [
+                "supermarket",
+                "groceries",
+                "household",
+                "bulk",
+                "convenience"
+            ]
+        },
+        {
+            "name": "Target",
+            "logo_png": "https://logo.clearbit.com/target.com?size=512",
+            "keywords": [
+                "supermarket",
+                "groceries",
+                "household",
+                "bulk",
+                "convenience"
+            ]
+        },
+        {
+            "name": "Amazon",
+            "logo_png": "https://logo.clearbit.com/amazon.com?size=512",
+            "keywords": [
+                "online",
+                "marketplace",
+                "ecommerce",
+                "shipping",
+                "catalog"
+            ]
+        },
+        {
+            "name": "Best Buy",
+            "logo_png": "https://logo.clearbit.com/bestbuy.com?size=512",
+            "keywords": [
+                "retail",
+                "shopping",
+                "storefront",
+                "products",
+                "brands"
+            ]
+        },
+        {
+            "name": "The Home Depot",
+            "logo_png": "https://logo.clearbit.com/homedepot.com?size=512",
+            "keywords": [
+                "hardware",
+                "tools",
+                "diy",
+                "home improvement",
+                "building"
+            ]
+        },
+        {
+            "name": "Lowe's",
+            "logo_png": "https://logo.clearbit.com/lowes.com?size=512",
+            "keywords": [
+                "hardware",
+                "tools",
+                "diy",
+                "home improvement",
+                "building"
+            ]
+        },
+        {
+            "name": "Macy's",
+            "logo_png": "https://logo.clearbit.com/macys.com?size=512",
+            "keywords": [
+                "retail",
+                "shopping",
+                "storefront",
+                "products",
+                "brands"
+            ]
+        },
+        {
+            "name": "Nordstrom",
+            "logo_png": "https://logo.clearbit.com/nordstrom.com?size=512",
+            "keywords": [
+                "retail",
+                "shopping",
+                "storefront",
+                "products",
+                "brands"
+            ]
+        },
+        {
+            "name": "Kohl's",
+            "logo_png": "https://logo.clearbit.com/kohls.com?size=512",
+            "keywords": [
+                "retail",
+                "shopping",
+                "storefront",
+                "products",
+                "brands"
+            ]
+        },
+        {
+            "name": "Costco",
+            "logo_png": "https://logo.clearbit.com/costco.com?size=512",
+            "keywords": [
+                "supermarket",
+                "groceries",
+                "household",
+                "bulk",
+                "convenience"
+            ]
+        },
+        {
+            "name": "Sam's Club",
+            "logo_png": "https://logo.clearbit.com/samsclub.com?size=512",
+            "keywords": [
+                "supermarket",
+                "groceries",
+                "household",
+                "bulk",
+                "convenience"
+            ]
+        },
+        {
+            "name": "Aldi",
+            "logo_png": "https://logo.clearbit.com/aldi.us?size=512",
+            "keywords": [
+                "supermarket",
+                "groceries",
+                "household",
+                "bulk",
+                "convenience"
+            ]
+        },
+        {
+            "name": "Trader Joe's",
+            "logo_png": "https://logo.clearbit.com/traderjoes.com?size=512",
+            "keywords": [
+                "supermarket",
+                "groceries",
+                "household",
+                "bulk",
+                "convenience"
+            ]
+        },
+        {
+            "name": "Whole Foods Market",
+            "logo_png": "https://logo.clearbit.com/wholefoodsmarket.com?size=512",
+            "keywords": [
+                "supermarket",
+                "groceries",
+                "household",
+                "bulk",
+                "convenience"
+            ]
+        },
+        {
+            "name": "IKEA",
+            "logo_png": "https://logo.clearbit.com/ikea.com?size=512",
+            "keywords": [
+                "home",
+                "furniture",
+                "decor",
+                "kitchen",
+                "housewares"
+            ]
+        },
+        {
+            "name": "Zara",
+            "logo_png": "https://logo.clearbit.com/zara.com?size=512",
+            "keywords": [
+                "apparel",
+                "fashion",
+                "clothing",
+                "accessories",
+                "trend"
+            ]
+        },
+        {
+            "name": "H&M",
+            "logo_png": "https://logo.clearbit.com/hm.com?size=512",
+            "keywords": [
+                "apparel",
+                "fashion",
+                "clothing",
+                "accessories",
+                "trend"
+            ]
+        },
+        {
+            "name": "Gap",
+            "logo_png": "https://logo.clearbit.com/gap.com?size=512",
+            "keywords": [
+                "apparel",
+                "fashion",
+                "clothing",
+                "accessories",
+                "casual"
+            ]
+        },
+        {
+            "name": "Old Navy",
+            "logo_png": "https://logo.clearbit.com/oldnavy.com?size=512",
+            "keywords": [
+                "apparel",
+                "fashion",
+                "clothing",
+                "accessories",
+                "casual"
+            ]
+        },
+        {
+            "name": "JCPenney",
+            "logo_png": "https://logo.clearbit.com/jcpenney.com?size=512",
+            "keywords": [
+                "retail",
+                "shopping",
+                "storefront",
+                "products",
+                "brands"
+            ]
+        },
+        {
+            "name": "Sephora",
+            "logo_png": "https://logo.clearbit.com/sephora.com?size=512",
+            "keywords": [
+                "beauty",
+                "skincare",
+                "cosmetics",
+                "makeup",
+                "fragrance"
+            ]
+        },
+        {
+            "name": "Ulta Beauty",
+            "logo_png": "https://logo.clearbit.com/ulta.com?size=512",
+            "keywords": [
+                "beauty",
+                "skincare",
+                "cosmetics",
+                "makeup",
+                "fragrance"
+            ]
+        },
+        {
+            "name": "Walgreens",
+            "logo_png": "https://logo.clearbit.com/walgreens.com?size=512",
+            "keywords": [
+                "pharmacy",
+                "health",
+                "household",
+                "convenience",
+                "care"
+            ]
+        },
+        {
+            "name": "CVS Pharmacy",
+            "logo_png": "https://logo.clearbit.com/cvs.com?size=512",
+            "keywords": [
+                "pharmacy",
+                "health",
+                "household",
+                "convenience",
+                "care"
+            ]
+        },
+        {
+            "name": "Rite Aid",
+            "logo_png": "https://logo.clearbit.com/riteaid.com?size=512",
+            "keywords": [
+                "pharmacy",
+                "health",
+                "household",
+                "convenience",
+                "care"
+            ]
+        },
+        {
+            "name": "7-Eleven",
+            "logo_png": "https://logo.clearbit.com/7-eleven.com?size=512",
+            "keywords": [
+                "convenience",
+                "snacks",
+                "fuel",
+                "24/7",
+                "grab-and-go"
+            ]
+        },
+        {
+            "name": "Dollar General",
+            "logo_png": "https://logo.clearbit.com/dollargeneral.com?size=512",
+            "keywords": [
+                "discount",
+                "value",
+                "household",
+                "everyday",
+                "budget"
+            ]
+        },
+        {
+            "name": "Dollar Tree",
+            "logo_png": "https://logo.clearbit.com/dollartree.com?size=512",
+            "keywords": [
+                "discount",
+                "value",
+                "household",
+                "everyday",
+                "budget"
+            ]
+        },
+        {
+            "name": "Family Dollar",
+            "logo_png": "https://logo.clearbit.com/familydollar.com?size=512",
+            "keywords": [
+                "discount",
+                "value",
+                "household",
+                "everyday",
+                "budget"
+            ]
+        },
+        {
+            "name": "Ross Dress for Less",
+            "logo_png": "https://logo.clearbit.com/rossstores.com?size=512",
+            "keywords": [
+                "discount",
+                "apparel",
+                "home",
+                "bargain",
+                "clearance"
+            ]
+        },
+        {
+            "name": "TJ Maxx",
+            "logo_png": "https://logo.clearbit.com/tjmaxx.com?size=512",
+            "keywords": [
+                "discount",
+                "apparel",
+                "home",
+                "bargain",
+                "clearance"
+            ]
+        },
+        {
+            "name": "Marshalls",
+            "logo_png": "https://logo.clearbit.com/marshalls.com?size=512",
+            "keywords": [
+                "discount",
+                "apparel",
+                "home",
+                "bargain",
+                "clearance"
+            ]
+        },
+        {
+            "name": "Nike",
+            "logo_png": "https://logo.clearbit.com/nike.com?size=512",
+            "keywords": [
+                "apparel",
+                "sportswear",
+                "athletic",
+                "performance",
+                "footwear"
+            ]
+        },
+        {
+            "name": "Adidas",
+            "logo_png": "https://logo.clearbit.com/adidas.com?size=512",
+            "keywords": [
+                "apparel",
+                "sportswear",
+                "athletic",
+                "performance",
+                "footwear"
+            ]
+        },
+        {
+            "name": "Foot Locker",
+            "logo_png": "https://logo.clearbit.com/footlocker.com?size=512",
+            "keywords": [
+                "apparel",
+                "sportswear",
+                "athletic",
+                "performance",
+                "footwear"
+            ]
+        },
+        {
+            "name": "DSW",
+            "logo_png": "https://logo.clearbit.com/dsw.com?size=512",
+            "keywords": [
+                "apparel",
+                "shoes",
+                "footwear",
+                "accessories",
+                "retail"
+            ]
+        },
+        {
+            "name": "Lululemon",
+            "logo_png": "https://logo.clearbit.com/lululemon.com?size=512",
+            "keywords": [
+                "apparel",
+                "sportswear",
+                "athletic",
+                "performance",
+                "yoga"
+            ]
+        },
+        {
+            "name": "Patagonia",
+            "logo_png": "https://logo.clearbit.com/patagonia.com?size=512",
+            "keywords": [
+                "apparel",
+                "outdoor",
+                "sustainable",
+                "performance",
+                "gear"
+            ]
+        },
+        {
+            "name": "REI",
+            "logo_png": "https://logo.clearbit.com/rei.com?size=512",
+            "keywords": [
+                "apparel",
+                "outdoor",
+                "gear",
+                "adventure",
+                "camping"
+            ]
+        },
+        {
+            "name": "The North Face",
+            "logo_png": "https://logo.clearbit.com/thenorthface.com?size=512",
+            "keywords": [
+                "apparel",
+                "outdoor",
+                "gear",
+                "adventure",
+                "performance"
+            ]
+        },
+        {
+            "name": "Columbia Sportswear",
+            "logo_png": "https://logo.clearbit.com/columbia.com?size=512",
+            "keywords": [
+                "apparel",
+                "outdoor",
+                "gear",
+                "adventure",
+                "performance"
+            ]
+        },
+        {
+            "name": "Michaels",
+            "logo_png": "https://logo.clearbit.com/michaels.com?size=512",
+            "keywords": [
+                "crafts",
+                "hobbies",
+                "arts",
+                "supplies",
+                "DIY"
+            ]
+        },
+        {
+            "name": "Hobby Lobby",
+            "logo_png": "https://logo.clearbit.com/hobbylobby.com?size=512",
+            "keywords": [
+                "crafts",
+                "hobbies",
+                "arts",
+                "supplies",
+                "DIY"
+            ]
+        },
+        {
+            "name": "Joann",
+            "logo_png": "https://logo.clearbit.com/joann.com?size=512",
+            "keywords": [
+                "crafts",
+                "hobbies",
+                "arts",
+                "supplies",
+                "DIY"
+            ]
+        },
+        {
+            "name": "Barnes & Noble",
+            "logo_png": "https://logo.clearbit.com/barnesandnoble.com?size=512",
+            "keywords": [
+                "books",
+                "reading",
+                "literature",
+                "paperback",
+                "novels"
+            ]
+        },
+        {
+            "name": "Books-A-Million",
+            "logo_png": "https://logo.clearbit.com/booksamillion.com?size=512",
+            "keywords": [
+                "books",
+                "reading",
+                "literature",
+                "paperback",
+                "novels"
+            ]
+        },
+        {
+            "name": "GameStop",
+            "logo_png": "https://logo.clearbit.com/gamestop.com?size=512",
+            "keywords": [
+                "games",
+                "consoles",
+                "video games",
+                "accessories",
+                "collectibles"
+            ]
+        },
+        {
+            "name": "Petco",
+            "logo_png": "https://logo.clearbit.com/petco.com?size=512",
+            "keywords": [
+                "pets",
+                "petfood",
+                "supplies",
+                "toys",
+                "grooming"
+            ]
+        },
+        {
+            "name": "PetSmart",
+            "logo_png": "https://logo.clearbit.com/petsmart.com?size=512",
+            "keywords": [
+                "pets",
+                "petfood",
+                "supplies",
+                "toys",
+                "grooming"
+            ]
+        },
+        {
+            "name": "Ace Hardware",
+            "logo_png": "https://logo.clearbit.com/acehardware.com?size=512",
+            "keywords": [
+                "hardware",
+                "tools",
+                "diy",
+                "home improvement",
+                "building"
+            ]
+        },
+        {
+            "name": "True Value",
+            "logo_png": "https://logo.clearbit.com/truevalue.com?size=512",
+            "keywords": [
+                "hardware",
+                "tools",
+                "diy",
+                "home improvement",
+                "building"
+            ]
+        },
+        {
+            "name": "AutoZone",
+            "logo_png": "https://logo.clearbit.com/autozone.com?size=512",
+            "keywords": [
+                "automotive",
+                "parts",
+                "accessories",
+                "maintenance",
+                "repair"
+            ]
+        },
+        {
+            "name": "O'Reilly Auto Parts",
+            "logo_png": "https://logo.clearbit.com/oreillyauto.com?size=512",
+            "keywords": [
+                "automotive",
+                "parts",
+                "accessories",
+                "maintenance",
+                "repair"
+            ]
+        },
+        {
+            "name": "Advance Auto Parts",
+            "logo_png": "https://logo.clearbit.com/advanceautoparts.com?size=512",
+            "keywords": [
+                "automotive",
+                "parts",
+                "accessories",
+                "maintenance",
+                "repair"
+            ]
+        },
+        {
+            "name": "Staples",
+            "logo_png": "https://logo.clearbit.com/staples.com?size=512",
+            "keywords": [
+                "office",
+                "supplies",
+                "printers",
+                "stationery",
+                "workplace"
+            ]
+        },
+        {
+            "name": "Office Depot",
+            "logo_png": "https://logo.clearbit.com/officedepot.com?size=512",
+            "keywords": [
+                "office",
+                "supplies",
+                "printers",
+                "stationery",
+                "workplace"
+            ]
+        },
+        {
+            "name": "Menards",
+            "logo_png": "https://logo.clearbit.com/menards.com?size=512",
+            "keywords": [
+                "hardware",
+                "tools",
+                "diy",
+                "home improvement",
+                "building"
+            ]
+        },
+        {
+            "name": "Bed Bath & Beyond",
+            "logo_png": "https://logo.clearbit.com/bedbathandbeyond.com?size=512",
+            "keywords": [
+                "home",
+                "furniture",
+                "decor",
+                "kitchen",
+                "housewares"
+            ]
+        },
+        {
+            "name": "Wayfair",
+            "logo_png": "https://logo.clearbit.com/wayfair.com?size=512",
+            "keywords": [
+                "home",
+                "furniture",
+                "decor",
+                "kitchen",
+                "housewares"
+            ]
+        },
+        {
+            "name": "Etsy",
+            "logo_png": "https://logo.clearbit.com/etsy.com?size=512",
+            "keywords": [
+                "online",
+                "marketplace",
+                "ecommerce",
+                "shipping",
+                "catalog"
+            ]
+        },
+        {
+            "name": "eBay",
+            "logo_png": "https://logo.clearbit.com/ebay.com?size=512",
+            "keywords": [
+                "online",
+                "marketplace",
+                "ecommerce",
+                "shipping",
+                "catalog"
+            ]
+        },
+        {
+            "name": "Newegg",
+            "logo_png": "https://logo.clearbit.com/newegg.com?size=512",
+            "keywords": [
+                "online",
+                "marketplace",
+                "ecommerce",
+                "shipping",
+                "catalog"
+            ]
+        },
+        {
+            "name": "B&H Photo Video",
+            "logo_png": "https://logo.clearbit.com/bhphotovideo.com?size=512",
+            "keywords": [
+                "retail",
+                "shopping",
+                "storefront",
+                "products",
+                "brands"
+            ]
+        },
+        {
+            "name": "Crate & Barrel",
+            "logo_png": "https://logo.clearbit.com/crateandbarrel.com?size=512",
+            "keywords": [
+                "home",
+                "furniture",
+                "decor",
+                "kitchen",
+                "housewares"
+            ]
+        },
+        {
+            "name": "Williams-Sonoma",
+            "logo_png": "https://logo.clearbit.com/williams-sonoma.com?size=512",
+            "keywords": [
+                "home",
+                "furniture",
+                "decor",
+                "kitchen",
+                "housewares"
+            ]
+        },
+        {
+            "name": "Pottery Barn",
+            "logo_png": "https://logo.clearbit.com/potterybarn.com?size=512",
+            "keywords": [
+                "home",
+                "furniture",
+                "decor",
+                "kitchen",
+                "housewares"
+            ]
+        },
+        {
+            "name": "Sur La Table",
+            "logo_png": "https://logo.clearbit.com/surlatable.com?size=512",
+            "keywords": [
+                "home",
+                "furniture",
+                "decor",
+                "kitchen",
+                "housewares"
+            ]
+        },
+        {
+            "name": "Anthropologie",
+            "logo_png": "https://logo.clearbit.com/anthropologie.com?size=512",
+            "keywords": [
+                "home",
+                "furniture",
+                "decor",
+                "kitchen",
+                "housewares"
+            ]
+        },
+        {
+            "name": "Urban Outfitters",
+            "logo_png": "https://logo.clearbit.com/urbanoutfitters.com?size=512",
+            "keywords": [
+                "retail",
+                "shopping",
+                "storefront",
+                "products",
+                "brands"
+            ]
+        },
+        {
+            "name": "Banana Republic",
+            "logo_png": "https://logo.clearbit.com/bananarepublic.com?size=512",
+            "keywords": [
+                "apparel",
+                "fashion",
+                "clothing",
+                "accessories",
+                "casual"
+            ]
+        },
+        {
+            "name": "J.Crew",
+            "logo_png": "https://logo.clearbit.com/jcrew.com?size=512",
+            "keywords": [
+                "apparel",
+                "fashion",
+                "clothing",
+                "accessories",
+                "casual"
+            ]
+        },
+        {
+            "name": "Express",
+            "logo_png": "https://logo.clearbit.com/express.com?size=512",
+            "keywords": [
+                "apparel",
+                "fashion",
+                "clothing",
+                "accessories",
+                "casual"
+            ]
+        },
+        {
+            "name": "Forever 21",
+            "logo_png": "https://logo.clearbit.com/forever21.com?size=512",
+            "keywords": [
+                "apparel",
+                "fashion",
+                "clothing",
+                "accessories",
+                "trend"
+            ]
+        },
+        {
+            "name": "Shein",
+            "logo_png": "https://logo.clearbit.com/shein.com?size=512",
+            "keywords": [
+                "online",
+                "marketplace",
+                "ecommerce",
+                "shipping",
+                "catalog"
+            ]
+        },
+        {
+            "name": "ASOS",
+            "logo_png": "https://logo.clearbit.com/asos.com?size=512",
+            "keywords": [
+                "online",
+                "marketplace",
+                "ecommerce",
+                "shipping",
+                "catalog"
+            ]
+        },
+        {
+            "name": "Boohoo",
+            "logo_png": "https://logo.clearbit.com/boohoo.com?size=512",
+            "keywords": [
+                "online",
+                "marketplace",
+                "ecommerce",
+                "shipping",
+                "catalog"
+            ]
+        },
+        {
+            "name": "Revolve",
+            "logo_png": "https://logo.clearbit.com/revolve.com?size=512",
+            "keywords": [
+                "online",
+                "marketplace",
+                "ecommerce",
+                "shipping",
+                "catalog"
+            ]
+        },
+        {
+            "name": "Net-a-Porter",
+            "logo_png": "https://logo.clearbit.com/net-a-porter.com?size=512",
+            "keywords": [
+                "online",
+                "marketplace",
+                "ecommerce",
+                "shipping",
+                "catalog"
+            ]
+        },
+        {
+            "name": "Saks Fifth Avenue",
+            "logo_png": "https://logo.clearbit.com/saksfifthavenue.com?size=512",
+            "keywords": [
+                "retail",
+                "shopping",
+                "storefront",
+                "luxury",
+                "designer"
+            ]
+        },
+        {
+            "name": "Bloomingdale's",
+            "logo_png": "https://logo.clearbit.com/bloomingdales.com?size=512",
+            "keywords": [
+                "retail",
+                "shopping",
+                "storefront",
+                "luxury",
+                "designer"
+            ]
+        },
+        {
+            "name": "Neiman Marcus",
+            "logo_png": "https://logo.clearbit.com/neimanmarcus.com?size=512",
+            "keywords": [
+                "retail",
+                "shopping",
+                "storefront",
+                "luxury",
+                "designer"
+            ]
+        },
+        {
+            "name": "Lord & Taylor",
+            "logo_png": "https://logo.clearbit.com/lordandtaylor.com?size=512",
+            "keywords": [
+                "retail",
+                "shopping",
+                "storefront",
+                "luxury",
+                "designer"
+            ]
+        },
+        {
+            "name": "Bergdorf Goodman",
+            "logo_png": "https://logo.clearbit.com/bergdorfgoodman.com?size=512",
+            "keywords": [
+                "retail",
+                "shopping",
+                "storefront",
+                "luxury",
+                "designer"
+            ]
+        },
+        {
+            "name": "Tiffany & Co.",
+            "logo_png": "https://logo.clearbit.com/tiffany.com?size=512",
+            "keywords": [
+                "jewelry",
+                "engagement",
+                "gifts",
+                "fine jewelry",
+                "accessories"
+            ]
+        },
+        {
+            "name": "Cartier",
+            "logo_png": "https://logo.clearbit.com/cartier.com?size=512",
+            "keywords": [
+                "jewelry",
+                "engagement",
+                "gifts",
+                "fine jewelry",
+                "accessories"
+            ]
+        },
+        {
+            "name": "Wegmans",
+            "logo_png": "https://logo.clearbit.com/wegmans.com?size=512",
+            "keywords": [
+                "supermarket",
+                "groceries",
+                "household",
+                "bulk",
+                "convenience"
+            ]
+        },
+        {
+            "name": "Publix",
+            "logo_png": "https://logo.clearbit.com/publix.com?size=512",
+            "keywords": [
+                "supermarket",
+                "groceries",
+                "household",
+                "bulk",
+                "convenience"
+            ]
+        },
+        {
+            "name": "Kroger",
+            "logo_png": "https://logo.clearbit.com/kroger.com?size=512",
+            "keywords": [
+                "supermarket",
+                "groceries",
+                "household",
+                "bulk",
+                "convenience"
+            ]
+        },
+        {
+            "name": "Safeway",
+            "logo_png": "https://logo.clearbit.com/safeway.com?size=512",
+            "keywords": [
+                "supermarket",
+                "groceries",
+                "household",
+                "bulk",
+                "convenience"
+            ]
+        },
+        {
+            "name": "Albertsons",
+            "logo_png": "https://logo.clearbit.com/albertsons.com?size=512",
+            "keywords": [
+                "supermarket",
+                "groceries",
+                "household",
+                "bulk",
+                "convenience"
+            ]
+        },
+        {
+            "name": "Meijer",
+            "logo_png": "https://logo.clearbit.com/meijer.com?size=512",
+            "keywords": [
+                "supermarket",
+                "groceries",
+                "household",
+                "bulk",
+                "convenience"
+            ]
+        },
+        {
+            "name": "Giant Eagle",
+            "logo_png": "https://logo.clearbit.com/gianteagle.com?size=512",
+            "keywords": [
+                "supermarket",
+                "groceries",
+                "household",
+                "bulk",
+                "convenience"
+            ]
+        },
+        {
+            "name": "Hy-Vee",
+            "logo_png": "https://logo.clearbit.com/hy-vee.com?size=512",
+            "keywords": [
+                "supermarket",
+                "groceries",
+                "household",
+                "bulk",
+                "convenience"
+            ]
+        },
+        {
+            "name": "Food Lion",
+            "logo_png": "https://logo.clearbit.com/foodlion.com?size=512",
+            "keywords": [
+                "supermarket",
+                "groceries",
+                "household",
+                "bulk",
+                "convenience"
+            ]
+        },
+        {
+            "name": "Stop & Shop",
+            "logo_png": "https://logo.clearbit.com/stopandshop.com?size=512",
+            "keywords": [
+                "supermarket",
+                "groceries",
+                "household",
+                "bulk",
+                "convenience"
+            ]
+        },
+        {
+            "name": "Piggly Wiggly",
+            "logo_png": "https://logo.clearbit.com/pigglywiggly.com?size=512",
+            "keywords": [
+                "supermarket",
+                "groceries",
+                "household",
+                "bulk",
+                "convenience"
+            ]
+        },
+        {
+            "name": "Harris Teeter",
+            "logo_png": "https://logo.clearbit.com/harristeeter.com?size=512",
+            "keywords": [
+                "supermarket",
+                "groceries",
+                "household",
+                "bulk",
+                "convenience"
+            ]
+        },
+        {
+            "name": "Big Lots",
+            "logo_png": "https://logo.clearbit.com/biglots.com?size=512",
+            "keywords": [
+                "discount",
+                "home",
+                "furniture",
+                "bargain",
+                "clearance"
+            ]
+        },
+        {
+            "name": "The Container Store",
+            "logo_png": "https://logo.clearbit.com/containerstore.com?size=512",
+            "keywords": [
+                "home",
+                "organization",
+                "storage",
+                "accessories",
+                "solutions"
+            ]
+        },
+        {
+            "name": "Burlington",
+            "logo_png": "https://logo.clearbit.com/burlington.com?size=512",
+            "keywords": [
+                "discount",
+                "apparel",
+                "home",
+                "bargain",
+                "clearance"
+            ]
+        },
+        {
+            "name": "Dollarama",
+            "logo_png": "https://logo.clearbit.com/dollarama.com?size=512",
+            "keywords": [
+                "discount",
+                "value",
+                "household",
+                "everyday",
+                "budget"
+            ]
+        },
+        {
+            "name": "Canadian Tire",
+            "logo_png": "https://logo.clearbit.com/canadiantire.ca?size=512",
+            "keywords": [
+                "hardware",
+                "automotive",
+                "sporting",
+                "home",
+                "tools"
+            ]
+        },
+        {
+            "name": "Zales",
+            "logo_png": "https://logo.clearbit.com/zales.com?size=512",
+            "keywords": [
+                "jewelry",
+                "engagement",
+                "gifts",
+                "fine jewelry",
+                "accessories"
+            ]
+        },
+        {
+            "name": "Kay Jewelers",
+            "logo_png": "https://logo.clearbit.com/kay.com?size=512",
+            "keywords": [
+                "jewelry",
+                "engagement",
+                "gifts",
+                "fine jewelry",
+                "accessories"
+            ]
+        },
+        {
+            "name": "Finish Line",
+            "logo_png": "https://logo.clearbit.com/finishline.com?size=512",
+            "keywords": [
+                "apparel",
+                "sportswear",
+                "athletic",
+                "performance",
+                "footwear"
+            ]
+        },
+        {
+            "name": "Bath & Body Works",
+            "logo_png": "https://logo.clearbit.com/bathandbodyworks.com?size=512",
+            "keywords": [
+                "beauty",
+                "skincare",
+                "cosmetics",
+                "makeup",
+                "fragrance"
+            ]
+        },
+        {
+            "name": "The Body Shop",
+            "logo_png": "https://logo.clearbit.com/thebodyshop.com?size=512",
+            "keywords": [
+                "beauty",
+                "skincare",
+                "cosmetics",
+                "makeup",
+                "fragrance"
+            ]
+        },
+        {
+            "name": "Lush",
+            "logo_png": "https://logo.clearbit.com/lush.com?size=512",
+            "keywords": [
+                "beauty",
+                "skincare",
+                "cosmetics",
+                "makeup",
+                "fragrance"
+            ]
+        },
+        {
+            "name": "L'Occitane",
+            "logo_png": "https://logo.clearbit.com/loccitane.com?size=512",
+            "keywords": [
+                "beauty",
+                "skincare",
+                "cosmetics",
+                "makeup",
+                "fragrance"
+            ]
+        },
+        {
+            "name": "Uniqlo",
+            "logo_png": "https://logo.clearbit.com/uniqlo.com?size=512",
+            "keywords": [
+                "apparel",
+                "fashion",
+                "clothing",
+                "accessories",
+                "casual"
+            ]
+        },
+        {
+            "name": "Mango",
+            "logo_png": "https://logo.clearbit.com/mango.com?size=512",
+            "keywords": [
+                "apparel",
+                "fashion",
+                "clothing",
+                "accessories",
+                "trend"
+            ]
+        },
+        {
+            "name": "Next",
+            "logo_png": "https://logo.clearbit.com/next.co.uk?size=512",
+            "keywords": [
+                "retail",
+                "shopping",
+                "storefront",
+                "products",
+                "brands"
+            ]
+        },
+        {
+            "name": "Primark",
+            "logo_png": "https://logo.clearbit.com/primark.com?size=512",
+            "keywords": [
+                "discount",
+                "apparel",
+                "fashion",
+                "clothing",
+                "bargain"
+            ]
+        },
+        {
+            "name": "Abercrombie & Fitch",
+            "logo_png": "https://logo.clearbit.com/abercrombie.com?size=512",
+            "keywords": [
+                "apparel",
+                "fashion",
+                "clothing",
+                "accessories",
+                "casual"
+            ]
+        },
+        {
+            "name": "Hollister",
+            "logo_png": "https://logo.clearbit.com/hollisterco.com?size=512",
+            "keywords": [
+                "apparel",
+                "fashion",
+                "clothing",
+                "accessories",
+                "casual"
+            ]
+        },
+        {
+            "name": "American Eagle",
+            "logo_png": "https://logo.clearbit.com/ae.com?size=512",
+            "keywords": [
+                "apparel",
+                "fashion",
+                "clothing",
+                "accessories",
+                "casual"
+            ]
+        },
+        {
+            "name": "Aéropostale",
+            "logo_png": "https://logo.clearbit.com/aeropostale.com?size=512",
+            "keywords": [
+                "retail",
+                "shopping",
+                "storefront",
+                "products",
+                "brands"
+            ]
+        },
+        {
+            "name": "Lids",
+            "logo_png": "https://logo.clearbit.com/lids.com?size=512",
+            "keywords": [
+                "retail",
+                "shopping",
+                "storefront",
+                "products",
+                "brands"
+            ]
+        },
+        {
+            "name": "Guitar Center",
+            "logo_png": "https://logo.clearbit.com/guitarcenter.com?size=512",
+            "keywords": [
+                "retail",
+                "music",
+                "instruments",
+                "audio",
+                "gear"
+            ]
+        },
+        {
+            "name": "Dillard's",
+            "logo_png": "https://logo.clearbit.com/dillards.com?size=512",
+            "keywords": [
+                "retail",
+                "shopping",
+                "storefront",
+                "products",
+                "brands"
+            ]
+        },
+        {
+            "name": "Sears (legacy)",
+            "logo_png": "https://logo.clearbit.com/sears.com?size=512",
+            "keywords": [
+                "retail",
+                "shopping",
+                "storefront",
+                "products",
+                "brands"
+            ]
+        },
+        {
+            "name": "Cracker Barrel (retail store)",
+            "logo_png": "https://logo.clearbit.com/crackerbarrel.com?size=512",
+            "keywords": [
+                "retail",
+                "gifts",
+                "souvenirs",
+                "food",
+                "country"
+            ]
+        },
+        {
+            "name": "Footasylum",
+            "logo_png": "https://logo.clearbit.com/footasylum.com?size=512",
+            "keywords": [
+                "apparel",
+                "sportswear",
+                "athletic",
+                "performance",
+                "footwear"
+            ]
+        },
+        {
+            "name": "Shoe Carnival",
+            "logo_png": "https://logo.clearbit.com/shoecarnival.com?size=512",
+            "keywords": [
+                "apparel",
+                "shoes",
+                "footwear",
+                "accessories",
+                "retail"
+            ]
+        },
+        {
+            "name": "Saks OFF 5TH",
+            "logo_png": "https://logo.clearbit.com/saksoff5th.com?size=512",
+            "keywords": [
+                "discount",
+                "luxury",
+                "designer",
+                "outlet",
+                "bargain"
+            ]
+        },
+        {
+            "name": "Cost Plus World Market",
+            "logo_png": "https://logo.clearbit.com/worldmarket.com?size=512",
+            "keywords": [
+                "home",
+                "furniture",
+                "decor",
+                "kitchen",
+                "imports"
+            ]
+        },
+        {
+            "name": "Big W",
+            "logo_png": "https://logo.clearbit.com/bigw.com.au?size=512",
+            "keywords": [
+                "retail",
+                "discount",
+                "household",
+                "clothing",
+                "general"
+            ]
+        },
+        {
+            "name": "Woolworths (AU)",
+            "logo_png": "https://logo.clearbit.com/woolworths.com.au?size=512",
+            "keywords": [
+                "supermarket",
+                "groceries",
+                "fresh",
+                "produce",
+                "bakery"
+            ]
+        },
+        {
+            "name": "Takashimaya",
+            "logo_png": "https://logo.clearbit.com/takashimaya.co.jp?size=512",
+            "keywords": [
+                "department",
+                "luxury",
+                "retail",
+                "japanese",
+                "designer"
+            ]
+        },
+        {
+            "name": "Muji",
+            "logo_png": "https://logo.clearbit.com/muji.com?size=512",
+            "keywords": [
+                "home",
+                "minimalist",
+                "design",
+                "furniture",
+                "lifestyle"
+            ]
+        },
+        {
+            "name": "PC Richard & Son",
+            "logo_png": "https://logo.clearbit.com/pcrichard.com?size=512",
+            "keywords": [
+                "electronics",
+                "appliances",
+                "retail",
+                "home",
+                "audio"
+            ]
+        },
+        {
+            "name": "Miniso",
+            "logo_png": "https://logo.clearbit.com/miniso.com?size=512",
+            "keywords": [
+                "discount",
+                "home",
+                "gadgets",
+                "accessories",
+                "novelties"
+            ]
+        },
+        {
+            "name": "Soma",
+            "logo_png": "https://logo.clearbit.com/soma.com?size=512",
+            "keywords": [
+                "apparel",
+                "lingerie",
+                "sleepwear",
+                "comfort",
+                "fashion"
+            ]
+        },
+        {
+            "name": "Stitch Fix",
+            "logo_png": "https://logo.clearbit.com/stitchfix.com?size=512",
+            "keywords": [
+                "online",
+                "marketplace",
+                "ecommerce",
+                "shipping",
+                "catalog"
+            ]
+        },
+        {
+            "name": "Rent the Runway",
+            "logo_png": "https://logo.clearbit.com/renttherunway.com?size=512",
+            "keywords": [
+                "online",
+                "marketplace",
+                "fashion",
+                "rentals",
+                "events"
+            ]
+        },
+        {
+            "name": "Blue Nile",
+            "logo_png": "https://logo.clearbit.com/bluenile.com?size=512",
+            "keywords": [
+                "jewelry",
+                "engagement",
+                "gifts",
+                "fine jewelry",
+                "online"
+            ]
+        },
+        {
+            "name": "Forever New",
+            "logo_png": "https://logo.clearbit.com/forevernew.com.au?size=512",
+            "keywords": [
+                "apparel",
+                "fashion",
+                "clothing",
+                "accessories",
+                "trend"
+            ]
+        },
+        {
+            "name": "Lovisa",
+            "logo_png": "https://logo.clearbit.com/lovisa.com?size=512",
+            "keywords": [
+                "jewelry",
+                "accessories",
+                "fashion",
+                "affordable",
+                "trending"
+            ]
+        },
+        {
+            "name": "Arcteryx",
+            "logo_png": "https://logo.clearbit.com/arcteryx.com?size=512",
+            "keywords": [
+                "apparel",
+                "outdoor",
+                "gear",
+                "performance",
+                "technical"
+            ]
+        },
+        {
+            "name": "H&M Home",
+            "logo_png": "https://logo.clearbit.com/hm.com?size=512",
+            "keywords": [
+                "home",
+                "decor",
+                "textiles",
+                "affordable",
+                "trend"
+            ]
+        },
+        {
+            "name": "Boxed",
+            "logo_png": "https://logo.clearbit.com/boxed.com?size=512",
+            "keywords": [
+                "online",
+                "bulk",
+                "wholesale",
+                "ecommerce",
+                "shipping"
+            ]
+        },
+        {
+            "name": "Chewy",
+            "logo_png": "https://logo.clearbit.com/chewy.com?size=512",
+            "keywords": [
+                "pets",
+                "petfood",
+                "supplies",
+                "toys",
+                "grooming"
+            ]
+        },
+        {
+            "name": "BoxLunch",
+            "logo_png": "https://logo.clearbit.com/boxlunchgift.com?size=512",
+            "keywords": [
+                "gifts",
+                "pop-culture",
+                "apparel",
+                "novelties",
+                "collectibles"
+            ]
+        },
+        {
+            "name": "Hot Topic",
+            "logo_png": "https://logo.clearbit.com/hottopic.com?size=512",
+            "keywords": [
+                "pop-culture",
+                "apparel",
+                "music",
+                "novelties",
+                "collectibles"
+            ]
+        },
+        {
+            "name": "Spencer's",
+            "logo_png": "https://logo.clearbit.com/spencersonline.com?size=512",
+            "keywords": [
+                "novelty",
+                "gifts",
+                "apparel",
+                "collectibles",
+                "pop-culture"
+            ]
+        },
+        {
+            "name": "REI Outlet",
+            "logo_png": "https://logo.clearbit.com/rei.com?size=512",
+            "keywords": [
+                "outdoor",
+                "gear",
+                "discount",
+                "adventure",
+                "camping"
+            ]
+        },
+        {
+            "name": "Barnes & Noble College",
+            "logo_png": "https://logo.clearbit.com/bncollege.com?size=512",
+            "keywords": [
+                "books",
+                "campus",
+                "textbooks",
+                "college",
+                "retail"
+            ]
+        },
+        {
+            "name": "Bookshop.org",
+            "logo_png": "https://logo.clearbit.com/bookshop.org?size=512",
+            "keywords": [
+                "books",
+                "independent",
+                "reading",
+                "community",
+                "literature"
+            ]
+        },
+        {
+            "name": "ThriftBooks",
+            "logo_png": "https://logo.clearbit.com/thriftbooks.com?size=512",
+            "keywords": [
+                "books",
+                "used",
+                "affordable",
+                "reading",
+                "paperback"
+            ]
+        },
+        {
+            "name": "Depop",
+            "logo_png": "https://logo.clearbit.com/depop.com?size=512",
+            "keywords": [
+                "online",
+                "marketplace",
+                "secondhand",
+                "fashion",
+                "resale"
+            ]
+        },
+        {
+            "name": "Poshmark",
+            "logo_png": "https://logo.clearbit.com/poshmark.com?size=512",
+            "keywords": [
+                "online",
+                "marketplace",
+                "secondhand",
+                "fashion",
+                "resale"
+            ]
+        },
+        {
+            "name": "OfferUp",
+            "logo_png": "https://logo.clearbit.com/offerup.com?size=512",
+            "keywords": [
+                "local",
+                "marketplace",
+                "buy",
+                "sell",
+                "used"
+            ]
+        },
+        {
+            "name": "Letgo",
+            "logo_png": "https://logo.clearbit.com/letgo.com?size=512",
+            "keywords": [
+                "local",
+                "marketplace",
+                "buy",
+                "sell",
+                "used"
+            ]
+        },
+        {
+            "name": "Carrefour (retail)",
+            "logo_png": "https://logo.clearbit.com/carrefour.com?size=512",
+            "keywords": [
+                "supermarket",
+                "groceries",
+                "fresh",
+                "bakery",
+                "produce"
+            ]
+        },
+        {
+            "name": "Metro (retail)",
+            "logo_png": "https://logo.clearbit.com/metro.ca?size=512",
+            "keywords": [
+                "supermarket",
+                "groceries",
+                "fresh",
+                "bakery",
+                "produce"
+            ]
+        },
+        {
+            "name": "Lidl",
+            "logo_png": "https://logo.clearbit.com/lidl.com?size=512",
+            "keywords": [
+                "supermarket",
+                "groceries",
+                "fresh",
+                "bakery",
+                "produce"
+            ]
+        },
+        {
+            "name": "Marks & Spencer",
+            "logo_png": "https://logo.clearbit.com/marksandspencer.com?size=512",
+            "keywords": [
+                "retail",
+                "food",
+                "clothing",
+                "home",
+                "quality"
+            ]
+        },
+        {
+            "name": "John Lewis",
+            "logo_png": "https://logo.clearbit.com/johnlewis.com?size=512",
+            "keywords": [
+                "department",
+                "retail",
+                "home",
+                "clothing",
+                "quality"
+            ]
+        },
+        {
+            "name": "Galeries Lafayette",
+            "logo_png": "https://logo.clearbit.com/galerieslafayette.com?size=512",
+            "keywords": [
+                "department",
+                "luxury",
+                "retail",
+                "fashion",
+                "designer"
+            ]
+        },
+        {
+            "name": "El Corte Inglés",
+            "logo_png": "https://logo.clearbit.com/elcorteingles.es?size=512",
+            "keywords": [
+                "department",
+                "retail",
+                "fashion",
+                "home",
+                "spanish"
+            ]
+        },
+        {
+            "name": "Swarovski",
+            "logo_png": "https://logo.clearbit.com/swarovski.com?size=512",
+            "keywords": [
+                "jewelry",
+                "crystal",
+                "gifts",
+                "accessories",
+                "luxury"
+            ]
+        },
+        {
+            "name": "Buckle",
+            "logo_png": "https://logo.clearbit.com/buckle.com?size=512",
+            "keywords": [
+                "apparel",
+                "jeans",
+                "casual",
+                "retail",
+                "accessories"
+            ]
+        },
+        {
+            "name": "Shoe Dept",
+            "logo_png": "https://logo.clearbit.com/shoedept.com?size=512",
+            "keywords": [
+                "shoes",
+                "footwear",
+                "retail",
+                "kids",
+                "family"
+            ]
+        },
+        {
+            "name": "The Kooples",
+            "logo_png": "https://logo.clearbit.com/thekooples.com?size=512",
+            "keywords": [
+                "apparel",
+                "fashion",
+                "designer",
+                "trendy",
+                "luxury"
+            ]
+        },
+        {
+            "name": "Brandy Melville",
+            "logo_png": "https://logo.clearbit.com/brandymelvilleusa.com?size=512",
+            "keywords": [
+                "apparel",
+                "fashion",
+                "teen",
+                "trend",
+                "casual"
+            ]
+        },
+        {
+            "name": "Bed Bath & Beyond Canada",
+            "logo_png": "https://logo.clearbit.com/bedbathandbeyond.ca?size=512",
+            "keywords": [
+                "home",
+                "furniture",
+                "decor",
+                "kitchen",
+                "housewares"
+            ]
+        },
+        {
+            "name": "Priceline (AU)",
+            "logo_png": "https://logo.clearbit.com/priceline.com.au?size=512",
+            "keywords": [
+                "health",
+                "beauty",
+                "pharmacy",
+                "australia",
+                "store"
+            ]
+        },
+        {
+            "name": "David Jones (AU)",
+            "logo_png": "https://logo.clearbit.com/davidjones.com.au?size=512",
+            "keywords": [
+                "department",
+                "retail",
+                "australia",
+                "fashion",
+                "home"
+            ]
+        },
+        {
+            "name": "Myer (AU)",
+            "logo_png": "https://logo.clearbit.com/myer.com.au?size=512",
+            "keywords": [
+                "department",
+                "retail",
+                "australia",
+                "fashion",
+                "home"
+            ]
+        },
+        {
+            "name": "Nitori",
+            "logo_png": "https://logo.clearbit.com/nitori-net.jp?size=512",
+            "keywords": [
+                "home",
+                "furniture",
+                "japan",
+                "decor",
+                "affordable"
+            ]
+        },
+        {
+            "name": "Seiyu",
+            "logo_png": "https://logo.clearbit.com/seiyu.co.jp?size=512",
+            "keywords": [
+                "supermarket",
+                "groceries",
+                "japan",
+                "fresh",
+                "produce"
+            ]
+        },
+        {
+            "name": "Aeon",
+            "logo_png": "https://logo.clearbit.com/aeonretail.jp?size=512",
+            "keywords": [
+                "supermarket",
+                "groceries",
+                "japan",
+                "fresh",
+                "produce"
+            ]
+        },
+        {
+            "name": "Don Quijote",
+            "logo_png": "https://logo.clearbit.com/donki.com?size=512",
+            "keywords": [
+                "discount",
+                "novelty",
+                "convenience",
+                "japan",
+                "variety"
+            ]
+        },
+        {
+            "name": "FamilyMart",
+            "logo_png": "https://logo.clearbit.com/family.co.jp?size=512",
+            "keywords": [
+                "convenience",
+                "snacks",
+                "fuel",
+                "24/7",
+                "grab-and-go"
+            ]
+        },
+        {
+            "name": "Lawson",
+            "logo_png": "https://logo.clearbit.com/lawson.co.jp?size=512",
+            "keywords": [
+                "convenience",
+                "snacks",
+                "fuel",
+                "24/7",
+                "grab-and-go"
+            ]
+        },
+        {
+            "name": "ShopRite",
+            "logo_png": "https://logo.clearbit.com/shoprite.com?size=512",
+            "keywords": [
+                "supermarket",
+                "groceries",
+                "household",
+                "bulk",
+                "convenience"
+            ]
+        },
+        {
+            "name": "Aldi Nord",
+            "logo_png": "https://logo.clearbit.com/aldi-nord.de?size=512",
+            "keywords": [
+                "supermarket",
+                "groceries",
+                "household",
+                "bulk",
+                "convenience"
+            ]
+        },
+        {
+            "name": "Aldi Süd",
+            "logo_png": "https://logo.clearbit.com/aldi-sued.de?size=512",
+            "keywords": [
+                "supermarket",
+                "groceries",
+                "household",
+                "bulk",
+                "convenience"
+            ]
+        },
+        {
+            "name": "Soko Glam",
+            "logo_png": "https://logo.clearbit.com/sokoglam.com?size=512",
+            "keywords": [
+                "beauty",
+                "skincare",
+                "k-beauty",
+                "cosmetics",
+                "online"
+            ]
+        },
+        {
+            "name": "Beautylish",
+            "logo_png": "https://logo.clearbit.com/beautylish.com?size=512",
+            "keywords": [
+                "beauty",
+                "skincare",
+                "cosmetics",
+                "makeup",
+                "online"
+            ]
+        },
+        {
+            "name": "Space NK",
+            "logo_png": "https://logo.clearbit.com/spacenk.com?size=512",
+            "keywords": [
+                "beauty",
+                "skincare",
+                "cosmetics",
+                "perfume",
+                "luxury"
+            ]
+        },
+        {
+            "name": "Selfridges",
+            "logo_png": "https://logo.clearbit.com/selfridges.com?size=512",
+            "keywords": [
+                "department",
+                "luxury",
+                "designer",
+                "retail",
+                "shopping"
+            ]
+        }
+    ]
+}

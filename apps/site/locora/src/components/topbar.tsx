@@ -6,32 +6,54 @@ import BaseButton from "./button";
 import WaitlistButton from "./waitlistbutton";
 import Dropdown from "./dropdown";
 
+// externals
+import { useMotionValueEvent, useScroll } from "framer-motion";
+
+import GoToSection from "../effects/GoToSection";
+import { useState } from "react";
+import clamp from "../utilities/clamp";
+
 export default function TopBar() {
+
+    const { scrollY } = useScroll();
+    const [CurrentAlpha, setCurrentAlpha] = useState(0.9);
+
+    useMotionValueEvent(scrollY, "change", (_) => {
+        const alpha = clamp((0.9 - (scrollY.get() / 2750)), 0.6, 0.9);
+        setCurrentAlpha(alpha);
+    })
 
     return (
         <>
-            <header className="fixed top-0 left-0 w-full z-20 bg-gradient-to-b from-bay-of-many-400 to drop-shadow-xl">
-                <div className="mx-auto flex max-w-5xl items-center px-5 md:px-8 py-2">
+            <header
+                className={`fixed bg-clip-padding backdrop-filter backdrop-blur-xl top-0 left-0 min-w-full z-20 border-b-3 shadow-xl border-bay-of-many-300 drop-shadow-xl`}
+                style={{
+                    background: `linear-gradient(to bottom,
+                        rgba(0, 66, 244, ${CurrentAlpha}),
+                        rgba(43, 127, 255, ${CurrentAlpha}),
+                        rgba(124, 134, 255, ${CurrentAlpha}))`,
+                }}
+            >
+                <div className="flex items-center justify-between px-5 md:px-8 py-2">
                     {/* Left Logo */}
                     <div className="flex items-center gap-3">
-                        <BaseButton hasBackground={false} shape="circle">
+                        <BaseButton hasBackground={false} otherProps="gap-5" shape="circle" onClick={() => { GoToSection("landing") }}>
                             <img src={Locora} alt="Locora Logo" className="h-8" />
+                            <h1 className="text-white text-xl font-bold drop-shadow-2xl">Locora</h1>
                         </BaseButton>
-                        <h1 className="text-white text-xl font-bold drop-shadow-2xl">Locora</h1>
                     </div>
 
                     {/* Middle dropdown */}
-                    <div className="flex-1 gap-2 flex justify-center">
-                        <Dropdown label="Info" options={["What is this?", "How does it work?", "FAQ"]} />
-                        <Dropdown label="Features" options={["AI Search", "Game-Based Experience", "Review Businesses", "Community", "Deals & Discounts"]} />
+                    <div className="flex-1 md:visible lg:flex xl:flex hidden items-center gap-2 justify-center">
+                        <Dropdown label="Info" options={["What is this?", "Waitlist Now!"]} />
+                        <Dropdown label="Features" options={["AI Search", "Game-Based Experience"]} />
                     </div>
 
                     {/* Right waitlist */}
                     <div className="flex items-center gap-3">
-                        <WaitlistButton />
+                        <WaitlistButton otherProps="align-right" />
                     </div>
                 </div>
-
             </header>
 
 

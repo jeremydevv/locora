@@ -5,11 +5,20 @@ interface buttonProps {
     text?: string;
     type?: "default" | "black" | "white";
     shape?: "circle" | "square";
-    size?: "small" | "medium" | "large" | "extra-large" | undefined;
+    size?: "xs" | "small" | "medium" | "large" | "extra-large" | undefined;
     otherProps?: string;
     preChildren?: React.ReactNode;
     children?: React.ReactNode;
     hasBackground?: boolean;
+    onClick?: (...args : any) => void;
+}
+
+const sizesToText = {
+    ["xs"]: "text-xs",
+    ["small"]: "text-sm",
+    ["medium"]: "text-base",
+    ["large"]: "text-lg",
+    ["extra-large"]: "text-xl",
 }
 
 export default function BaseButton({
@@ -21,8 +30,9 @@ export default function BaseButton({
     size = "medium",
     type = "default",
     hasBackground = true,
+    onClick = () => {},
 }: buttonProps) {
-    var BaseStyle = "text-white py-2 px-4 rounded-lg drop-shadow-lg font-semibold flex items-center justify-center ";
+    var BaseStyle = "text-white py-2 cursor-pointer px-4 rounded-lg drop-shadow-lg font-semibold flex items-center justify-center ";
 
     var SizeAnimations =
         "hover:scale-105 active:scale-97 transition-transform duration-10 ease-in-out style-smooth ";
@@ -31,7 +41,7 @@ export default function BaseButton({
 
     if (hasBackground) {
         if (type === "default") {
-            BaseStyle += "bg-gradient-to-b from-bay-of-many-700 to-bay-of-many-400 transition-colors ";
+            BaseStyle += "bg-gradient-to-b from-blue-700 to-bay-of-many-500 transition-colors ";
         } else if (type === "black") {
             BaseStyle += "bg-gradient-to-b from-gray-900 to-gray-600 transition-colors ";
         } else if (type === "white") {
@@ -48,18 +58,12 @@ export default function BaseButton({
         BaseStyle += otherProps;
     }
 
-    if (size === "small") {
-        BaseStyle += "text-sm ";
-    } else if (size === "medium") {
-        BaseStyle += "text-base ";
-    } else if (size === "large") {
-        BaseStyle += "text-lg ";
-    } else if (size === "extra-large") {
-        BaseStyle += "text-xl ";
+    if (size) {
+        BaseStyle += " " + sizesToText[size];
     }
 
     return (
-        <button className={BaseStyle}>
+        <button className={BaseStyle} onClick={onClick}>
             {preChildren}
             {text && <p>{text}</p>}
             {children}

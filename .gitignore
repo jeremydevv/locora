@@ -10,3 +10,6 @@ dist/
 build/
 /apps/site/locora/dist/
 /apps/application/build/
+
+/apps/site/locora/node_modules
+/apps/apis/node_modules
