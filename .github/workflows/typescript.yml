@@ -1,18 +1,29 @@
+name: TypeScript Lint
+
 on: 
   push:
     paths:
       - 'apps/site/locora/**'
       - '.github/workflows/typescript.yml'
+
 jobs:
-  linter-action:
+  linter:
     runs-on: ubuntu-latest
-    name: Linter action
+    name: TypeScript Lint
     steps:
-      - uses: actions/checkout@v2
-      - name: Prepare
-        run: npm ci # you can use any custom command, just be sure it includes npm install
-      - name: Linter action
-        id: linter
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: apps/site/locora
+        run: npm ci
+
+      - name: Run TypeScript Linter
         uses: AntonKornus/TypeScript-Linter@1.0.0
         with:
           folder: apps/site/locora
