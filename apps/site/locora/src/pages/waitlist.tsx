@@ -1,6 +1,15 @@
 import BaseInput from "../components/baseinput"
 import Footer from "../components/footer"
 import cloud from "../assets/Clouds3.png"
+import BaseButton from "../components/button"
+
+const API_URL = import.meta.env.VITE_API_URL
+
+async function TestAPI() {
+    const data = await fetch(`${API_URL}/test`)
+    const body = await data.json()
+    console.log(body.message)
+}
 
 function WaitlistPage() {
     return (
@@ -30,7 +39,17 @@ function WaitlistPage() {
                             Get notifications on the development of the program and receive a reward for waitlisting early.
                         </p>
                     </div>
-                    <BaseInput placeholder="Email or Phone Number" />
+                    <div className="flex flex-col gap-3 items-center justify-center">
+                        
+                        <div>
+                            <p
+                                className="text-left"
+                            >Email or Phone Number</p>
+                            <BaseInput placeholder="johndoe@gmail.com" />
+                        </div>
+
+                        <BaseButton text="Join Waitlist" onClick={TestAPI} />
+                    </div>
                 </div>
 
             </div>

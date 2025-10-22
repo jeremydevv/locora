@@ -6,7 +6,7 @@ function InfoHeader({txt} : {txt : string}) {
     return (
         <div>
             <h2
-                className="text-xl text-white lg:text-2xl xl:text-5xl text-center font-bold leading-tight tracking-tight text-gray-900 dark:text-white"
+                className="text-xl text-white lg:text-2xl xl:text-5xl text-center font-bold leading-tight tracking-tight dark:text-white"
             >
                 {txt}
             </h2>
@@ -18,7 +18,7 @@ function WrappedLink({txt, link} : {txt : string, link : string}) {
     return (
         <a
             onClick={() => GoToSection(link)}
-            className="text-md text-white lg:text-lg xl:text-2xl text-center underline font-semibold leading-tight tracking-tight text-gray-900 dark:text-white"
+            className="text-md text-white lg:text-lg xl:text-2xl text-center underline font-semibold leading-tight tracking-tigh dark:text-white"
         >
             {txt}
         </a>
@@ -52,11 +52,11 @@ export default function Footer() {
 
                     <div>
                         {<InfoHeader txt="Contact" />}
-                        <p className="xl:text-2xl text-white text-lg text-center font-semibold leading-tight tracking-tight text-gray-900 dark:text-white">
+                        <p className="xl:text-2xl text-white text-lg text-center font-semibold leading-tight tracking-tight dark:text-white">
                             Contact us at {
                                 <a
                                     href="mailto:contact@locora.org"
-                                    className="xl:text-2xl text-white text-lg text-center underline font-semibold leading-tight tracking-tight text-gray-900 dark:text-white"
+                                    className="xl:text-2xl text-white text-lg text-center underline font-semibold leading-tight tracking-tight dark:text-white"
                                 >
                                     contact@locora.org
                                 </a>

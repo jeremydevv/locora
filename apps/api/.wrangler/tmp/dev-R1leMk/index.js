@@ -18,28 +18,38 @@ var l = o("image/jpeg");
 var p = o("image/png");
 var d = o("image/webp");
 
-// src/routes/auth.ts
-var router = e({ base: "/auth" });
-router.get("/test", () => new Response("Auth route works \u2705"));
-router.post("/login", async (req) => {
-  const body = await req.json().catch(() => ({}));
-  console.log("Login request:", body);
-  return new Response("Login placeholder", { status: 200 });
-});
-router.post("/register", async (req) => {
-  const body = await req.json().catch(() => ({}));
-  console.log("Register request:", body);
-  return new Response("Register placeholder", { status: 200 });
-});
-var handleAuth = router.handle;
-
 // src/index.ts
-var router2 = e();
-router2.get("/", () => new Response("Locora API is running! \u{1F680}", { status: 200 }));
-router2.all("/auth/*", handleAuth);
-router2.all("*", () => new Response("Not Found", { status: 404 }));
+var router = e();
+function CORSify(res) {
+  const headers = new Headers(res.headers);
+  headers.set("Access-Control-Allow-Origin", "*");
+  headers.set("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  return new Response(res.body, {
+    headers,
+    status: res.status
+  });
+}
+__name(CORSify, "CORSify");
+router.get("/", () => {
+  return Response.redirect("https://locora.org", 302);
+});
+router.get("/test", () => {
+  try {
+    const Data = {
+      "message": "API route works \u2705",
+      "time": Date.now()
+    };
+    return CORSify(new Response(JSON.stringify(Data), { status: 200 }));
+  } catch (err) {
+    return CORSify(new Response(err.message, { status: 500 }));
+  }
+});
+router.all("*", () => CORSify(new Response("Not Found", { status: 404 })));
 var src_default = {
-  fetch: /* @__PURE__ */ __name((req, env, ctx) => router2.handle(req, env, ctx), "fetch")
+  fetch: /* @__PURE__ */ __name((request, env, ctx) => {
+    return router.handle(request, env, ctx);
+  }, "fetch")
 };
 
 // node_modules/wrangler/templates/middleware/middleware-ensure-req-body-drained.ts
@@ -83,7 +93,7 @@ var jsonError = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx)
 }, "jsonError");
 var middleware_miniflare3_json_error_default = jsonError;
 
-// .wrangler/tmp/bundle-fsCBsG/middleware-insertion-facade.js
+// .wrangler/tmp/bundle-uW1PKa/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default,
   middleware_miniflare3_json_error_default
@@ -115,7 +125,7 @@ function __facade_invoke__(request, env, ctx, dispatch, finalMiddleware) {
 }
 __name(__facade_invoke__, "__facade_invoke__");
 
-// .wrangler/tmp/bundle-fsCBsG/middleware-loader.entry.ts
+// .wrangler/tmp/bundle-uW1PKa/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class ___Facade_ScheduledController__ {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;
