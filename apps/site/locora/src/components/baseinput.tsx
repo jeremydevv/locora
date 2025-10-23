@@ -1,16 +1,18 @@
 interface inputProps {
+    id : string,
     placeholder : string,
-    inputType? : "" | "Password"
+    inputType? : "" | "password" | "email"
 }
 
-export default function BaseInput({placeholder} : inputProps) {
+export default function BaseInput({id , placeholder , inputType} : inputProps) {
 
     return (
         <div className="flex rounded-xl cursor-text bg-bay-of-many-300">
             <input
-                className="p-3 text-black w-full h-full"
+                id={id}
+                className="p-3 text-black w-full h-full z-2"
                 placeholder={placeholder}
-                type=""
+                type={inputType || "text"}
             >
                 
             </input>

@@ -5,10 +5,39 @@ import BaseButton from "../components/button"
 
 const API_URL = import.meta.env.VITE_API_URL
 
-async function TestAPI() {
-    const data = await fetch(`${API_URL}/test`)
-    const body = await data.json()
-    console.log(body.message)
+function isValidEmail(email: string) {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+}
+
+async function RequestWaitlistAdd() {
+    try {
+
+        const CurrentEmailInput = document.getElementById("waitlist-email") as HTMLInputElement
+
+        if (CurrentEmailInput.value === "") {
+            return
+        }
+
+        if (!(isValidEmail(CurrentEmailInput.value))) {
+            return
+        }
+
+        const response = await fetch(`${API_URL}/v1/waitlist/add`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                "email": CurrentEmailInput.value
+            }),
+        })
+
+        const data = await response.json()
+        console.log(data)
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 function WaitlistPage() {
@@ -45,10 +74,10 @@ function WaitlistPage() {
                             <p
                                 className="text-left"
                             >Email or Phone Number</p>
-                            <BaseInput placeholder="johndoe@gmail.com" />
+                            <BaseInput id="waitlist-email" placeholder="johndoe@gmail.com" inputType="email"/>
                         </div>
 
-                        <BaseButton text="Join Waitlist" onClick={TestAPI} />
+                        <BaseButton text="Join Waitlist" onClick={RequestWaitlistAdd} />
                     </div>
                 </div>
 
