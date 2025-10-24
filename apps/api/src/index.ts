@@ -18,9 +18,8 @@ router.all("/v1/auth/*", (req) => {
     return handleAuth(req);
 });
 
-router.all("/v1/waitlist/*", (req) => {
-    return handleWaitlist(req);
-})
+router.all("/v1/waitlist", handleWaitlist);
+router.all("/v1/waitlist/:rest*", handleWaitlist);
 
 router.all("/v1/*", () => Corsify(new Response("Not Found", { status: 404 })));
 router.all("*", () => Corsify(new Response("Not Found", { status: 404 })));
