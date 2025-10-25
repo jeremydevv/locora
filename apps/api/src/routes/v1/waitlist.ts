@@ -6,6 +6,7 @@ import JSONResponse from "../utils/JSONResponse";
 import isValidEmail from "../utils/isValidEmail";
 import { Env } from "../types";
 import OriginValidate from "../utils/OriginValidate";
+import { addToEmails } from "./Waitlist/Spreadsheet";
 
 const router = Router({ base: "/v1/waitlist/" });
 
@@ -109,6 +110,10 @@ async function VerifyTurnstileToken(req : Request ,token: string, env : Env, ip?
     );
 }
 
+async function AddEmailToGoogleSheets(req : Request, env : Env, email : string) {
+    
+}
+
 async function Add_To_Waitlist(req: Request, env: Env) {
 
     const body: { email: string; turnstile_token: string } = await req.json();
@@ -128,11 +133,16 @@ async function Add_To_Waitlist(req: Request, env: Env) {
         return TurnstileValid;
     }
 
-    // passed turnstile token
-    return JSONResponse(req,{
-        status: "success",
-        message: "You have been added to the waitlist.",
-    })
+    const EmailAdded = await addToEmails(req,Email);
+
+    if (!(EmailAdded)) {
+        return JSONResponse(req,
+            {status: "error",message: "Error adding email to spreadsheet.",},
+            500
+        );
+    }
+
+    return EmailAdded
 }
 
 export const handleWaitlist = (req: Request, env: Env) => router.handle(req, env);
