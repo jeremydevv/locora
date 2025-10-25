@@ -5,29 +5,29 @@ import Corsify from "../utils/Corsify";
 import JSONResponse from "../utils/JSONResponse";
 import isValidEmail from "../utils/isValidEmail";
 import { Env } from "../types";
+import OriginValidate from "../utils/OriginValidate";
 
-const router = Router();
+const router = Router({ base: "/v1/waitlist/" });
 
-router.options("*", () => {
-    return new Response(null, {
-        status: 204,
-        headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type, Authorization",
-        },
-    });
+router.post("add", async (req : Request, env : Env) => {
+    const WaitlistResults = await Add_To_Waitlist(req, env);
+    return WaitlistResults
 });
 
-router.post("/add", Add_To_Waitlist);
+router.options("*", (req : Request) => {
+    return Corsify(req, new Response(null, {
+        status : 200
+    }));
+});
 
-router.all("*", () => {
-    return Corsify(new Response("Not Found", { status: 404 }));
+router.all("/*", (req) => {
+    return Corsify(req,new Response("Not Found", { status: 404 }));
 })
 
-async function checkForValidEmail(email: string) {
+async function checkForValidEmail(req : Request,email: string) {
+
     if (email == "") {
-        return JSONResponse(
+        return JSONResponse(req,
             {
                 status: "error",
                 message: "Email is required.",
@@ -37,7 +37,7 @@ async function checkForValidEmail(email: string) {
     }
 
     if (!email) {
-        return JSONResponse(
+        return JSONResponse(req,
             {
                 status: "error",
                 message: "Email is required.",
@@ -47,7 +47,7 @@ async function checkForValidEmail(email: string) {
     }
 
     if (!isValidEmail(email)) {
-        return JSONResponse(
+        return JSONResponse(req,
             {
                 status: "error",
                 message: "Invalid email address.",
@@ -59,9 +59,9 @@ async function checkForValidEmail(email: string) {
     return true;
 }
 
-async function VerifyTurnstileToken(token: string, env : Env, ip?: string,) {
+async function VerifyTurnstileToken(req : Request ,token: string, env : Env, ip?: string,) {
     if (!token) {
-        return JSONResponse(
+        return JSONResponse(req,
             {
                 status: "error",
                 message: "Turnstile token is required.",
@@ -71,7 +71,7 @@ async function VerifyTurnstileToken(token: string, env : Env, ip?: string,) {
     }
 
     if (token == "") {
-        return JSONResponse(
+        return JSONResponse(req,
             {
                 status: "error",
                 message: "Turnstile token is required.",
@@ -85,6 +85,8 @@ async function VerifyTurnstileToken(token: string, env : Env, ip?: string,) {
     formData.append("response", token);
     if (ip) formData.append("remoteip", ip);
 
+    console.log("passed form data thing")
+
     const res = await fetch(
         "https://challenges.cloudflare.com/turnstile/v0/siteverify",
         {
@@ -97,34 +99,40 @@ async function VerifyTurnstileToken(token: string, env : Env, ip?: string,) {
     if (data.success) {
         return true;
     }
+
+    return JSONResponse(req,
+        {
+            status: "error",
+            message: "Turnstile token is invalid.",
+        },
+        400
+    );
 }
 
 async function Add_To_Waitlist(req: Request, env: Env) {
+
     const body: { email: string; turnstile_token: string } = await req.json();
     const Email = body.email;
 
     const IP: string = req.headers.get("CF-Connecting-IP")!;
 
-    const EmailValid = await checkForValidEmail(Email);
+    const EmailValid = await checkForValidEmail(req,Email);
     if (!(EmailValid)) {
         return EmailValid;
     }
 
     // passed email testing
 
-    const TurnstileValid = await VerifyTurnstileToken(body.turnstile_token, env, IP);
+    const TurnstileValid = await VerifyTurnstileToken(req,body.turnstile_token, env, IP);
     if (!(TurnstileValid)) {
         return TurnstileValid;
     }
 
     // passed turnstile token
-
-    return Corsify(
-        JSONResponse({
-            status: "success",
-            message: "You have been added to the waitlist.",
-        })
-    );
+    return JSONResponse(req,{
+        status: "success",
+        message: "You have been added to the waitlist.",
+    })
 }
 
 export const handleWaitlist = (req: Request, env: Env) => router.handle(req, env);

@@ -4,8 +4,8 @@ import JSONResponse from "../utils/JSONResponse";
 
 const router = Router({ base: "/v1/auth" });
 
-router.get("/test", () => {
-    JSONResponse({
+router.post("/test", (req : Request) => {
+    return JSONResponse(req,{
         "test": "test",
     });
 });

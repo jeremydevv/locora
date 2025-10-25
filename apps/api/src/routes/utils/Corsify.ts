@@ -1,8 +1,10 @@
+import OriginValidate from "./OriginValidate";
+
 const AllowedOrigins = "https://locora.org, https://api.locora.org, http://localhost:5173";
 
-export default function (res : Response) {
+export default function (req : Request, res : Response) {
     const headers = new Headers(res.headers);
-    headers.set("Access-Control-Allow-Origin", "*");
+    headers.set("Access-Control-Allow-Origin", OriginValidate(req.headers.get("Origin")!) && (req.headers.get("Origin")) || "https://locora.org");
     headers.set("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
     headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
 

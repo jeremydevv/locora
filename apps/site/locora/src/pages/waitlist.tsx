@@ -74,7 +74,7 @@ function WaitlistPage() {
 
             <TopBar PageType="waitlist" />
 
-            <img className="absolute min-w-screen animate-float xl:top-25 lg:top-20 md:top-15 sm:top-20" src={cloud} />
+            <img className="absolute min-w-screen animate-float z-0 xl:top-25 lg:top-20 md:top-15 sm:top-20" src={cloud} />
 
             <div
                 className="flex min-h-screen items-center justify-center"
