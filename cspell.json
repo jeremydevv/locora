@@ -4,6 +4,9 @@
     "dictionaryDefinitions": [],
     "dictionaries": [],
     "words": [
+        "baseinput",
+        "bluestar",
+        "cloudflare",
         "cooldown",
         "Corsify",
         "CORSify",
@@ -11,13 +14,17 @@
         "FBLA",
         "flaticon",
         "Freepik",
+        "Gameify",
         "Haha",
+        "ietf",
         "Infobox",
         "issueOccuring",
+        "itty",
         "jose",
         "labubus",
         "Locora",
         "Ramadhany",
+        "remoteip",
         "seacher",
         "Seacher",
         "seacherProps",
@@ -25,7 +32,8 @@
         "Syahrul",
         "topbar",
         "waitlist",
-        "waitlistbutton"
+        "waitlistbutton",
+        "waitlisting"
     ],
     "ignoreWords": [],
     "import": []

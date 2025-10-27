@@ -43,7 +43,7 @@ export default function TopBar({ PageType }: dropdownProps) {
                         rgba(124, 134, 255, ${CurrentAlpha}))`,
                 }}
             >
-                <div className="flex justify-center items-center justify-between px-5 md:px-8 py-2">
+                <div className="flex justify-center items-center  px-5 md:px-8 py-2">
                     {/* Left Logo */}
                     <div className="flex items-center gap-3">
                         <BaseButton hasBackground={false} otherProps="gap-5" shape="circle" onClick={() => { PageType === "landing" ? GoToSection("landing") : RedirectToMainPage()}}>

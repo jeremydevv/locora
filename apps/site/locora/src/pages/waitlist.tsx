@@ -4,7 +4,6 @@ import cloud from "../assets/Clouds3.png"
 import BaseButton from "../components/button"
 import TopBar from "../components/topbar"
 import { useEffect, useState } from "react"
-import { tr } from "framer-motion/client"
 
 const API_URL = import.meta.env.VITE_API_URL
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY
