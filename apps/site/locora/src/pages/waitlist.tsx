@@ -3,7 +3,7 @@ import Footer from "../components/footer"
 import cloud from "../assets/Clouds3.png"
 import BaseButton from "../components/button"
 import TopBar from "../components/topbar"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { tr } from "framer-motion/client"
 
 const API_URL = import.meta.env.VITE_API_URL
@@ -14,20 +14,18 @@ function isValidEmail(email: string) {
     return regex.test(email);
 }
 
-let IsProcessingRequest = false
 async function RequestWaitlistAdd() {
     try {
-
-        IsProcessingRequest = true
+        
+        // @ts-ignore
+        window.turnstile.reset();
 
         const CurrentEmailInput = document.getElementById("waitlist-email") as HTMLInputElement
 
-        if (CurrentEmailInput.value === "") return
-        if (!(isValidEmail(CurrentEmailInput.value))) return
+        if (CurrentEmailInput.value === "") return { success: false, message: "Please enter an email." }
+        if (!(isValidEmail(CurrentEmailInput.value))) return { success: false, message: "Please enter a valid email." }
 
         const token = await new Promise<string>((resolve, reject) => {
-            // @ts-ignore
-            window.turnstile.reset();
             // @ts-ignore
             window.turnstile.execute('#turnstile-container', {
                 callback: (t: string) => resolve(t),
@@ -47,15 +45,22 @@ async function RequestWaitlistAdd() {
         })
 
         const data = await response.json()
-        console.log(data)
 
-        IsProcessingRequest = false
+        return data
+
     } catch (error) {
         console.log(error)
+        return false
     }
 }
 
 function WaitlistPage() {
+
+    const [isProcessing , setIsProcessing] = useState(false)
+    const [issueOccuring , setIssueOccuring] = useState(false)
+    const [EmailInput , setEmailInput] = useState("")
+
+    const [feedback, setFeedback] = useState<string>("")
 
     // Cloudflare Verifications
     useEffect(() => {
@@ -69,12 +74,53 @@ function WaitlistPage() {
         }
     }, []);
 
+    function displayFeedback(feedback : string) {
+        setIssueOccuring(true)
+        setFeedback(feedback)
+        setTimeout(() => {
+            setIssueOccuring(false)
+        }, 3000);
+    }
+
+    async function ProcessWaitlist() {
+
+        console.log(localStorage.getItem("waitlist_joined"))
+
+        setIsProcessing(true)
+
+        if (localStorage.getItem("waitlist_joined") === "true") {
+            setIsProcessing(false)
+            displayFeedback("You have already joined the waitlist!")
+            setEmailInput("")
+            return;
+        }
+
+        try {
+            const result = await RequestWaitlistAdd()
+            
+            if (result && result.success) {
+                displayFeedback("Email was added to waitlist!")
+                const email = document.getElementById("waitlist-email") as HTMLInputElement
+                localStorage.setItem("waitlist_email", email.value.toLowerCase());
+                localStorage.setItem("waitlist_joined", "true");
+            } else if (result && !result.success) {
+                displayFeedback(result.message)
+                localStorage.setItem("waitlist_joined", "true");
+            } else {
+                displayFeedback("Something went wrong, please try again.")
+            }
+        } finally {
+            setEmailInput("")
+            setIsProcessing(false)
+        }
+    }
+
     return (
         <>
 
             <TopBar PageType="waitlist" />
 
-            <img className="absolute min-w-screen animate-float z-0 xl:top-25 lg:top-20 md:top-15 sm:top-20" src={cloud} />
+            <img className="absolute w-screen animate-float z-0 xl:top-25 lg:top-20 md:top-15 sm:top-20" src={cloud} />
 
             <div
                 className="flex min-h-screen items-center justify-center"
@@ -100,14 +146,14 @@ function WaitlistPage() {
                     </div>
                     <div className="flex flex-col gap-3 items-center justify-center">
 
-                        <div>
+                        <div className="flex flex-col gap-3 items-center justify-center">
                             <p
                                 className="text-left"
                             >Email or Phone Number</p>
-                            <BaseInput id="waitlist-email" placeholder="johndoe@gmail.com" inputType="email" />
+                            <BaseInput id="waitlist-email" OnChange={(e) => { setEmailInput(e.target.value) }} input={EmailInput} placeholder="johndoe@gmail.com" inputType="email" />
+                            <BaseButton CurrentlyYielding={isProcessing} text="Join Waitlist" onClick={() => {ProcessWaitlist()}} />
+                            {issueOccuring && <p className="text-red-500 text-bold text-center z-3">{feedback}</p>}
                         </div>
-
-                        <BaseButton CurrentlyYielding={IsProcessingRequest} text="Join Waitlist" onClick={RequestWaitlistAdd} />
                         
                         <div
                             id="turnstile-container"

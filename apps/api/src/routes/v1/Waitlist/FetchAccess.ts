@@ -23,8 +23,6 @@ export async function getAccessToken() {
 
     const now = Math.floor(Date.now() / 1000);
 
-    console.log((env as Env).SPREADSHEET_ID, (env as Env).GOOGLE_SERVICE_ACCOUNT_JSON)
-
     const signed_jwt = await new SignJWT({
         scope: "https://www.googleapis.com/auth/spreadsheets",
     })

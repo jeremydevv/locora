@@ -67,7 +67,7 @@ export default function BaseButton({
     }
 
     return (
-        <button className={BaseStyle} onClick={() => {onClick()}} disabled={CurrentlyYielding}>
+        <button className={BaseStyle} onClick={onClick} disabled={CurrentlyYielding}>
             {preChildren}
             {!CurrentlyYielding && text && <p>{text}</p>}
             {CurrentlyYielding && 

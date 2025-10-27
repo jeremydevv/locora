@@ -1194,7 +1194,6 @@ async function getAccessToken() {
     ["sign"]
   );
   const now = Math.floor(Date.now() / 1e3);
-  console.log(env.SPREADSHEET_ID, env.GOOGLE_SERVICE_ACCOUNT_JSON);
   const signed_jwt = await new SignJWT({
     scope: "https://www.googleapis.com/auth/spreadsheets"
   }).setProtectedHeader({ alg: "RS256", typ: "JWT" }).setIssuer(client_email).setAudience(creds.token_uri).setIssuedAt(now).setExpirationTime(now + 3600).sign(privateKey);
@@ -1211,6 +1210,33 @@ async function getAccessToken() {
 __name(getAccessToken, "getAccessToken");
 
 // src/routes/v1/Waitlist/Spreadsheet.ts
+async function isInSheet(req, email) {
+  const access_token = await getAccessToken();
+  const spreadsheet_id = env2.SPREADSHEET_ID;
+  var InSheet = false;
+  try {
+    const columnData = await fetch(
+      `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheet_id}/values/A:A`,
+      {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${access_token}`,
+          "Content-Type": "application/json"
+        }
+      }
+    );
+    const data = await columnData.json();
+    const emails = (data.values || []).map((row) => row[0]?.toLowerCase().trim());
+    if (emails.includes(email.toLowerCase())) {
+      InSheet = true;
+    }
+    return InSheet;
+  } catch (error) {
+    console.error(error);
+    return JSONResponse(req, { status: "error", message: "Error adding email to spreadsheet." }, 500);
+  }
+}
+__name(isInSheet, "isInSheet");
 async function addToEmails(req, email) {
   const access_token = await getAccessToken();
   const spreadsheet_id = env2.SPREADSHEET_ID;
@@ -1245,9 +1271,6 @@ router2.options("*", (req) => {
   return Corsify_default(req, new Response(null, {
     status: 200
   }));
-});
-router2.all("/*", (req) => {
-  return Corsify_default(req, new Response("Not Found", { status: 404 }));
 });
 async function checkForValidEmail(req, email) {
   if (email == "") {
@@ -1308,7 +1331,6 @@ async function VerifyTurnstileToken(req, token, env3, ip) {
   formData.append("secret", env3.TURNSTILE_SECRET_KEY);
   formData.append("response", token);
   if (ip) formData.append("remoteip", ip);
-  console.log("passed form data thing");
   const res = await fetch(
     "https://challenges.cloudflare.com/turnstile/v0/siteverify",
     {
@@ -1342,11 +1364,15 @@ async function Add_To_Waitlist(req, env3) {
   if (!TurnstileValid) {
     return TurnstileValid;
   }
+  const AlreadyAdded = await isInSheet(req, Email);
+  if (AlreadyAdded) {
+    return JSONResponse(req, { status: "error", message: "Email already added to waitlist." }, 400);
+  }
   const EmailAdded = await addToEmails(req, Email);
   if (!EmailAdded) {
     return JSONResponse(
       req,
-      { status: "error", message: "Error adding email to spreadsheet." },
+      { status: "error", message: "Error adding email to waitlist." },
       500
     );
   }
@@ -1428,7 +1454,7 @@ var jsonError = /* @__PURE__ */ __name(async (request, env3, _ctx, middlewareCtx
 }, "jsonError");
 var middleware_miniflare3_json_error_default = jsonError;
 
-// .wrangler/tmp/bundle-tsuTD3/middleware-insertion-facade.js
+// .wrangler/tmp/bundle-LFykJT/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default,
   middleware_miniflare3_json_error_default
@@ -1460,7 +1486,7 @@ function __facade_invoke__(request, env3, ctx, dispatch, finalMiddleware) {
 }
 __name(__facade_invoke__, "__facade_invoke__");
 
-// .wrangler/tmp/bundle-tsuTD3/middleware-loader.entry.ts
+// .wrangler/tmp/bundle-LFykJT/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class ___Facade_ScheduledController__ {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;

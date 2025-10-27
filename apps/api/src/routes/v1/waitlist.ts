@@ -6,7 +6,7 @@ import JSONResponse from "../utils/JSONResponse";
 import isValidEmail from "../utils/isValidEmail";
 import { Env } from "../types";
 import OriginValidate from "../utils/OriginValidate";
-import { addToEmails } from "./Waitlist/Spreadsheet";
+import { addToEmails, isInSheet } from "./Waitlist/Spreadsheet";
 
 const router = Router({ base: "/v1/waitlist/" });
 
@@ -20,10 +20,6 @@ router.options("*", (req : Request) => {
         status : 200
     }));
 });
-
-router.all("/*", (req) => {
-    return Corsify(req,new Response("Not Found", { status: 404 }));
-})
 
 async function checkForValidEmail(req : Request,email: string) {
 
@@ -86,8 +82,6 @@ async function VerifyTurnstileToken(req : Request ,token: string, env : Env, ip?
     formData.append("response", token);
     if (ip) formData.append("remoteip", ip);
 
-    console.log("passed form data thing")
-
     const res = await fetch(
         "https://challenges.cloudflare.com/turnstile/v0/siteverify",
         {
@@ -109,11 +103,6 @@ async function VerifyTurnstileToken(req : Request ,token: string, env : Env, ip?
         400
     );
 }
-
-async function AddEmailToGoogleSheets(req : Request, env : Env, email : string) {
-    
-}
-
 async function Add_To_Waitlist(req: Request, env: Env) {
 
     const body: { email: string; turnstile_token: string } = await req.json();
@@ -133,11 +122,17 @@ async function Add_To_Waitlist(req: Request, env: Env) {
         return TurnstileValid;
     }
 
+    const AlreadyAdded = await isInSheet(req,Email);
+    
+    if (AlreadyAdded) {
+        return JSONResponse(req, {status: "error",message: "Email already added to waitlist.",}, 400);
+    }
+
     const EmailAdded = await addToEmails(req,Email);
 
     if (!(EmailAdded)) {
         return JSONResponse(req,
-            {status: "error",message: "Error adding email to spreadsheet.",},
+            {status: "error",message: "Error adding email to waitlist.",},
             500
         );
     }
