@@ -4,25 +4,27 @@ import cloud from "../assets/Clouds3.png"
 import BaseButton from "../components/button"
 import TopBar from "../components/topbar"
 import { useEffect, useState } from "react"
+import { isValidEmail, standardizePhoneNumber } from "../utilities/infoValidators"
+import { isNumericalString, number } from "framer-motion"
 
 const API_URL = import.meta.env.VITE_API_URL
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY
 
-function isValidEmail(email: string) {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email);
-}
-
 async function RequestWaitlistAdd() {
     try {
-        
         // @ts-ignore
         window.turnstile.reset();
 
         const CurrentEmailInput = document.getElementById("waitlist-email") as HTMLInputElement
 
-        if (CurrentEmailInput.value === "") return { success: false, message: "Please enter an email." }
-        if (!(isValidEmail(CurrentEmailInput.value))) return { success: false, message: "Please enter a valid email." }
+        if (CurrentEmailInput.value === "") return { success: false, message: "Please enter an email or phone number." }
+
+        const standardizedNum = standardizePhoneNumber(CurrentEmailInput.value)
+        const validEmail = isValidEmail(CurrentEmailInput.value)
+
+        if (!(validEmail) && !(standardizedNum)) {
+            return { success: false, message: "Please enter a valid email or phone number." }
+        }
 
         const token = await new Promise<string>((resolve, reject) => {
             // @ts-ignore
@@ -38,7 +40,7 @@ async function RequestWaitlistAdd() {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                "email": CurrentEmailInput.value,
+                "info": CurrentEmailInput.value,
                 "turnstile_token": token
             }),
         })
@@ -55,9 +57,13 @@ async function RequestWaitlistAdd() {
 
 function WaitlistPage() {
 
+    localStorage.clear();
+
     const [isProcessing , setIsProcessing] = useState(false)
     const [issueOccuring , setIssueOccuring] = useState(false)
-    const [EmailInput , setEmailInput] = useState("")
+    const [InfoInput , setInfoInput] = useState("")
+
+    const [InputStatus , setInputStatus] = useState(true)
 
     const [feedback, setFeedback] = useState<string>("")
 
@@ -81,6 +87,25 @@ function WaitlistPage() {
         }, 3000);
     }
 
+    function InputLinter(value : string) {
+        setInfoInput(value)
+
+        if (isNumericalString(value.substring(0, 1))) {
+            setInfoInput(standardizePhoneNumber(value)! || value)
+        }
+
+        if (value == "" || value == null || value == undefined) {
+            setInputStatus(true)
+            return
+        }
+
+        if (isValidEmail(value) || standardizePhoneNumber(value)) {
+            setInputStatus(true)
+        } else {
+            setInputStatus(false)
+        }
+    }
+
     async function ProcessWaitlist() {
 
         console.log(localStorage.getItem("waitlist_joined"))
@@ -90,7 +115,7 @@ function WaitlistPage() {
         if (localStorage.getItem("waitlist_joined") === "true") {
             setIsProcessing(false)
             displayFeedback("You have already joined the waitlist!")
-            setEmailInput("")
+            setInfoInput("")
             return;
         }
 
@@ -98,9 +123,7 @@ function WaitlistPage() {
             const result = await RequestWaitlistAdd()
             
             if (result && result.success) {
-                displayFeedback("Email was added to waitlist!")
-                const email = document.getElementById("waitlist-email") as HTMLInputElement
-                localStorage.setItem("waitlist_email", email.value.toLowerCase());
+                displayFeedback("Info was added to waitlist!")
                 localStorage.setItem("waitlist_joined", "true");
             } else if (result && !result.success) {
                 displayFeedback(result.message)
@@ -109,7 +132,7 @@ function WaitlistPage() {
                 displayFeedback("Something went wrong, please try again.")
             }
         } finally {
-            setEmailInput("")
+            setInfoInput("")
             setIsProcessing(false)
         }
     }
@@ -149,7 +172,7 @@ function WaitlistPage() {
                             <p
                                 className="text-left"
                             >Email or Phone Number</p>
-                            <BaseInput id="waitlist-email" OnChange={(e) => { setEmailInput(e.target.value) }} input={EmailInput} placeholder="johndoe@gmail.com" inputType="email" />
+                            <BaseInput id="waitlist-email" borderType={InputStatus ? "Normal" : "Red"} OnChange={(e) => { InputLinter(e.target.value) }} input={InfoInput} placeholder="johndoe@gmail.com" inputType="email" />
                             <BaseButton CurrentlyYielding={isProcessing} text="Join Waitlist" onClick={() => {ProcessWaitlist()}} />
                             {issueOccuring && <p className="text-red-500 text-bold text-center z-3">{feedback}</p>}
                         </div>

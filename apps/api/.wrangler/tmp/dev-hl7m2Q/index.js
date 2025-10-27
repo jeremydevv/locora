@@ -59,13 +59,6 @@ router.post("/test", (req) => {
 });
 var handleAuth = router.handle;
 
-// src/routes/utils/isValidEmail.ts
-function isValidEmail(email) {
-  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return regex.test(email);
-}
-__name(isValidEmail, "isValidEmail");
-
 // src/routes/v1/Waitlist/Spreadsheet.ts
 import { env as env2 } from "cloudflare:workers";
 
@@ -1215,7 +1208,7 @@ async function isInSheet(req, email) {
   const spreadsheet_id = env2.SPREADSHEET_ID;
   var InSheet = false;
   try {
-    const columnData = await fetch(
+    const emailColumnData = await fetch(
       `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheet_id}/values/A:A`,
       {
         method: "GET",
@@ -1225,15 +1218,27 @@ async function isInSheet(req, email) {
         }
       }
     );
-    const data = await columnData.json();
-    const emails = (data.values || []).map((row) => row[0]?.toLowerCase().trim());
-    if (emails.includes(email.toLowerCase())) {
+    const phoneNumColumnData = await fetch(
+      `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheet_id}/values/B:B`,
+      {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${access_token}`,
+          "Content-Type": "application/json"
+        }
+      }
+    );
+    const emailData = await emailColumnData.json();
+    const phoneData = await phoneNumColumnData.json();
+    const emails = (emailData.values || []).map((row) => row[0]?.toLowerCase().trim());
+    const phoneNumbers = (phoneData.values || []).map((row) => row[0]?.toLowerCase().trim());
+    if (emails.includes(email.toLowerCase()) || phoneNumbers.includes(email.toLowerCase())) {
       InSheet = true;
     }
     return InSheet;
   } catch (error) {
     console.error(error);
-    return JSONResponse(req, { status: "error", message: "Error adding email to spreadsheet." }, 500);
+    return JSONResponse(req, { status: "error", message: "Error adding info to spreadsheet." }, 500);
   }
 }
 __name(isInSheet, "isInSheet");
@@ -1261,17 +1266,21 @@ async function addToEmails(req, email) {
 }
 __name(addToEmails, "addToEmails");
 
-// src/routes/v1/waitlist.ts
-var router2 = e({ base: "/v1/waitlist/" });
-router2.post("add", async (req, env3) => {
-  const WaitlistResults = await Add_To_Waitlist(req, env3);
-  return WaitlistResults;
-});
-router2.options("*", (req) => {
-  return Corsify_default(req, new Response(null, {
-    status: 200
-  }));
-});
+// src/routes/utils/isValidEmail.ts
+function isValidEmail(email) {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
+}
+__name(isValidEmail, "isValidEmail");
+
+// src/routes/utils/isValidPhoneNumber.ts
+function isValidPhoneNumber(phoneNumber) {
+  const regex = /^(\+\d{1,2}\s?)?1?\-?\.?\s?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/;
+  return regex.test(phoneNumber);
+}
+__name(isValidPhoneNumber, "isValidPhoneNumber");
+
+// src/routes/v1/Waitlist/inputValidation.ts
 async function checkForValidEmail(req, email) {
   if (email == "") {
     return JSONResponse(
@@ -1306,6 +1315,52 @@ async function checkForValidEmail(req, email) {
   return true;
 }
 __name(checkForValidEmail, "checkForValidEmail");
+async function checkForValidPhone(req, phonenumber) {
+  if (phonenumber == "") {
+    return JSONResponse(
+      req,
+      {
+        status: "error",
+        message: "Phone number is required."
+      },
+      400
+    );
+  }
+  if (!phonenumber) {
+    return JSONResponse(
+      req,
+      {
+        status: "error",
+        message: "Phone number is required."
+      },
+      400
+    );
+  }
+  if (!isValidPhoneNumber(phonenumber)) {
+    return JSONResponse(
+      req,
+      {
+        status: "error",
+        message: "Invalid phone number."
+      },
+      400
+    );
+  }
+  return true;
+}
+__name(checkForValidPhone, "checkForValidPhone");
+
+// src/routes/v1/waitlist.ts
+var router2 = e({ base: "/v1/waitlist/" });
+router2.post("add", async (req, env3) => {
+  const WaitlistResults = await Add_To_Waitlist(req, env3);
+  return WaitlistResults;
+});
+router2.options("*", (req) => {
+  return Corsify_default(req, new Response(null, {
+    status: 200
+  }));
+});
 async function VerifyTurnstileToken(req, token, env3, ip) {
   if (!token) {
     return JSONResponse(
@@ -1354,29 +1409,43 @@ async function VerifyTurnstileToken(req, token, env3, ip) {
 __name(VerifyTurnstileToken, "VerifyTurnstileToken");
 async function Add_To_Waitlist(req, env3) {
   const body = await req.json();
-  const Email = body.email;
+  const userInfo = body.info;
   const IP = req.headers.get("CF-Connecting-IP");
-  const EmailValid = await checkForValidEmail(req, Email);
-  if (!EmailValid) {
-    return EmailValid;
+  const EmailValid = await checkForValidEmail(req, userInfo);
+  const PhoneValid = await checkForValidPhone(req, userInfo);
+  const InputType = EmailValid ? "email" : "phone";
+  if (!EmailValid || !PhoneValid) {
+    return JSONResponse(req, { status: "error", message: "Invalid email or phone number." }, 400);
   }
   const TurnstileValid = await VerifyTurnstileToken(req, body.turnstile_token, env3, IP);
   if (!TurnstileValid) {
     return TurnstileValid;
   }
-  const AlreadyAdded = await isInSheet(req, Email);
+  const AlreadyAdded = await isInSheet(req, userInfo);
   if (AlreadyAdded) {
-    return JSONResponse(req, { status: "error", message: "Email already added to waitlist." }, 400);
+    return JSONResponse(req, { status: "error", message: "Info already added to waitlist." }, 400);
   }
-  const EmailAdded = await addToEmails(req, Email);
-  if (!EmailAdded) {
+  let InfoAdded;
+  if (InputType == "email") {
+    InfoAdded = await addToEmails(req, userInfo);
+    if (!InfoAdded) {
+      return JSONResponse(
+        req,
+        { status: "error", message: "Error adding email to waitlist." },
+        500
+      );
+    }
+    return InfoAdded;
+  } else if (InputType == "phone") {
+  }
+  if (!InfoAdded) {
     return JSONResponse(
       req,
-      { status: "error", message: "Error adding email to waitlist." },
+      { status: "error", message: "Error adding info to waitlist." },
       500
     );
   }
-  return EmailAdded;
+  return InfoAdded;
 }
 __name(Add_To_Waitlist, "Add_To_Waitlist");
 var handleWaitlist = /* @__PURE__ */ __name((req, env3) => router2.handle(req, env3), "handleWaitlist");
@@ -1454,7 +1523,7 @@ var jsonError = /* @__PURE__ */ __name(async (request, env3, _ctx, middlewareCtx
 }, "jsonError");
 var middleware_miniflare3_json_error_default = jsonError;
 
-// .wrangler/tmp/bundle-LFykJT/middleware-insertion-facade.js
+// .wrangler/tmp/bundle-XnjupC/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default,
   middleware_miniflare3_json_error_default
@@ -1486,7 +1555,7 @@ function __facade_invoke__(request, env3, ctx, dispatch, finalMiddleware) {
 }
 __name(__facade_invoke__, "__facade_invoke__");
 
-// .wrangler/tmp/bundle-LFykJT/middleware-loader.entry.ts
+// .wrangler/tmp/bundle-XnjupC/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class ___Facade_ScheduledController__ {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;

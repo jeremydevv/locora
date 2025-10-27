@@ -17,6 +17,7 @@
         "dotenv": "^17.2.3",
         "googleapis": "^164.1.0",
         "itty-router": "^4.0.21",
-        "jose": "^6.1.0"
+        "jose": "^6.1.0",
+        "libphonenumber-js": "^1.12.25"
     }
 }
