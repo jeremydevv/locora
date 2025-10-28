@@ -178,7 +178,7 @@ function WaitlistPage() {
                         <div
                             id="turnstile-container"
                             className="hidden"
-                            data-sitekey={import.meta.env.VITE_TURNSTILE_SITE_KEY}
+                            data-sitekey={TURNSTILE_SITE_KEY}
                             data-callback="onTurnstileSuccess"
                             data-size="invisible"
                         ></div>
