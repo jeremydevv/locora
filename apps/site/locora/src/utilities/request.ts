@@ -1,4 +1,4 @@
-const ENVIRONMENT = import.meta.env.ENVIRONMENT
+const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT
 async function request(path: string, options?: RequestInit) {
 
     if (ENVIRONMENT === "dev") {

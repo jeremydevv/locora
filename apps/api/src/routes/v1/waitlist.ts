@@ -26,7 +26,7 @@ async function VerifyTurnstileToken(req : Request ,token: string, env : Env, ip?
         return JSONResponse(req,
             {
                 status: "error",
-                message: "Turnstile token is required.",
+                message: "Bad request.",
             },
             400
         );
@@ -36,7 +36,7 @@ async function VerifyTurnstileToken(req : Request ,token: string, env : Env, ip?
         return JSONResponse(req,
             {
                 status: "error",
-                message: "Turnstile token is required.",
+                message: "Bad request.",
             },
             400
         );
@@ -63,11 +63,12 @@ async function VerifyTurnstileToken(req : Request ,token: string, env : Env, ip?
     return JSONResponse(req,
         {
             status: "error",
-            message: "Turnstile token is invalid.",
+            message: "Bad request.",
         },
         400
     );
 }
+
 async function Add_To_Waitlist(req: Request, env: Env) {
 
     const body: { info : string; turnstile_token: string } = await req.json();
@@ -84,8 +85,6 @@ async function Add_To_Waitlist(req: Request, env: Env) {
     }
 
     const InputType : "email" | "phone" = EmailValid === true ? "email" : "phone";
-
-    console.log(`Input type: ${InputType}`, "Input: ", userInfo);
 
     // cloudflare verifications
     const TurnstileValid = await VerifyTurnstileToken(req,body.turnstile_token, env, IP);

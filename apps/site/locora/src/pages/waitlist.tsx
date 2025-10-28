@@ -14,7 +14,7 @@ async function RequestWaitlistAdd(widgetId?: string) {
 
     try {
         // @ts-ignore
-        if (widgetId && window.turnstile) window.turnstile.reset(widgetId)
+        if (widgetId && window.turnstile) window.turnstile.reset()
 
         const CurrentEmailInput = document.getElementById("waitlist-email") as HTMLInputElement
 
@@ -42,8 +42,8 @@ async function RequestWaitlistAdd(widgetId?: string) {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    email: CurrentEmailInput.value,
-                    token,
+                    info: CurrentEmailInput.value,
+                    turnstile_token: token,
                 }),
             }
         )
@@ -59,8 +59,6 @@ async function RequestWaitlistAdd(widgetId?: string) {
 }
 
 function WaitlistPage() {
-
-    localStorage.clear()
 
     const [isProcessing , setIsProcessing] = useState(false)
     const [issueOccuring , setIssueOccuring] = useState(false)
