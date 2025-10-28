@@ -1,4 +1,4 @@
-const ValidOrigins = ["https://locora.org", "https://api.locora.org", "http://localhost:5173"];
+const ValidOrigins = ["https://locora.org", "https://api.locora.org", "http://localhost:5173", "locora-site.pages.dev"];
 export default function OriginValidate(origin : string) {
 
     if (!origin) return false;
