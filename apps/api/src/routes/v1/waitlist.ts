@@ -3,10 +3,9 @@ import { google } from "googleapis";
 
 import Corsify from "../utils/Corsify";
 import JSONResponse from "../utils/JSONResponse";
-import isValidEmail from "../utils/isValidEmail";
 import { Env } from "../types";
 import OriginValidate from "../utils/OriginValidate";
-import { addToEmails, isInSheet } from "./Waitlist/Spreadsheet";
+import { addToEmails, addToPhoneNumbers, isInSheet } from "./Waitlist/Spreadsheet";
 import { checkForValidEmail, checkForValidPhone } from "./Waitlist/inputValidation";
 
 const router = Router({ base: "/v1/waitlist/" });
@@ -78,12 +77,15 @@ async function Add_To_Waitlist(req: Request, env: Env) {
 
     const EmailValid = await checkForValidEmail(req,userInfo);
     const PhoneValid = await checkForValidPhone(req,userInfo);
-    const InputType : "email" | "phone" = EmailValid ? "email" : "phone";
 
     // tests input against both info types, if neither, send it back
-    if (!(EmailValid) || !(PhoneValid)) {
+    if ((EmailValid !== true) && (PhoneValid !== true)) {
         return JSONResponse(req, {status: "error",message: "Invalid email or phone number.",}, 400);
     }
+
+    const InputType : "email" | "phone" = EmailValid === true ? "email" : "phone";
+
+    console.log(`Input type: ${InputType}`, "Input: ", userInfo);
 
     // cloudflare verifications
     const TurnstileValid = await VerifyTurnstileToken(req,body.turnstile_token, env, IP);
@@ -103,15 +105,8 @@ async function Add_To_Waitlist(req: Request, env: Env) {
     
     if (InputType == "email") {
         InfoAdded = await addToEmails(req,userInfo);
-        if (!(InfoAdded)) {
-            return JSONResponse(req,
-                {status: "error",message: "Error adding email to waitlist.",},
-                500
-            );
-        }
-        return InfoAdded
     } else if (InputType == "phone") {
-        
+        InfoAdded = await addToPhoneNumbers(req,userInfo);
     }
 
     if (!(InfoAdded)) {

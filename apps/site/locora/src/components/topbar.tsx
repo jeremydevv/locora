@@ -11,7 +11,7 @@ import { useMotionValueEvent, useScroll } from "framer-motion";
 
 import GoToSection from "../effects/GoToSection";
 import { useState } from "react";
-import clamp from "../utilities/clamp";
+import { clamp } from "framer-motion";
 
 interface dropdownProps {
     PageType: "landing" | "waitlist"
@@ -23,7 +23,7 @@ export default function TopBar({ PageType }: dropdownProps) {
     const [CurrentAlpha, setCurrentAlpha] = useState(0.9);
 
     useMotionValueEvent(scrollY, "change", (_) => {
-        const alpha = clamp((0.9 - (scrollY.get() / 2750)), 0.6, 0.9);
+        const alpha = clamp(0.6, 0.9, (0.9 - (scrollY.get() / 2750)));
         setCurrentAlpha(alpha);
     })
 

@@ -1,5 +1,4 @@
-import isValidEmail from "../../utils/isValidEmail";
-import isValidPhoneNumber from "../../utils/isValidPhoneNumber";
+import { isValidEmail, isValidPhoneNumber } from "../../utils/infoValidator";
 import JSONResponse from "../../utils/JSONResponse";
 
 async function checkForValidEmail(req : Request,email: string) {

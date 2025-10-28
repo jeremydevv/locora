@@ -1222,13 +1222,12 @@ async function isInSheet(req, info) {
     ]);
     const cleanedNumber = info.replace(/[\s()-]/g, "").replace(/^\+/, "");
     const emailData = await EmailData.json();
-    const phoneData = await EmailData.json();
+    const phoneData = await emailData;
     const emails = (emailData.values || []).slice(1).map((row) => row[0]?.toLowerCase().trim());
     const phoneNumbers = (phoneData.values || []).slice(1).map((row) => row[0]?.replace(/[\s()-]/g, "").toLowerCase().trim()).filter(Boolean);
     if (emails.includes(info.toLowerCase()) || phoneNumbers.includes(cleanedNumber)) {
       InSheet = true;
     }
-    console.log(info, cleanedNumber, emails, phoneNumbers, InSheet);
     return InSheet;
   } catch (error) {
     console.error(error);
@@ -3906,7 +3905,7 @@ var jsonError = /* @__PURE__ */ __name(async (request, env3, _ctx, middlewareCtx
 }, "jsonError");
 var middleware_miniflare3_json_error_default = jsonError;
 
-// .wrangler/tmp/bundle-Fk8ROt/middleware-insertion-facade.js
+// .wrangler/tmp/bundle-3rYdCM/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default,
   middleware_miniflare3_json_error_default
@@ -3938,7 +3937,7 @@ function __facade_invoke__(request, env3, ctx, dispatch, finalMiddleware) {
 }
 __name(__facade_invoke__, "__facade_invoke__");
 
-// .wrangler/tmp/bundle-Fk8ROt/middleware-loader.entry.ts
+// .wrangler/tmp/bundle-3rYdCM/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class ___Facade_ScheduledController__ {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;

@@ -5,7 +5,7 @@ import { Router } from "itty-router";
 import {handleAuth} from "./routes/v1/auth";
 import {handleWaitlist} from "./routes/v1/waitlist";
 import Corsify from "./routes/utils/Corsify";
-import SourceValidation from "./routes/utils/SourceValidation";
+import OriginValidate from "./routes/utils/OriginValidate";
 
 const router = Router();
 
@@ -23,7 +23,7 @@ router.all("*", (req : Request) => Corsify(req,new Response("Not Found", { statu
 export default {
     fetch : (request : Request, env : any, ctx : any) => {
 
-        if (!(SourceValidation(request))) {
+        if (!(OriginValidate(request.headers.get("Origin")!))) {
             return Corsify(request,new Response("Forbidden", { status: 403 }));
         }
 

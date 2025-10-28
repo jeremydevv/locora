@@ -5,7 +5,7 @@ import BaseButton from "../components/button"
 import TopBar from "../components/topbar"
 import { useEffect, useState } from "react"
 import { isValidEmail, standardizePhoneNumber } from "../utilities/infoValidators"
-import { isNumericalString, number } from "framer-motion"
+import { isNumericalString } from "framer-motion"
 
 const API_URL = import.meta.env.VITE_API_URL
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY
@@ -56,8 +56,6 @@ async function RequestWaitlistAdd() {
 }
 
 function WaitlistPage() {
-
-    localStorage.clear();
 
     const [isProcessing , setIsProcessing] = useState(false)
     const [issueOccuring , setIssueOccuring] = useState(false)
