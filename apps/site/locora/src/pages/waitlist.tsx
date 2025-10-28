@@ -6,11 +6,12 @@ import TopBar from "../components/topbar"
 import { useEffect, useState } from "react"
 import { isValidEmail, standardizePhoneNumber } from "../utilities/infoValidators"
 import { isNumericalString } from "framer-motion"
+import request from "../utilities/request"
 
-const API_URL = import.meta.env.VITE_API_URL
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY
 
 async function RequestWaitlistAdd(widgetId?: string) {
+
     try {
         // @ts-ignore
         if (widgetId && window.turnstile) window.turnstile.reset(widgetId)
@@ -34,16 +35,18 @@ async function RequestWaitlistAdd(widgetId?: string) {
             });
         });
 
-        const response = await fetch(`${API_URL}/v1/waitlist/add`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                "info": CurrentEmailInput.value,
-                "turnstile_token": token
-            }),
-        })
+        const response = await request(`/v1/waitlist/add`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email: CurrentEmailInput.value,
+                    token,
+                }),
+            }
+        )
 
         const data = await response.json()
 
@@ -56,6 +59,8 @@ async function RequestWaitlistAdd(widgetId?: string) {
 }
 
 function WaitlistPage() {
+
+    localStorage.clear()
 
     const [isProcessing , setIsProcessing] = useState(false)
     const [issueOccuring , setIssueOccuring] = useState(false)
@@ -109,8 +114,6 @@ function WaitlistPage() {
     }
 
     async function ProcessWaitlist() {
-
-        console.log(localStorage.getItem("waitlist_joined"))
 
         setIsProcessing(true)
 

@@ -6,3 +6,6 @@ compatibility_date = "2025-10-06"
 ENVIRONMENT = "dev"
 
 compatibility_flags = ["nodejs_compat"]
+
+[triggers]
+routes = ["api.locora.org/*"]
