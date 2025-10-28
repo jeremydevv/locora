@@ -10,10 +10,10 @@ import { isNumericalString } from "framer-motion"
 const API_URL = import.meta.env.VITE_API_URL
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY
 
-async function RequestWaitlistAdd() {
+async function RequestWaitlistAdd(widgetId?: string) {
     try {
         // @ts-ignore
-        window.turnstile.reset();
+        if (widgetId && window.turnstile) window.turnstile.reset(widgetId)
 
         const CurrentEmailInput = document.getElementById("waitlist-email") as HTMLInputElement
 
@@ -65,15 +65,19 @@ function WaitlistPage() {
 
     const [feedback, setFeedback] = useState<string>("")
 
+    const [widgetId, setWidgetId] = useState<string>("")
+
     // Cloudflare Verifications
     useEffect(() => {
         // @ts-ignore
         if (window.turnstile) {
             // @ts-ignore
-            window.turnstile.render('#turnstile-container', {
+            const id = window.turnstile.render('#turnstile-container', {
                 sitekey: TURNSTILE_SITE_KEY,
                 size: "compact",
             });
+
+            setWidgetId(id)
         }
     }, []);
 
@@ -118,7 +122,7 @@ function WaitlistPage() {
         }
 
         try {
-            const result = await RequestWaitlistAdd()
+            const result = await RequestWaitlistAdd(widgetId)
             
             if (result && result.success) {
                 displayFeedback("Info was added to waitlist!")
