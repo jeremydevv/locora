@@ -1,25 +1,12 @@
-const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT
-async function request(path: string, options?: RequestInit) {
+const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT;
 
+async function request(path: string, options?: RequestInit) {
     if (ENVIRONMENT === "dev") {
-        // Local development uses wrangler
-        return fetch(`http://127.0.0.1:8787${path}`, {
-            ...options,
-            headers: {
-                "Content-Type": "application/json",
-                ...(options?.headers || {}),
-            },
-        });
+        return fetch(`http://127.0.0.1:8787${path}`, { ...options });
     }
 
-    // @ts-ignore - injected at runtime by Cloudflare Pages
-    return API.fetch(path, {
-        ...options,
-        headers: {
-            "Content-Type": "application/json",
-            ...(options?.headers || {}),
-        },
-    });
+    return fetch(path, { ...options });
 }
+
 
 export default request

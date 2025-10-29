@@ -6,7 +6,7 @@ import TopBar from "../components/topbar"
 import { useEffect, useState } from "react"
 import { isValidEmail, standardizePhoneNumber } from "../utilities/infoValidators"
 import { isNumericalString } from "framer-motion"
-import request from "../utilities/request"
+import apiRequest from "../utilities/request"
 
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY
 
@@ -35,7 +35,7 @@ async function RequestWaitlistAdd(widgetId?: string) {
             });
         });
 
-        const response = await request(`/v1/waitlist/add`,
+        const response = await apiRequest(`/v1/waitlist/add`,
             {
                 method: "POST",
                 headers: {
