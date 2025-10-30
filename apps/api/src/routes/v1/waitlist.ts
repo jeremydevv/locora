@@ -4,7 +4,6 @@ import { google } from "googleapis";
 import Corsify from "../utils/Corsify";
 import JSONResponse from "../utils/JSONResponse";
 import { Env } from "../types";
-import OriginValidate from "../utils/OriginValidate";
 import { addToEmails, addToPhoneNumbers, isInSheet } from "./Waitlist/Spreadsheet";
 import { checkForValidEmail, checkForValidPhone } from "./Waitlist/inputValidation";
 
