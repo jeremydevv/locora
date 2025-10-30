@@ -1,16 +1,26 @@
 interface inputProps {
+    id : string,
+    input? : string
     placeholder : string,
-    inputType? : "" | "Password"
+    inputType? : "" | "password" | "email"
+    OnChange : (e : React.ChangeEvent<HTMLInputElement>) => void
+    borderType? : "Red" | "Normal"
 }
 
-export default function input({placeholder} : inputProps) {
+export default function BaseInput({id , OnChange , placeholder , input , inputType , borderType = "Normal"} : inputProps) {
 
     return (
-        <div className="flex rounded-xl bg-bay-of-many-300">
+        <div 
+            className={`flex opacity-100 border-2 rounded-xl bg-bay-of-many-300`}
+            style={{borderColor : borderType === "Red" ? "red" : "blue"}}
+        >
             <input
-                className="p-3 text-black w-full h-full"
+                id={id}
+                className="p-3 text-black w-full h-full z-2 bg-bay-of-many-300 rounded-xl focus:outline-none"
                 placeholder={placeholder}
-                type=""
+                value={input}
+                type={inputType || "text"}
+                onChange={OnChange}
             >
                 
             </input>
