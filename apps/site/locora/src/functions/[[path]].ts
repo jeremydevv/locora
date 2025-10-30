@@ -19,5 +19,5 @@ export const onRequest = async (context: { request: Request; env: Env; params: {
         body: request.body
     });
 
-    return await env.API.fetch(newRequest);;
+    return env.API.fetch(newRequest);;
 };

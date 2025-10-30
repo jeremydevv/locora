@@ -23,8 +23,12 @@ router.all("*", (req : Request) => Corsify(req,new Response("Not Found", { statu
 export default {
     fetch : (request : Request, env : any, ctx : any) => {
 
+        if (request.url == "/") {
+            return Response.redirect("https://locora.org", 302);
+        }
+
         if (!(OriginValidate(request.headers.get("Origin")!))) {
-            return Corsify(request,new Response("Forbidden", { status: 403 }));
+            return Corsify(request,new Response("Forbidden Access", { status: 403 }));
         }
 
         return router.handle(request, env, ctx);

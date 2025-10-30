@@ -3856,8 +3856,11 @@ router3.all("/v1/waitlist/*", handleWaitlist);
 router3.all("*", (req) => Corsify_default(req, new Response("Not Found", { status: 404 })));
 var src_default = {
   fetch: /* @__PURE__ */ __name((request, env3, ctx) => {
+    if (request.url == "/") {
+      return Response.redirect("https://locora.org", 302);
+    }
     if (!OriginValidate(request.headers.get("Origin"))) {
-      return Corsify_default(request, new Response("Forbidden", { status: 403 }));
+      return Corsify_default(request, new Response("Forbidden Access", { status: 403 }));
     }
     return router3.handle(request, env3, ctx);
   }, "fetch")
