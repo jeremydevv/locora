@@ -71,6 +71,12 @@ async function VerifyTurnstileToken(req : Request ,token: string, env : Env, ip?
 
 async function Add_To_Waitlist(req: Request, env: Env) {
 
+    const { success } = await env.WaitlistRatelimiter.limit({ key: req.headers.get("CF-Connecting-IP") || "" });
+
+    if (!success) {
+        return JSONResponse(req, {status: "error",message: "Too many requests.",}, 429);
+    }
+
     const body: { info : string; turnstile_token: string } = await req.json();
     const userInfo = body.info;
 

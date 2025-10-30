@@ -60,8 +60,6 @@ async function RequestWaitlistAdd(widgetId?: string) {
 
 function WaitlistPage() {
 
-    localStorage.clear()
-
     const [isProcessing , setIsProcessing] = useState(false)
     const [issueOccuring , setIssueOccuring] = useState(false)
     const [InfoInput , setInfoInput] = useState("")
@@ -91,7 +89,7 @@ function WaitlistPage() {
         setFeedback(feedback)
         setTimeout(() => {
             setIssueOccuring(false)
-        }, 3000);
+        }, 5000);
     }
 
     function InputLinter(value : string) {
