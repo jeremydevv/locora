@@ -13,3 +13,6 @@ Auth & Data: Firebase
 Site: React-TS TailwindCSS Cloudflare Pages and DNS
 
 Application: React Native Electron.js
+
+
+Usage License applies to this entire project. 
