@@ -1,12 +1,18 @@
 const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT;
 
-async function request(path: string, options?: RequestInit) {
+function getApiBaseUrl() {
     if (ENVIRONMENT === "dev") {
-        return fetch(`http://127.0.0.1:8787${path}`, { ...options });
+        return "http://127.0.0.1:8787";
+    } else {
+        const wholeUrl = window.location.hostname;
+        const subDomain = wholeUrl.split(".")[0];
+        return `https://${subDomain}-locora-api.jeremymathew100.workers.dev`;
     }
-
-    return fetch(path, { ...options });
 }
 
+async function request(path: string, options?: RequestInit) {
+    const baseUrl = getApiBaseUrl();
+    return fetch(`${baseUrl}${path}`, options);
+}
 
-export default request
+export default request;
