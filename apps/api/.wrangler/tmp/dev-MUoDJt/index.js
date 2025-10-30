@@ -19,7 +19,7 @@ var p = o("image/png");
 var d = o("image/webp");
 
 // src/routes/utils/OriginValidate.ts
-var ValidOrigins = ["https://locora.org", "https://api.locora.org", "http://localhost:5173", "locora-site.pages.dev"];
+var ValidOrigins = ["https://locora.org", "https://api.locora.org", "http://localhost:5173", "https://waitlist-dev.locora.pages.dev"];
 function OriginValidate(origin) {
   if (!origin) return false;
   if (origin?.startsWith("http://localhost")) return true;
