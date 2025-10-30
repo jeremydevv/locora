@@ -91,7 +91,7 @@ function WaitlistPage() {
         setFeedback(feedback)
         setTimeout(() => {
             setIssueOccuring(false)
-        }, 3000);
+        }, 5000);
     }
 
     function InputLinter(value : string) {
