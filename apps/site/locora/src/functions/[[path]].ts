@@ -13,7 +13,11 @@ export const onRequest = async (context: { request: Request; env: Env; params: {
         return new Response('Invalid API path', { status: 404 });
     }
     
-    const newRequest = new Request(apiPath, request);
+    const newRequest = new Request(apiPath, {
+        method: request.method,
+        headers: request.headers,
+        body: request.body
+    });
 
     return await env.API.fetch(newRequest);;
 };
