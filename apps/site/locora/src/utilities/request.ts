@@ -5,6 +5,11 @@ function getApiBaseUrl() {
         return "http://127.0.0.1:8787";
     } else {
         const wholeUrl = window.location.hostname;
+
+        if (wholeUrl === "https://locora.org") {
+            return "api.locora.org";
+        }
+
         const subDomain = wholeUrl.split(".")[0];
         return `https://${subDomain}-locora-api.jeremymathew100.workers.dev`;
     }
