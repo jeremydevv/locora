@@ -1,8 +1,6 @@
 import React from "react";
 import Embossed from "./embossed";
 
-import loading from "../assets/loading.png"
-
 interface buttonProps {
     text?: string;
     type?: "default" | "black" | "white";
@@ -12,7 +10,6 @@ interface buttonProps {
     preChildren?: React.ReactNode;
     children?: React.ReactNode;
     hasBackground?: boolean;
-    CurrentlyYielding? : boolean,
     onClick?: (...args : any) => void;
 }
 
@@ -32,7 +29,6 @@ export default function BaseButton({
     preChildren,
     size = "medium",
     type = "default",
-    CurrentlyYielding = false,
     hasBackground = true,
     onClick = () => {},
 }: buttonProps) {
@@ -67,12 +63,9 @@ export default function BaseButton({
     }
 
     return (
-        <button className={BaseStyle} onClick={onClick} disabled={CurrentlyYielding}>
+        <button className={BaseStyle} onClick={onClick}>
             {preChildren}
-            {!CurrentlyYielding && text && <p>{text}</p>}
-            {CurrentlyYielding && 
-                <img src={loading} alt="Loading" className="w-6 h-6 animate-spin"/>
-            }
+            {text && <p>{text}</p>}
             {children}
         </button>
     );

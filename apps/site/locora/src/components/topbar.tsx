@@ -11,26 +11,17 @@ import { useMotionValueEvent, useScroll } from "framer-motion";
 
 import GoToSection from "../effects/GoToSection";
 import { useState } from "react";
-import { clamp } from "framer-motion";
+import clamp from "../utilities/clamp";
 
-interface dropdownProps {
-    PageType: "landing" | "waitlist"
-}
-
-export default function TopBar({ PageType }: dropdownProps) {
+export default function TopBar() {
 
     const { scrollY } = useScroll();
     const [CurrentAlpha, setCurrentAlpha] = useState(0.9);
 
     useMotionValueEvent(scrollY, "change", (_) => {
-        const alpha = clamp(0.6, 0.9, (0.9 - (scrollY.get() / 2750)));
+        const alpha = clamp((0.9 - (scrollY.get() / 2750)), 0.6, 0.9);
         setCurrentAlpha(alpha);
     })
-
-    function RedirectToMainPage() {
-        // opens back main site
-        window.location.href = "/";
-    }
 
     return (
         <>
@@ -43,28 +34,25 @@ export default function TopBar({ PageType }: dropdownProps) {
                         rgba(124, 134, 255, ${CurrentAlpha}))`,
                 }}
             >
-                <div className="flex justify-center items-center  px-5 md:px-8 py-2">
+                <div className="flex items-center justify-between px-5 md:px-8 py-2">
                     {/* Left Logo */}
                     <div className="flex items-center gap-3">
-                        <BaseButton hasBackground={false} otherProps="gap-5" shape="circle" onClick={() => { PageType === "landing" ? GoToSection("landing") : RedirectToMainPage()}}>
+                        <BaseButton hasBackground={false} otherProps="gap-5" shape="circle" onClick={() => { GoToSection("landing") }}>
                             <img src={Locora} alt="Locora Logo" className="h-8" />
                             <h1 className="text-white text-xl font-bold drop-shadow-2xl">Locora</h1>
                         </BaseButton>
                     </div>
 
                     {/* Middle dropdown */}
-                    <div className="flex-1 md:visible lg:flex xl:flex hidden justify-center items-center gap-2">
+                    <div className="flex-1 md:visible lg:flex xl:flex hidden items-center gap-2 justify-center">
                         <Dropdown label="Info" options={["What is this?", "Waitlist Now!"]} />
                         <Dropdown label="Features" options={["AI Search", "Game-Based Experience"]} />
                     </div>
 
                     {/* Right waitlist */}
-                    {
-                        PageType === "landing" &&
-                        <div className="flex items-center gap-3">
-                            <WaitlistButton otherProps="align-right" />
-                        </div>
-                    }
+                    <div className="flex items-center gap-3">
+                        <WaitlistButton otherProps="align-right" />
+                    </div>
                 </div>
             </header>
 

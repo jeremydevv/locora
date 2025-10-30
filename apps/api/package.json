@@ -3,21 +3,16 @@
     "version": "1.0.0",
     "private": true,
     "scripts": {
-        "dev": "dotenv -- wrangler dev",
-        "build": "tsc",
-        "deploy": "wrangler deploy"
+        "dev": "npm run build && wrangler deploy",
+        "deploy": "wrangler deploy",
+        "build": "tsc"
     },
     "devDependencies": {
         "@cloudflare/workers-types": "^4.2025.0",
-        "dotenv-cli": "^7.3.0",
-        "typescript": "^5.5.0",
-        "wrangler": "^4.42.0"
+        "wrangler": "^4.42.0",
+        "typescript": "^5.5.0"
     },
     "dependencies": {
-        "dotenv": "^17.2.3",
-        "googleapis": "^164.1.0",
-        "itty-router": "^4.0.21",
-        "jose": "^6.1.0",
-        "libphonenumber-js": "^1.12.25"
+        "itty-router": "^4.0.21"
     }
 }

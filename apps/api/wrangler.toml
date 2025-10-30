@@ -4,10 +4,3 @@ compatibility_date = "2025-10-06"
 
 [vars]
 ENVIRONMENT = "dev"
-
-[[ratelimits]]
-name = "WaitlistRatelimiter"
-namespace_id = "1"
-simple = { limit = 5, period = 60 }
-
-compatibility_flags = ["nodejs_compat"]

@@ -70,7 +70,7 @@ function LandingPage() {
 
     return (
         <>
-            <TopBar PageType="landing" />
+            <TopBar />
 
             {/* Section 1 */}
             <section
@@ -253,7 +253,7 @@ function LandingPage() {
                 </div>
             </section>
 
-            <Footer PageType="landing" />
+            <Footer />
         </>
     );
 }

@@ -1,29 +1,15 @@
-
+# Firebase / API secrets
 .env
-.env.*
-!.env.example        # Keep a safe example env (no secrets)
-*.local
-.dev.vars
+.env.local
+.env.*.local
 
+
+.pnpm-store/
+node_modules/
 dist/
 build/
-.out/
-.cache/
-.next/
-
-node_modules/
-.pnpm-store/
-
 /apps/site/locora/dist/
-/apps/site/locora/node_modules/
-/apps/api/dist/
-/apps/api/node_modules/
 /apps/application/build/
 
-*.log
-*.tmp
-*.temp
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
+/apps/site/locora/node_modules
+/apps/apis/node_modules

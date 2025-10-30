@@ -2,40 +2,30 @@ import GoToSection from "../effects/GoToSection"
 
 import Locora from "../assets/BorderedLocora.png"
 
-interface props {
-    PageType : "landing" | "waitlist"
-}
-
-export default function Footer({PageType} : props) {
-
-    function RedirectToMain() {
-        // opens back main site
-        window.location.href = "/"
-    }
-
-    function InfoHeader({ txt }: { txt: string }) {
-        return (
-            <div>
-                <h2
-                    className="text-xl text-white lg:text-2xl xl:text-5xl text-center font-bold leading-tight tracking-tight dark:text-white"
-                >
-                    {txt}
-                </h2>
-            </div>
-        )
-    }
-
-    function WrappedLink({ txt, link }: { txt: string, link: string }) {
-        return (
-            <a
-                onClick={() => {PageType === "landing" ? GoToSection(link) : RedirectToMain()} }
-                className="text-md text-white lg:text-lg xl:text-2xl text-center underline font-semibold leading-tight tracking-tigh dark:text-white"
+function InfoHeader({txt} : {txt : string}) {
+    return (
+        <div>
+            <h2
+                className="text-xl lg:text-2xl xl:text-5xl text-center font-bold leading-tight tracking-tight text-gray-900 dark:text-white"
             >
                 {txt}
-            </a>
-        )
-    }
+            </h2>
+        </div>
+    )
+}
 
+function WrappedLink({txt, link} : {txt : string, link : string}) {
+    return (
+        <a
+            onClick={() => GoToSection(link)}
+            className="text-md lg:text-lg xl:text-2xl text-center underline font-semibold leading-tight tracking-tight text-gray-900 dark:text-white"
+        >
+            {txt}
+        </a>
+    )
+}
+
+export default function Footer() {
     return (
         <>
             <footer
@@ -50,7 +40,7 @@ export default function Footer({PageType} : props) {
                 <div className="grid w-full justify-between grid-cols-3 gap-4">
                     <div className="flex flex-col p-2">
                         {<InfoHeader txt="Information" />}
-                        {<WrappedLink txt="About Us" link="info" />}
+                        {<WrappedLink txt="About Us" link="info" /> }
                         {<WrappedLink txt="Waitlist" link="ending" />}
                     </div>
 
@@ -62,11 +52,11 @@ export default function Footer({PageType} : props) {
 
                     <div>
                         {<InfoHeader txt="Contact" />}
-                        <p className="xl:text-2xl text-white text-lg text-center font-semibold leading-tight tracking-tight dark:text-white">
+                        <p className="xl:text-2xl text-lg text-center font-semibold leading-tight tracking-tight text-gray-900 dark:text-white">
                             Contact us at {
                                 <a
                                     href="mailto:contact@locora.org"
-                                    className="xl:text-2xl text-white text-lg text-center underline font-semibold leading-tight tracking-tight dark:text-white"
+                                    className="xl:text-2xl text-lg text-center underline font-semibold leading-tight tracking-tight text-gray-900 dark:text-white"
                                 >
                                     contact@locora.org
                                 </a>
@@ -77,11 +67,11 @@ export default function Footer({PageType} : props) {
 
                 <div className="flex p-2 gap-10 items-center">
                     <img src={Locora} alt="Locora Logo" className="h-8 w-8" />
-                    <p className="text-md text-white text-center font-semibold leading-tight tracking-tight dark:text-white">
+                    <p className="text-md text-center font-semibold leading-tight tracking-tight dark:text-white">
                         © 2025 Locora. All rights aren't reserved.
                     </p>
                 </div>
-            </footer>
+            </footer>             
         </>
     )
 }
