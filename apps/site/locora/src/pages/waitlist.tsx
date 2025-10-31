@@ -60,31 +60,41 @@ async function RequestWaitlistAdd(widgetId?: string) {
 
 function WaitlistPage() {
 
-    const [isProcessing , setIsProcessing] = useState(false)
-    const [issueOccuring , setIssueOccuring] = useState(false)
-    const [InfoInput , setInfoInput] = useState("")
+    const [isProcessing, setIsProcessing] = useState(false)
+    const [issueOccuring, setIssueOccuring] = useState(false)
+    const [InfoInput, setInfoInput] = useState("")
 
-    const [InputStatus , setInputStatus] = useState(true)
+    const [InputStatus, setInputStatus] = useState(true)
 
     const [feedback, setFeedback] = useState<string>("")
 
     const [widgetId, setWidgetId] = useState<string>("")
 
+    console.log("test")
+
     // Cloudflare Verifications
     useEffect(() => {
-        // @ts-ignore
-        if (window.turnstile) {
-            // @ts-ignore
-            const id = window.turnstile.render('#turnstile-container', {
-                sitekey: TURNSTILE_SITE_KEY,
-                size: "compact",
-            });
+        const attemptTurnstileLoad = () => {
 
-            setWidgetId(id)
+            // @ts-ignore
+            if (window.turnstile) {
+                // @ts-ignore
+                const id = window.turnstile.render('#turnstile-container', {
+                    sitekey: TURNSTILE_SITE_KEY,
+                    size: "compact",
+                });
+
+                setWidgetId(id)
+            } else {
+                setTimeout(attemptTurnstileLoad, 500);
+            }
+
         }
+
+        attemptTurnstileLoad()
     }, []);
 
-    function displayFeedback(feedback : string) {
+    function displayFeedback(feedback: string) {
         setIssueOccuring(true)
         setFeedback(feedback)
         setTimeout(() => {
@@ -92,7 +102,7 @@ function WaitlistPage() {
         }, 5000);
     }
 
-    function InputLinter(value : string) {
+    function InputLinter(value: string) {
         setInfoInput(value)
 
         if (isNumericalString(value.substring(0, 1))) {
@@ -124,7 +134,7 @@ function WaitlistPage() {
 
         try {
             const result = await RequestWaitlistAdd(widgetId)
-            
+
             if (result && result.success) {
                 displayFeedback("Info was added to waitlist!")
                 localStorage.setItem("waitlist_joined", "true");
@@ -146,6 +156,14 @@ function WaitlistPage() {
             <TopBar PageType="waitlist" />
 
             <img className="absolute w-screen animate-float z-0 xl:top-25 lg:top-20 md:top-15 sm:top-20" src={cloud} />
+
+            <div
+                id="turnstile-container"
+                className="hidden"
+                data-sitekey={TURNSTILE_SITE_KEY}
+                data-callback="onTurnstileSuccess"
+                data-size="invisible"
+            ></div>
 
             <div
                 className="flex min-h-screen items-center justify-center"
@@ -176,17 +194,9 @@ function WaitlistPage() {
                                 className="text-left"
                             >Email or Phone Number</p>
                             <BaseInput id="waitlist-email" borderType={InputStatus ? "Normal" : "Red"} OnChange={(e) => { InputLinter(e.target.value) }} input={InfoInput} placeholder="johndoe@gmail.com" inputType="email" />
-                            <BaseButton CurrentlyYielding={isProcessing} text="Join Waitlist" onClick={() => {ProcessWaitlist()}} />
+                            <BaseButton CurrentlyYielding={isProcessing} text="Join Waitlist" onClick={() => { ProcessWaitlist() }} />
                             {issueOccuring && <p className="text-red-500 text-bold text-center z-3">{feedback}</p>}
                         </div>
-                        
-                        <div
-                            id="turnstile-container"
-                            className="hidden"
-                            data-sitekey={TURNSTILE_SITE_KEY}
-                            data-callback="onTurnstileSuccess"
-                            data-size="invisible"
-                        ></div>
 
                     </div>
                 </div>
