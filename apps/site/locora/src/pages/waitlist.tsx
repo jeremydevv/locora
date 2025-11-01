@@ -7,6 +7,7 @@ import { useEffect, useState } from "react"
 import { isValidEmail, standardizePhoneNumber } from "../utilities/infoValidators"
 import { isNumericalString } from "framer-motion"
 import request from "../utilities/request"
+import { Helmet } from "react-helmet-async"
 
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY
 
@@ -70,7 +71,6 @@ function WaitlistPage() {
 
     const [widgetId, setWidgetId] = useState<string>("")
 
-    console.log("test")
 
     // Cloudflare Verifications
     useEffect(() => {
@@ -153,57 +153,69 @@ function WaitlistPage() {
     return (
         <>
 
-            <TopBar PageType="waitlist" />
+            <Helmet>
+                <title>Locora | Waitlist</title>
+                <meta name="description" content="Waitlist to Locora and receive an initial bonus for future use on the application."/>
+                <meta property="og:title" content="Locora" />
+                <meta property="og:description" content="Discover and support nearby businesses." />
+                <meta property="og:image" content="https://locora.org/LocoraBranding.png" />
+                <meta property="og:url" content="https://locora.org" />
+                <meta property="og:type" content="website" />
+            </Helmet>
 
-            <img className="absolute w-screen animate-float z-0 xl:top-25 lg:top-20 md:top-15 sm:top-20" src={cloud} />
+            <main>
+                <TopBar PageType="waitlist" />
 
-            <div
-                id="turnstile-container"
-                className="hidden"
-                data-sitekey={TURNSTILE_SITE_KEY}
-                data-callback="onTurnstileSuccess"
-                data-size="invisible"
-            ></div>
+                <img className="absolute w-screen animate-float z-0 xl:top-25 lg:top-20 md:top-15 sm:top-20" src={cloud} />
 
-            <div
-                className="flex min-h-screen items-center justify-center"
-            >
-
-                {/* main container */}
                 <div
-                    className="flex flex-col gap-20 p-5"
+                    id="turnstile-container"
+                    className="hidden"
+                    data-sitekey={TURNSTILE_SITE_KEY}
+                    data-callback="onTurnstileSuccess"
+                    data-size="invisible"
+                ></div>
+
+                <div
+                    className="flex min-h-screen items-center justify-center"
                 >
+
+                    {/* main container */}
                     <div
-                        className="text-center flex flex-col gap-10 items-center justify-center"
+                        className="flex flex-col gap-20 p-5"
                     >
-                        <h1
-                            className="font-black inline-block text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-cyan-500 to-bay-of-many-500 text-7xl"
+                        <div
+                            className="text-center flex flex-col gap-10 items-center justify-center"
                         >
-                            Waitlist
-                        </h1>
-                        <p
-                            className="text-center text-xl font-bold max-w-xl text-bay-of-many-800"
-                        >
-                            Get notifications on the development of the program and receive a reward for waitlisting early.
-                        </p>
-                    </div>
-                    <div className="flex flex-col gap-3 items-center justify-center">
-
-                        <div className="flex flex-col gap-3 items-center justify-center">
+                            <h1
+                                className="font-black inline-block text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-cyan-500 to-bay-of-many-500 text-7xl"
+                            >
+                                Waitlist
+                            </h1>
                             <p
-                                className="text-left"
-                            >Email or Phone Number</p>
-                            <BaseInput id="waitlist-email" borderType={InputStatus ? "Normal" : "Red"} OnChange={(e) => { InputLinter(e.target.value) }} input={InfoInput} placeholder="johndoe@gmail.com" inputType="email" />
-                            <BaseButton CurrentlyYielding={isProcessing} text="Join Waitlist" onClick={() => { ProcessWaitlist() }} />
-                            {issueOccuring && <p className="text-red-500 text-bold text-center z-3">{feedback}</p>}
+                                className="text-center text-xl font-bold max-w-xl text-bay-of-many-800"
+                            >
+                                Get notifications on the development of the program and receive a reward for waitlisting early.
+                            </p>
                         </div>
+                        <div className="flex flex-col gap-3 items-center justify-center">
 
+                            <div className="flex flex-col gap-3 items-center justify-center">
+                                <p
+                                    className="text-left"
+                                >Email or Phone Number</p>
+                                <BaseInput id="waitlist-email" borderType={InputStatus ? "Normal" : "Red"} OnChange={(e) => { InputLinter(e.target.value) }} input={InfoInput} placeholder="johndoe@gmail.com" inputType="email" />
+                                <BaseButton CurrentlyYielding={isProcessing} text="Join Waitlist" onClick={() => { ProcessWaitlist() }} />
+                                {issueOccuring && <p className="text-red-500 text-bold text-center z-3">{feedback}</p>}
+                            </div>
+
+                        </div>
                     </div>
+
                 </div>
 
-            </div>
-
-            <Footer PageType="waitlist" />
+                <Footer PageType="waitlist" />
+            </main>
 
         </>
     )

@@ -3,20 +3,23 @@ import './App.css'
 import Landing from './pages/landing';
 import Waitlist from './pages/waitlist';
 
-import { Routes , Route } from 'react-router-dom';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 
 function App() {
 
   return (
     <>
-      <Routes>
-        <Route path="/" element={
-          <Landing />
-        } />
-        <Route path="/waitlist" element={
-          <Waitlist />
-        } />
-      </Routes>
+      <HelmetProvider>
+          <Routes>
+            <Route path="/" element={
+              <Landing />
+            } />
+            <Route path="/waitlist" element={
+              <Waitlist />
+            } />
+          </Routes>
+      </HelmetProvider>
     </>
   )
 }
