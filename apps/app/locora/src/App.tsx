@@ -1,12 +1,11 @@
 
 import './App.css'
+import Taskbar from './components/taskbar'
 
 function App() {
   return (
     <>
-      <p>
-        Locora
-      </p>
+      <Taskbar />
     </>
   )
 }

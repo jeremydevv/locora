@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
@@ -12,7 +12,13 @@ process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 
 let win;
 function createWindow() {
   win = new BrowserWindow({
-    icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
+    width: 1920,
+    height: 1080,
+    title: "Locora",
+    autoHideMenuBar: true,
+    frame: false,
+    titleBarStyle: "hidden",
+    icon: path.join(process.env.VITE_PUBLIC, "BorderedLocora.png"),
     webPreferences: {
       preload: path.join(__dirname, "preload.mjs")
     }
@@ -20,6 +26,8 @@ function createWindow() {
   win.webContents.on("did-finish-load", () => {
     win?.webContents.send("main-process-message", (/* @__PURE__ */ new Date()).toLocaleString());
   });
+  win.on("maximize", () => win.webContents.send("window-maximized"));
+  win.on("unmaximize", () => win.webContents.send("window-unmaximized"));
   if (VITE_DEV_SERVER_URL) {
     win.loadURL(VITE_DEV_SERVER_URL);
   } else {
@@ -35,6 +43,24 @@ app.on("window-all-closed", () => {
 app.on("activate", () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
+  }
+});
+ipcMain.on("window-action", (event, action) => {
+  if (!win) return;
+  switch (action) {
+    case "close":
+      win.close();
+      break;
+    case "minimize":
+      win.minimize();
+      break;
+    case "maximize":
+      if (win.isMaximized()) {
+        win.unmaximize();
+      } else {
+        win.maximize();
+      }
+      break;
   }
 });
 app.whenReady().then(createWindow);

@@ -1,4 +1,5 @@
 import { ipcRenderer, contextBridge } from 'electron'
+import { WindowAction } from '../types'
 
 // --------- Expose some API to the Renderer process ---------
 contextBridge.exposeInMainWorld('ipcRenderer', {
@@ -22,3 +23,23 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
   // You can expose other APTs you need here.
   // ...
 })
+
+contextBridge.exposeInMainWorld("electronAPI", {
+  windowAction: (action: "minimize" | "maximize" | "close") => ipcRenderer.send("window-action", action),
+  onWindowMaximize: (callback: () => void) => ipcRenderer.on("window-maximized", callback),
+  onWindowUnmaximize: (callback: () => void) => ipcRenderer.on("window-unmaximized", callback),
+  offWindowMaximize: (callback: () => void) => ipcRenderer.removeListener("window-maximized", callback),
+  offWindowUnmaximize: (callback: () => void) => ipcRenderer.removeListener("window-unmaximized", callback),
+});
+
+declare global {
+  interface Window {
+    electronAPI?: {
+      windowAction: (action: WindowAction) => void;
+      onWindowMaximize: (callback: () => void) => void;
+      onWindowUnmaximize: (callback: () => void) => void;
+      offWindowMaximize: (callback: () => void) => void;
+      offWindowUnmaximize: (callback: () => void) => void;
+    };
+  }
+}
