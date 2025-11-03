@@ -19,6 +19,10 @@ const SelectionEnum : Record<number, string> = {
 function App() {
   const [curSelection, setSelection] = useState<number>(1)
 
+  function SwitchPage(newSection : number) {
+    setSelection(newSection)
+  }
+
   return (
     <>
       <div
@@ -29,7 +33,11 @@ function App() {
           className='justify-center items-center w-full flex z-30 top-0'
         >
           <Taskbar />
-          <BottomBar /> 
+          <BottomBar
+            homeActivated={() => SwitchPage(1)} 
+            exploreActivate={() => SwitchPage(2)} 
+            bookmarkActivate={() => SwitchPage(3)} 
+          /> 
         </div>
 
         {

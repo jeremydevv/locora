@@ -8,10 +8,12 @@ import Compass from "../assets/Compass.png"
 import HomeIcon from "../assets/Home.png"
 
 interface props {
-
+    OnHomeActivate ?: () => void,
+    OnExploreActivate ?: () => void,
+    OnBookmarkActivate ?: () => void,
 }
 
-export default function PageSwitch({} : props) {
+export default function PageSwitch({OnHomeActivate , OnExploreActivate, OnBookmarkActivate} : props) {
 
     return (
         <>
@@ -25,9 +27,9 @@ export default function PageSwitch({} : props) {
                     className="flex items-center justify-between p-2 gap-2"
                 >
 
-                    <Imagebutton image={HomeIcon} Effects="transform-all invert transition-transform duration-100 hover:scale-115 active:scale-85" />
-                    <Imagebutton image={Compass} Effects="transform-all invert transition-transform duration-100 hover:scale-115 active:scale-85" />
-                    <Imagebutton image={Bookmark} Effects="transform-all invert transition-transform duration-100 hover:scale-115 active:scale-85" />
+                    <Imagebutton image={HomeIcon} OnActivated={OnHomeActivate} Effects="transform-all invert transition-transform duration-100 hover:scale-115 active:scale-85" />
+                    <Imagebutton image={Compass} OnActivated={OnExploreActivate} Effects="transform-all invert transition-transform duration-100 hover:scale-115 active:scale-85" />
+                    <Imagebutton image={Bookmark} OnActivated={OnBookmarkActivate} Effects="transform-all invert transition-transform duration-100 hover:scale-115 active:scale-85" />
                 
                 </div>
 
