@@ -6,7 +6,7 @@ interface props {
     image : string
 }
 
-export default function({image, isActivated , OnActivated, OnHover, OnUnHover} : props) {
+export default function({image , OnActivated, OnHover, OnUnHover} : props) {
 
     return (
         <>

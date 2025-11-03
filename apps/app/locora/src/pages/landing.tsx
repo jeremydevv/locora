@@ -1,5 +1,0 @@
-/*
-
-    This is going to be the map and the search bar
-
-*/

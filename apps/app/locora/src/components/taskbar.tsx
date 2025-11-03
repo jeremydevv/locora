@@ -30,7 +30,7 @@ export default function Taskbar() {
     return (
         <>
             <div
-                className="fixed top-0 left-0 w-full bg-bay-of-many-400 z-10 justify-between h-9 flex items-center drag-region"
+                className="fixed top-0 left-0 w-full bg-bay-of-many-900 z-10 justify-between h-9 flex items-center drag-region"
             >
 
                 {/* Title */}

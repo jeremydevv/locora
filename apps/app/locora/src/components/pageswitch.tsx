@@ -4,15 +4,7 @@ interface props {
 
 }
 
-const SelectionEnum = {
-    1 : "Home",
-    2 : "Explore",
-    3 : "Profile",
-}
-
 export default function PageSwitch({} : props) {
-
-    const [curSelection, setSelection] = useState<number>(1)
 
     return (
         <>
@@ -25,7 +17,7 @@ export default function PageSwitch({} : props) {
 
                 {/*this holds all of the section buttons */}
                 <div>
-                    
+
                 </div>
 
             </div>

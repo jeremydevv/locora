@@ -27,3 +27,8 @@ electron.contextBridge.exposeInMainWorld("electronAPI", {
   offWindowMaximize: (callback) => electron.ipcRenderer.removeListener("window-maximized", callback),
   offWindowUnmaximize: (callback) => electron.ipcRenderer.removeListener("window-unmaximized", callback)
 });
+electron.contextBridge.exposeInMainWorld("mapCache", {
+  getCachedTile: (url) => electron.ipcRenderer.invoke("mapCache-get", url),
+  saveTile: (url, data) => electron.ipcRenderer.invoke("mapCache-save", url, data),
+  cleanupCache: () => electron.ipcRenderer.invoke("mapCache-cleanup")
+});
