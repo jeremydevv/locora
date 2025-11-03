@@ -21,10 +21,16 @@ function App() {
   return (
     <>
       <div
-        className='bg-bay-of-many-200 w-full h-full'
+        className='bg-bay-of-many-200 w-screen h-screen overflow-hidden relative'
       >
-        <Taskbar />
-        // This is where the page the user is on will go
+        
+        <div
+          className='justify-center items-center w-full flex z-30 top-0'
+        >
+          <Taskbar />
+          <PageSwitch /> 
+        </div>
+
         {
           SelectionEnum[curSelection] === "Home" && (
             <Home />
@@ -40,7 +46,6 @@ function App() {
             <Profile />
           )
         }
-        <PageSwitch />
       </div>
     </>
   )

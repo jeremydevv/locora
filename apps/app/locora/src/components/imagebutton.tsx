@@ -1,12 +1,13 @@
 interface props {
-    isActivated : boolean
-    OnActivated : () => void,
-    OnHover : () => void,
-    OnUnHover : () => void
+    isActivated? : boolean
+    OnActivated? : () => void,
+    OnHover? : () => void,
+    OnUnHover? : () => void
+    Effects? : string
     image : string
 }
 
-export default function({image , OnActivated, OnHover, OnUnHover} : props) {
+export default function({image , OnActivated, OnHover, OnUnHover, Effects} : props) {
 
     return (
         <>
@@ -14,7 +15,7 @@ export default function({image , OnActivated, OnHover, OnUnHover} : props) {
                 onClick={OnActivated}
                 onMouseEnter={OnHover}
                 onMouseLeave={OnUnHover}
-                className="w-8 h-8 p-2 items-center justify-center"
+                className={`w-8 h-8 p-2 items-center justify-center select-none  ${Effects}`}
             >
                 <img src={image} className="w-full h-full"/>
             </div>

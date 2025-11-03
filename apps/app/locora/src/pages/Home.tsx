@@ -11,9 +11,9 @@ export default function Home() {
     return (
         <>
             <div
-                className="w-full h-full"
+                className="absolute w-full h-full overflow-y-hidden overflow-hidden"
             >
-                <div className="absolute w-full h-screen overflow-hidden">
+                <div className="absolute w-full h-full overflow-hidden">
                     <MapView />
                 </div>
             </div>

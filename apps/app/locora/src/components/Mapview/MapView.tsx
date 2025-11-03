@@ -20,58 +20,54 @@ declare global {
     }
 }
 
-export default function MapView({
-    initialCenter = DEFAULT_CENTER,
-    initialZoom = DEFAULT_ZOOM,
-}: MapViewProps): JSX.Element {
+export default function MapView({initialCenter = DEFAULT_CENTER, initialZoom = DEFAULT_ZOOM}: MapViewProps): JSX.Element {
     const mapContainer = useRef<HTMLDivElement | null>(null);
     const mapInstance = useRef<Map | null>(null);
 
+    // init render
     useEffect(() => {
         if (!mapContainer.current) return;
 
-        // Clean old cached tiles via preload bridge
         window.mapCache.cleanupCache().catch(console.error);
 
         const map: Map = new maplibregl.Map({
             container: mapContainer.current,
-            style: "https://api.maptiler.com/maps/streets-v2/style.json?key=K6wriMmtcrd3c7Ta05iz",
+            style: "https://api.maptiler.com/maps/streets-v4/style.json?key=K6wriMmtcrd3c7Ta05iz",
             center: initialCenter,
             zoom: initialZoom,
+
             transformRequest: (url, resourceType) => {
                 if (resourceType === "Tile") {
                     return { url };
                 }
                 return { url };
             },
+
         });
 
         mapInstance.current = map;
 
-        map.on("sourcedata", async (e) => {
-            const tileUrl = (e as any).tile?.url as string | undefined;
+        map.on("sourcedata", async (data : any) => {
+            const tileUrl = data.tile?.url as string | undefined;
+            
             if (!tileUrl) return;
 
             try {
                 const cached = await window.mapCache.getCachedTile(tileUrl);
+
                 if (!cached) {
                     const res = await fetch(tileUrl);
                     const buf = new Uint8Array(await res.arrayBuffer());
                     await window.mapCache.saveTile(tileUrl, buf);
                 }
+
             } catch (err) {
                 console.error("Map tile caching error:", err);
             }
         });
 
-        // Controls
-        map.addControl(new maplibregl.NavigationControl(), "top-right");
-        map.addControl(
-            new maplibregl.GeolocateControl({ trackUserLocation: true })
-        );
-
         return () => map.remove();
     }, [initialCenter, initialZoom]);
 
-    return <div ref={mapContainer} className="absolute top-0 left-0 w-screen h-screen overflow-hidden" />;
+    return <div ref={mapContainer} className="absolute w-screen h-screen overflow-y-hidden overflow-hidden" />;
 }
