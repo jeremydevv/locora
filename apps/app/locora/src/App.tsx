@@ -8,6 +8,7 @@ import Taskbar from './components/taskbar'
 import Home from './pages/Home'
 import Explore from './pages/Explore'
 import Profile from './pages/Profile'
+import BottomBar from './components/bottombar'
 
 const SelectionEnum : Record<number, string> = {
     1 : "Home",
@@ -28,7 +29,7 @@ function App() {
           className='justify-center items-center w-full flex z-30 top-0'
         >
           <Taskbar />
-          <PageSwitch /> 
+          <BottomBar /> 
         </div>
 
         {
