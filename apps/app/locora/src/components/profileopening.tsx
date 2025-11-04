@@ -14,9 +14,10 @@ function ProfileExpansionBanner({isExpanded} : BannerProps) {
     return (
         <>
             <div
-                className={`relative bottom-18 flex transform-all origin-bottom transition-transform duration-200 bg-bay-of-many-800 border-2 border-bay-of-many-600 flex-col z-0 h-30 w-12 p-1 items-center justify-center select-none rounded-full overflow-hidden mt-2`}
+                className={`relative bottom-18 flex bg-clip-padding backdrop-filter backdrop-blur-xl transform-all origin-bottom transition-transform duration-200 ease-in-out border-2 border-bay-of-many-600 flex-col z-0 h-30 w-12 p-1 items-center justify-center select-none rounded-full overflow-hidden mt-2`}
                 style={{
                     scale : isExpanded ? "1" : "0",
+                    background : `linear-gradient(to bottom,rgba(0, 66, 244, 0.7),rgba(43, 127, 255, 0.7),rgba(124, 134, 255, 0.7)`,
                 }}
             >
                 
@@ -40,7 +41,10 @@ export default function ProfileOpening() {
             <ProfileExpansionBanner isExpanded={expanded} />
 
             <div
-                className="flex relative bottom-16 z-5 hover:scale-105 active:scale-92 transform-all transition-transform duration-50 select-none flex w-12 h-12 z-25 bottom-5 p-1 bg-bay-of-many-800 shadow-2xl border-2 border-bay-of-many-600 rounded-full items-center justify-center"
+                className="flex relative bottom-16 z-5 hover:scale-105 active:scale-92 bg-clip-padding backdrop-filter backdrop-blur-xl transform-all transition-transform duration-50 select-none w-12 h-12 p-1 bg-bay-of-many-800 shadow-2xl border-2 border-bay-of-many-600 rounded-full items-center justify-center"
+                style={{
+                    background : `linear-gradient(to bottom,rgba(0, 66, 244, 0.7),rgba(43, 127, 255, 0.7),rgba(124, 134, 255, 0.7)`,
+                }}
             >
 
                 {/*this holds all of the section buttons */}

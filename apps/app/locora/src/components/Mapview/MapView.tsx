@@ -2,72 +2,35 @@
 import { useEffect, useRef } from "react";
 import maplibregl, { Map } from "maplibre-gl";
 
-interface MapViewProps {
+const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_API_KEY;
+
+interface Props {
     initialCenter?: [number, number];
     initialZoom?: number;
 }
 
-const DEFAULT_CENTER: [number, number] = [-82.4572, 27.9506]; // Tampa, FL
-const DEFAULT_ZOOM = 13;
+const DefaultCenter: [number, number] = [-82.4572, 27.9506]; 
+const DefaultZoom = 13;
 
-declare global {
-    interface Window {
-        mapCache: {
-            getCachedTile: (url: string) => Promise<string | null>;
-            saveTile: (url: string, data: Uint8Array) => Promise<void>;
-            cleanupCache: () => Promise<void>;
-        };
-    }
-}
-
-export default function MapView({initialCenter = DEFAULT_CENTER, initialZoom = DEFAULT_ZOOM}: MapViewProps): JSX.Element {
-    const mapContainer = useRef<HTMLDivElement | null>(null);
-    const mapInstance = useRef<Map | null>(null);
+export default function MapView({ initialCenter = DefaultCenter, initialZoom = DefaultZoom }: Props) {
+    const mapContainer = useRef<HTMLDivElement | null>(null)
+    const mapInstance = useRef<Map | null>(null)
 
     // init render
     useEffect(() => {
-        if (!mapContainer.current) return;
-
-        window.mapCache.cleanupCache().catch(console.error);
+        if (!mapContainer.current) return
 
         const map: Map = new maplibregl.Map({
             container: mapContainer.current,
-            style: "https://api.maptiler.com/maps/streets-v4/style.json?key=K6wriMmtcrd3c7Ta05iz",
+            style: `https://api.maptiler.com/maps/streets-v4/style.json?key=${MAPTILER_KEY}`,
             center: initialCenter,
             zoom: initialZoom,
+        })
 
-            transformRequest: (url, resourceType) => {
-                if (resourceType === "Tile") {
-                    return { url };
-                }
-                return { url };
-            },
+        mapInstance.current = map
 
-        });
+        return () => map.remove()
+    }, [initialCenter, initialZoom])
 
-        mapInstance.current = map;
-
-        map.on("sourcedata", async (data : any) => {
-            const tileUrl = data.tile?.url as string | undefined;
-            
-            if (!tileUrl) return;
-
-            try {
-                const cached = await window.mapCache.getCachedTile(tileUrl);
-
-                if (!cached) {
-                    const res = await fetch(tileUrl);
-                    const buf = new Uint8Array(await res.arrayBuffer());
-                    await window.mapCache.saveTile(tileUrl, buf);
-                }
-
-            } catch (err) {
-                console.error("Map tile caching error:", err);
-            }
-        });
-
-        return () => map.remove();
-    }, [initialCenter, initialZoom]);
-
-    return <div ref={mapContainer} className="absolute w-screen h-screen overflow-y-hidden overflow-hidden" />;
+    return <div ref={mapContainer} className="absolute w-screen h-screen overflow-y-hidden overflow-hidden" />
 }

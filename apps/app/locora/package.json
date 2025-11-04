@@ -1,7 +1,9 @@
 {
-  "name": "locora",
+  "name": "Locora",
+  "productName": "Locora",
+  "description": "A local-business discovery app",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,6 +13,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.16",
+    "dotenv": "^17.2.3",
     "maplibre-gl": "^5.10.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

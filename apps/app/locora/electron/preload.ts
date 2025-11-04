@@ -31,13 +31,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
   offWindowMaximize: (callback: () => void) => ipcRenderer.removeListener("window-maximized", callback),
   offWindowUnmaximize: (callback: () => void) => ipcRenderer.removeListener("window-unmaximized", callback),
 });
-
-contextBridge.exposeInMainWorld("mapCache", {
-  getCachedTile: (url: string) => ipcRenderer.invoke("mapCache-get", url),
-  saveTile: (url: string, data: Uint8Array) => ipcRenderer.invoke("mapCache-save", url, data),
-  cleanupCache: () => ipcRenderer.invoke("mapCache-cleanup"),
-});
-
 declare global {
   interface Window {
     electronAPI?: {
