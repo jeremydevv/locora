@@ -22,7 +22,7 @@ export default function MapView({ initialCenter = DefaultCenter, initialZoom = D
 
         const map: Map = new maplibregl.Map({
             container: mapContainer.current,
-            style: `https://api.maptiler.com/maps/streets-v4/style.json?key=${MAPTILER_KEY}`,
+            style: `https://api.maptiler.com/maps/019a4c98-bb75-7cee-9178-7b7d402a46ad/style.json?key=${MAPTILER_KEY}`,
             center: initialCenter,
             zoom: initialZoom,
         })
