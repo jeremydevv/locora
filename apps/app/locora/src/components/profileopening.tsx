@@ -16,7 +16,7 @@ function ProfileExpansionBanner({isExpanded} : BannerProps) {
             <div
                 className={`relative bottom-18 flex bg-clip-padding backdrop-filter backdrop-blur-xl transform-all origin-bottom transition-transform duration-200 ease-in-out border-2 border-bay-of-many-600 flex-col z-0 h-30 w-12 p-1 items-center justify-center select-none rounded-full overflow-hidden mt-2`}
                 style={{
-                    scale : isExpanded ? "1" : "0",
+                    transform : isExpanded ? "scaleY(1)" : "scaleY(0)",
                     background : `linear-gradient(to bottom,rgba(0, 66, 244, 0.7),rgba(43, 127, 255, 0.7),rgba(124, 134, 255, 0.7)`,
                 }}
             >
