@@ -5,9 +5,10 @@ interface inputProps {
     inputType? : "" | "password" | "email"
     OnChange : (e : React.ChangeEvent<HTMLInputElement>) => void
     borderType? : "Red" | "Normal"
+    children?: React.ReactNode
 }
 
-export default function BaseInput({id , OnChange , placeholder , input , inputType , borderType = "Normal"} : inputProps) {
+export default function BaseInput({id , OnChange , placeholder , input , inputType , borderType = "Normal", children} : inputProps) {
 
     return (
         <div 
@@ -22,8 +23,8 @@ export default function BaseInput({id , OnChange , placeholder , input , inputTy
                 type={inputType || "text"}
                 onChange={OnChange}
             >
-                
             </input>
+            {children}
         </div>
     )
 

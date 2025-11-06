@@ -79,6 +79,7 @@ function LandingPage() {
                 <meta property="og:image" content="https://locora.org/LocoraBranding.png" />
                 <meta property="og:url" content="https://locora.org" />
                 <meta property="og:type" content="website" />
+                <link rel="canonical" href="https://locora.org/" />
             </Helmet>
 
             <main>

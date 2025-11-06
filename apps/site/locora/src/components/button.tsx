@@ -49,7 +49,7 @@ export default function BaseButton({
         } else if (type === "black") {
             BaseStyle += "bg-gradient-to-b from-gray-900 to-gray-600 transition-colors ";
         } else if (type === "white") {
-            BaseStyle += "bg-gradient-to-b from-gray-200 to-gray-50 text-gray-800 transition-colors ";
+            BaseStyle += "bg-gradient-to-b from-gray-200 to-gray-200/70 text-gray-800 transition-colors ";
         }
         BaseStyle += Embossed();
     }
