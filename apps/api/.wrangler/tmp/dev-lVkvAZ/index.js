@@ -3889,7 +3889,7 @@ var drainBody = /* @__PURE__ */ __name(async (request, env3, _ctx, middlewareCtx
 }, "drainBody");
 var middleware_ensure_req_body_drained_default = drainBody;
 
-// .wrangler/tmp/bundle-kiZhjw/middleware-insertion-facade.js
+// .wrangler/tmp/bundle-kfxp01/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default
 ];
@@ -3920,7 +3920,7 @@ function __facade_invoke__(request, env3, ctx, dispatch, finalMiddleware) {
 }
 __name(__facade_invoke__, "__facade_invoke__");
 
-// .wrangler/tmp/bundle-kiZhjw/middleware-loader.entry.ts
+// .wrangler/tmp/bundle-kfxp01/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class ___Facade_ScheduledController__ {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;

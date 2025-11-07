@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url'
 
 import path from 'node:path'
 import { WindowAction } from '../types'
+import { DeleteSessionToken, LoadSessionToken, UpdateSessionToken } from './SessionHandling/KeyHandler'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -22,19 +23,29 @@ app.setAppUserModelId('org.locora.app')
 
 function createWindow() {
   win = new BrowserWindow({
-    width : 1080, 
+
+    minWidth: 800,
+    minHeight: 600,
+    width: 1080,
     height: 720,
+
     title: 'Locora',
+
+    titleBarStyle: 'hidden',
     autoHideMenuBar: false,
-    frame : false,
+    frame: false,
+
     accentColor: '#276ff5',
+
     roundedCorners: true,
     simpleFullscreen: true,
-    titleBarStyle: 'hidden',
+
     icon: path.join(process.env.VITE_PUBLIC, 'BorderedLocora.png'),
+
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
     },
+
   })
 
   // Test active push message to Renderer-process.
@@ -71,7 +82,7 @@ app.on('activate', () => {
 
 
 // topbar window actions
-ipcMain.on("window-action", (event, action : WindowAction) => {
+ipcMain.on("window-action", (_, action: WindowAction) => {
   if (!win) return;
 
   switch (action) {
@@ -90,5 +101,17 @@ ipcMain.on("window-action", (event, action : WindowAction) => {
       break;
   }
 });
+
+ipcMain.handle("token-update", async (_,userId : string, token: string) => {
+  UpdateSessionToken(userId,token)
+})
+
+ipcMain.handle("token-fetch", async (_,userId : string) => {
+  return LoadSessionToken(userId)
+})
+
+ipcMain.handle("token-delete", async (_,userId : string) => {
+  DeleteSessionToken(userId)
+})
 
 app.whenReady().then(createWindow)

@@ -17,8 +17,6 @@ electron.contextBridge.exposeInMainWorld("ipcRenderer", {
     const [channel, ...omit] = args;
     return electron.ipcRenderer.invoke(channel, ...omit);
   }
-  // You can expose other APTs you need here.
-  // ...
 });
 electron.contextBridge.exposeInMainWorld("electronAPI", {
   windowAction: (action) => electron.ipcRenderer.send("window-action", action),
@@ -26,4 +24,9 @@ electron.contextBridge.exposeInMainWorld("electronAPI", {
   onWindowUnmaximize: (callback) => electron.ipcRenderer.on("window-unmaximized", callback),
   offWindowMaximize: (callback) => electron.ipcRenderer.removeListener("window-maximized", callback),
   offWindowUnmaximize: (callback) => electron.ipcRenderer.removeListener("window-unmaximized", callback)
+});
+electron.contextBridge.exposeInMainWorld("SessionAPI", {
+  updateSessionToken: (userId, token) => electron.ipcRenderer.invoke("token-update", userId, token),
+  fetchSessionToken: (userId) => electron.ipcRenderer.invoke("token-fetch", userId),
+  deleteSessionToken: (userId) => electron.ipcRenderer.invoke("token-delete", userId)
 });

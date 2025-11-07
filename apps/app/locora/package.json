@@ -14,6 +14,7 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.16",
     "dotenv": "^17.2.3",
+    "keytar": "^7.9.0",
     "maplibre-gl": "^5.10.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

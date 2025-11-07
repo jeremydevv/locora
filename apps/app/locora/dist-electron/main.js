@@ -12,6 +12,8 @@ app.setName("Locora");
 app.setAppUserModelId("org.locora.app");
 function createWindow() {
   win = new BrowserWindow({
+    minWidth: 800,
+    minHeight: 600,
     width: 1080,
     height: 720,
     title: "Locora",

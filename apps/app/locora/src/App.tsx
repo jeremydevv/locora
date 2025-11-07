@@ -13,7 +13,8 @@ import BottomBar from './components/bottombar'
 const SelectionEnum : Record<number, string> = {
     1 : "Home",
     2 : "Explore",
-    3 : "Profile",
+    3 : "Favorites",
+    4 : "Profile",
 }
 
 function App() {
@@ -36,7 +37,8 @@ function App() {
           <BottomBar
             homeActivated={() => SwitchPage(1)} 
             exploreActivate={() => SwitchPage(2)} 
-            bookmarkActivate={() => SwitchPage(3)} 
+            bookmarkActivate={() => SwitchPage(3)}
+            profileActivate={() => SwitchPage(4)} 
           /> 
         </div>
 

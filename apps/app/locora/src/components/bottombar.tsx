@@ -5,9 +5,10 @@ interface props {
     homeActivated ?: () => void,
     exploreActivate ?: () => void,
     bookmarkActivate ?: () => void,
+    profileActivate ?: () => void,
 }
 
-export default function BottomBar({homeActivated, exploreActivate, bookmarkActivate} : props) {
+export default function BottomBar({homeActivated, exploreActivate, bookmarkActivate, profileActivate} : props) {
 
     return (
         <>
@@ -15,7 +16,7 @@ export default function BottomBar({homeActivated, exploreActivate, bookmarkActiv
                 className="absolute flex w-full h-12 z-25 bottom-5 p-1 gap-2 items-center justify-center"
             >
                 <PageSwitch OnHomeActivate={homeActivated} OnBookmarkActivate={bookmarkActivate} OnExploreActivate={exploreActivate}/>
-                <ProfileOpening />
+                <ProfileOpening OnProfileActivate={profileActivate}/>
             </div>
         </>
     )

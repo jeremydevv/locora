@@ -15,9 +15,9 @@ export default function({image , OnActivated, OnHover, OnUnHover, Effects} : pro
                 onClick={OnActivated}
                 onMouseEnter={OnHover}
                 onMouseLeave={OnUnHover}
-                className={`w-8 h-8 p-[5px] items-center justify-center select-none  ${Effects}`}
+                className={`w-8 h-8 p-[5px] items-center justify-center select-none ${Effects}`}
             >
-                <img src={image} className="w-full h-full drop-shadow-5xl"/>
+                <img src={image} className="w-full h-full select-none drop-shadow-5xl"/>
             </div>
         </>
     )

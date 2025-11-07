@@ -20,8 +20,6 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
     return ipcRenderer.invoke(channel, ...omit)
   },
 
-  // You can expose other APTs you need here.
-  // ...
 })
 
 contextBridge.exposeInMainWorld("electronAPI", {
@@ -31,6 +29,13 @@ contextBridge.exposeInMainWorld("electronAPI", {
   offWindowMaximize: (callback: () => void) => ipcRenderer.removeListener("window-maximized", callback),
   offWindowUnmaximize: (callback: () => void) => ipcRenderer.removeListener("window-unmaximized", callback),
 });
+
+contextBridge.exposeInMainWorld("SessionAPI", {
+  updateSessionToken : (userId: string, token: string) => ipcRenderer.invoke("token-update", userId, token),
+  fetchSessionToken : (userId: string) => ipcRenderer.invoke("token-fetch", userId),
+  deleteSessionToken : (userId: string) => ipcRenderer.invoke("token-delete", userId),
+})
+
 declare global {
   interface Window {
     electronAPI?: {
@@ -39,6 +44,11 @@ declare global {
       onWindowUnmaximize: (callback: () => void) => void;
       offWindowMaximize: (callback: () => void) => void;
       offWindowUnmaximize: (callback: () => void) => void;
+    };
+    SessionAPI?: {
+      updateSessionToken : (userId: string, token: string) => null,
+      fetchSessionToken : (userId: string) => string,
+      deleteSessionToken : (userId: string) => null,
     };
   }
 }
