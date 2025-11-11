@@ -2,10 +2,11 @@ import './App.css'
 // pages
 import Landing from './pages/landing';
 import Waitlist from './pages/waitlist';
-
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
-import { HelmetProvider } from 'react-helmet-async';
+import NotFound from './pages/notfound';
 import AuthenticationPage from './pages/auth';
+
+import { Routes, Route } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 
 function App() {
 
@@ -21,6 +22,9 @@ function App() {
             } />
             <Route path="/auth" element={
               <AuthenticationPage />
+            } />
+            <Route path="*" element={
+              <NotFound />
             } />
           </Routes>
       </HelmetProvider>

@@ -9,54 +9,65 @@ import Home from './pages/Home'
 import Explore from './pages/Explore'
 import Profile from './pages/Profile'
 import BottomBar from './components/bottombar'
+import Favorites from './pages/Favorites'
 
-const SelectionEnum : Record<number, string> = {
-    1 : "Home",
-    2 : "Explore",
-    3 : "Favorites",
-    4 : "Profile",
+const SelectionEnum: Record<number, string> = {
+  1: "Home",
+  2: "Explore",
+  3: "Favorites",
+  4: "Profile",
 }
 
 function App() {
   const [curSelection, setSelection] = useState<number>(1)
 
-  function SwitchPage(newSection : number) {
+  function SwitchPage(newSection: number) {
     setSelection(newSection)
   }
 
   return (
     <>
       <div
-        className='bg-bay-of-many-200 w-screen h-screen overflow-hidden relative'
+        className='w-screen h-screen'
       >
-        
+
         <div
-          className='justify-center items-center w-full flex z-30 top-0'
+          className='flex bg-bay-of-many-200 w-full h-full'
         >
-          <Taskbar />
-          <BottomBar
-            homeActivated={() => SwitchPage(1)} 
-            exploreActivate={() => SwitchPage(2)} 
-            bookmarkActivate={() => SwitchPage(3)}
-            profileActivate={() => SwitchPage(4)} 
-          /> 
+          <div
+            className='absolute justify-center items-center w-full flex z-30 top-0'
+          >
+            <Taskbar />
+            <BottomBar
+              homeActivated={() => SwitchPage(1)}
+              exploreActivate={() => SwitchPage(2)}
+              bookmarkActivate={() => SwitchPage(3)}
+              profileActivate={() => SwitchPage(4)}
+            />
+          </div>
+
+          {
+            SelectionEnum[curSelection] === "Home" && (
+              <Home />
+            )
+          }
+          {
+            SelectionEnum[curSelection] === "Explore" && (
+              <Explore />
+            )
+          }
+          {
+            SelectionEnum[curSelection] === "Profile" && (
+              <Profile />
+            )
+          }
+          {
+            SelectionEnum[curSelection] === "Favorites" && (
+              <Favorites />
+            )
+          }
         </div>
 
-        {
-          SelectionEnum[curSelection] === "Home" && (
-            <Home />
-          )
-        }
-        {
-          SelectionEnum[curSelection] === "Explore" && (
-            <Explore />
-          )
-        }
-        {
-          SelectionEnum[curSelection] === "Profile" && (
-            <Profile />
-          )
-        }
       </div>
     </>
   )

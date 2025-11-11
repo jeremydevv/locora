@@ -7,10 +7,11 @@ import BaseButton from "../components/button"
 import Google from "../assets/Google.png"
 import Microsoft from "../assets/Microsoft.png"
 import LocaraIcon from "../assets/BorderedLocora.png"
-import { useEffect, useRef, useState } from "react"
+import React, { memo, useCallback, useEffect, useRef, useState } from "react"
 import { isValidEmail, standardizePhoneNumber } from "../utilities/infoValidators"
 import { isNumericalString } from "framer-motion"
-import { tr } from "framer-motion/client"
+import request from "../utilities/request"
+import { input } from "framer-motion/client"
 
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_LOGIN_SITE_TURNSTILE
 
@@ -28,17 +29,68 @@ function AuthenticationPage() {
     const RenderedCloudflare = useRef<boolean>(false)
 
     async function getTurnstileToken() {
-
         const token = await new Promise<string>((resolve, reject) => {
             // @ts-ignore
             window.turnstile.execute('#turnstile-container', {
                 callback: (t: string) => resolve(t),
                 'error-callback': () => reject(new Error('Turnstile execution failed')),
             })
-
         });
-
         return token
+    }
+
+    function DisplayFeedback(message: string) {
+        setFeedback(message)
+        setTimeout(() => {
+            setFeedback("")
+        }, 3000);
+    }
+
+    function InputLinter(value: string) {
+        let NewValue = value
+        if (isNumericalString(value.substring(0, 1))) {
+            setInfo(standardizePhoneNumber(value)! || value)
+        }
+
+        setInfo(NewValue)
+
+        if (!NewValue) {
+            setInputStatus(true)
+            return
+        }
+
+        const IsValid = isValidEmail(value) || !!standardizePhoneNumber(value)
+        setInputStatus(IsValid)
+    }
+
+    async function LoginViaPasswordEmail() {
+        if (info === "" || passwordInput === "") {
+            DisplayFeedback("Please fill out all fields.")
+            return
+        }
+
+        if (!inputStatus) {
+            DisplayFeedback("Please enter a valid email or phone number.")
+        }
+
+        const tokenPromise = await getTurnstileToken()
+
+        DisplayFeedback("Logging in...")
+    }
+
+    async function LoginViaSocialConnector(connector: "google" | "microsoft") {
+
+        const Data = request(`/v1/auth/${connector}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+
+        const Parsed = (await Data).json
+
+        console.log(Parsed)
+
     }
 
     useEffect(() => {
@@ -46,7 +98,7 @@ function AuthenticationPage() {
             if (RenderedCloudflare.current) {
                 return
             }
-            
+
             RenderedCloudflare.current = true
 
             // @ts-ignore
@@ -66,48 +118,6 @@ function AuthenticationPage() {
         attemptTurnstileLoad()
     }, []);
 
-    function DisplayFeedback(message: string) {
-        setFeedback(message)
-        setTimeout(() => {
-            setFeedback("")
-        }, 3000);
-    }
-
-    function InputLinter(value: string) {
-        setInfo(value)
-
-        if (isNumericalString(value.substring(0, 1))) {
-            setInfo(standardizePhoneNumber(value)! || value)
-        }
-
-        if (value == "" || value == null || value == undefined) {
-            setInputStatus(true)
-            return
-        }
-
-        if (isValidEmail(value) || standardizePhoneNumber(value)) {
-            setInputStatus(true)
-        } else {
-            setInputStatus(false)
-        }
-    }
-    async function AttemptLogin() {
-        if (info === "" || passwordInput === "") {
-            DisplayFeedback("Please fill out all fields.")
-            return
-        }
-
-        if (!inputStatus) {
-            DisplayFeedback("Please enter a valid email or phone number.")
-        }
-
-        const tokenPromise = await getTurnstileToken()
-
-        console.log(tokenPromise)
-
-        DisplayFeedback("Logging in...")
-    }
-
     return (
         <>
             <Helmet>
@@ -125,7 +135,7 @@ function AuthenticationPage() {
 
             <main>
                 <div
-                    className="w-full h-screen flex-col bg-bay-of-many-500 flex items-center justify-center"
+                    className="w-screen h-screen flex-col bg-bay-of-many-500 flex items-center justify-center"
                 >
 
                     <img src={Clouds} className="absolute xl:bottom-5 lg:bottom-5 animate-float invert opacity-8 w-full bottom-10" />
@@ -157,7 +167,7 @@ function AuthenticationPage() {
                                 >
                                     <BaseButton
                                         otherProps="w-full gap-2"
-                                        type="white" onClick={AttemptLogin}
+                                        type="white" onClick={() => { LoginViaSocialConnector("google") }}
                                     >
                                         <img src={Google} className="h-5 w-5" />
                                         <p className="text-black font-semibold">Continue with Google</p>
@@ -165,7 +175,7 @@ function AuthenticationPage() {
 
                                     <BaseButton
                                         otherProps="w-full gap-2"
-                                        type="white" onClick={() => { }}
+                                        type="white" onClick={() => { LoginViaSocialConnector("microsoft") }}
                                     >
                                         <img src={Microsoft} className="h-5 w-5" />
                                         <p className="text-black font-semibold">Continue with Microsoft</p>
@@ -190,7 +200,7 @@ function AuthenticationPage() {
                                 <p className="text-white text-lg sm:text-base">
                                     Email or Phone Number
                                 </p>
-                                <BaseInput id="email" borderType={inputStatus === true ? "Normal" : "Red"} input={info} placeholder="johndoe@gmail.com" inputType="email" OnChange={(msg) => { InputLinter(msg.target.value) }} />
+                                <BaseInput id="email" borderType={inputStatus === true ? "Normal" : "Red"} input={info} placeholder="johndoe@gmail.com" inputType="email" OnChange={(msg) => (InputLinter(msg.target.value))} />
                             </div>
 
                             <div>
@@ -219,7 +229,7 @@ function AuthenticationPage() {
                                 className="w-full"
                             ></div>
 
-                            <BaseButton text="Continue" type="default" otherProps="flex gap-2" onClick={AttemptLogin}>
+                            <BaseButton text="Continue" type="default" otherProps="flex gap-2" onClick={LoginViaPasswordEmail}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="m12.75 15 3-3m0 0-3-3m3 3h-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                 </svg>

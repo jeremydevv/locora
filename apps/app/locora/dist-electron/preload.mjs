@@ -23,9 +23,8 @@ electron.contextBridge.exposeInMainWorld("electronAPI", {
   onWindowMaximize: (callback) => electron.ipcRenderer.on("window-maximized", callback),
   onWindowUnmaximize: (callback) => electron.ipcRenderer.on("window-unmaximized", callback),
   offWindowMaximize: (callback) => electron.ipcRenderer.removeListener("window-maximized", callback),
-  offWindowUnmaximize: (callback) => electron.ipcRenderer.removeListener("window-unmaximized", callback)
-});
-electron.contextBridge.exposeInMainWorld("SessionAPI", {
+  offWindowUnmaximize: (callback) => electron.ipcRenderer.removeListener("window-unmaximized", callback),
+  openAuthenticationWindow: () => electron.ipcRenderer.invoke("open-authentication-window"),
   updateSessionToken: (userId, token) => electron.ipcRenderer.invoke("token-update", userId, token),
   fetchSessionToken: (userId) => electron.ipcRenderer.invoke("token-fetch", userId),
   deleteSessionToken: (userId) => electron.ipcRenderer.invoke("token-delete", userId)

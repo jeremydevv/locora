@@ -30,12 +30,12 @@ export default function Taskbar() {
     return (
         <>
             <div
-                className="fixed top-0 left-0 w-full bg-bay-of-many-900 z-10 justify-between h-9 flex items-center drag-region"
+                className="fixed top-0 left-0 w-full bg-bay-of-many-900 z-50 justify-between h-9 flex items-center drag-region"
             >
 
                 {/* Title */}
                 <div
-                    className="flex p-3 gap-3 h-full items-center justify-center gap-2"
+                    className="flex p-3 gap-3 h-full items-center justify-center"
                 >
                     <img src={LocoraIcon} alt="Locora Icon" className="w-5 h-5 select:none" />
                 </div>

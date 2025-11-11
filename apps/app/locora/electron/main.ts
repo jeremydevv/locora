@@ -1,10 +1,9 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
-import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 
 import path from 'node:path'
 import { WindowAction } from '../types'
-import { DeleteSessionToken, LoadSessionToken, UpdateSessionToken } from './SessionHandling/KeyHandler'
+//import { DeleteSessionToken, LoadSessionToken, UpdateSessionToken } from './SessionHandling/KeyHandler'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -21,11 +20,14 @@ let win: BrowserWindow | null
 app.setName('Locora')
 app.setAppUserModelId('org.locora.app')
 
-function createWindow() {
+function CreateMainApplication() {
   win = new BrowserWindow({
 
     minWidth: 800,
     minHeight: 600,
+
+    maxHeight : 1920,
+
     width: 1080,
     height: 720,
 
@@ -35,7 +37,7 @@ function createWindow() {
     autoHideMenuBar: false,
     frame: false,
 
-    accentColor: '#276ff5',
+    accentColor: '#323876',
 
     roundedCorners: true,
     simpleFullscreen: true,
@@ -48,7 +50,6 @@ function createWindow() {
 
   })
 
-  // Test active push message to Renderer-process.
   win.webContents.on('did-finish-load', () => {
     win?.webContents.send('main-process-message', (new Date).toLocaleString())
   })
@@ -62,10 +63,71 @@ function createWindow() {
   if (VITE_DEV_SERVER_URL) {
     win.loadURL(VITE_DEV_SERVER_URL)
   } else {
-    // win.loadFile('dist/index.html')
     win.loadFile(path.join(RENDERER_DIST, 'index.html'))
   }
 }
+
+ipcMain.handle("open-authentication-window",async () => {
+  const AuthenticationWindow = new BrowserWindow({
+    width : 480,
+    height : 720,
+
+    maxWidth : 480,
+    maxHeight : 780,
+
+    minWidth : 480,
+    minHeight : 780,
+    autoHideMenuBar : true,
+    
+    fullscreenable : false,
+
+    title: 'Locora',
+
+    accentColor: '#323876',
+
+    roundedCorners: true,
+
+    icon: path.join(process.env.VITE_PUBLIC, 'BorderedLocora.png'),
+
+    parent : undefined,
+    alwaysOnTop : true,
+    focusable : true,
+    modal : true,
+    show : false,
+
+    webPreferences : {
+      sandbox : false,
+      nodeIntegration : false,
+      contextIsolation : true,
+      backgroundThrottling : false,
+    }
+  })
+
+  if (process.env.NODE_ENV == "development") {
+    AuthenticationWindow.loadURL("http://localhost:5173/auth")
+  } else {
+    AuthenticationWindow.loadURL("https://locora.org/auth")
+  }
+
+  AuthenticationWindow.once("ready-to-show",() => {
+    AuthenticationWindow.show()
+    AuthenticationWindow.focus()
+  })
+
+  AuthenticationWindow.on("blur",()=>{
+    console.log("Unfocused")
+  })
+})
+
+
+ipcMain.handle("token-update", async (_,userId : string, token: string) => {
+})
+
+ipcMain.handle("token-fetch", async (_,userId : string) => {
+})
+
+ipcMain.handle("token-delete", async (_,userId : string) => {
+})
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -76,7 +138,7 @@ app.on('window-all-closed', () => {
 
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow()
+    CreateMainApplication()
   }
 })
 
@@ -102,16 +164,4 @@ ipcMain.on("window-action", (_, action: WindowAction) => {
   }
 });
 
-ipcMain.handle("token-update", async (_,userId : string, token: string) => {
-  UpdateSessionToken(userId,token)
-})
-
-ipcMain.handle("token-fetch", async (_,userId : string) => {
-  return LoadSessionToken(userId)
-})
-
-ipcMain.handle("token-delete", async (_,userId : string) => {
-  DeleteSessionToken(userId)
-})
-
-app.whenReady().then(createWindow)
+app.whenReady().then(CreateMainApplication)

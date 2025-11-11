@@ -18,7 +18,7 @@ export default function PageSwitch({OnHomeActivate , OnExploreActivate, OnBookma
     return (
         <>
             <div
-                className="flex w-35 h-12 z-25 bottom-5 p-1 bg-clip-padding backdrop-filter backdrop-blur-xl drop-shadow-2xl border-2 border-bay-of-many-600 rounded-full items-center justify-center"
+                className="fixed flex w-35 h-12 z-25 bottom-5 p-1 bg-clip-padding backdrop-filter backdrop-blur-xl drop-shadow-2xl border-2 border-bay-of-many-600 rounded-full items-center justify-center"
                 style={{
                     background : `linear-gradient(to bottom,rgba(0, 66, 244, 0.5),rgba(43, 127, 255, 0.5),rgba(124, 134, 255, 0.5)`,
                 }}

@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 interface inputProps {
     id : string,
     input? : string
@@ -8,7 +10,7 @@ interface inputProps {
     children?: React.ReactNode;
 }
 
-export default function BaseInput({id , OnChange , placeholder , input , inputType , borderType = "Normal", children} : inputProps) {
+function BaseInput({id , OnChange , placeholder , input , inputType , borderType = "Normal", children} : inputProps) {
 
     return (
         <div 
@@ -32,3 +34,5 @@ export default function BaseInput({id , OnChange , placeholder , input , inputTy
     )
 
 }
+
+export default memo(BaseInput);

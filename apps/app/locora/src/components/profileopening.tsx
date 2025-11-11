@@ -7,16 +7,16 @@ import HomeIcon from "../assets/Home.png"
 import Imagebutton from "./imagebutton"
 
 interface BannerProps {
-    OnProfileActivate: () => void,
+    OnProfilePageActivate: () => void,
     isExpanded: boolean
 }
 
-function ProfileExpansionBanner({ isExpanded, OnProfileActivate }: BannerProps) {
+function ProfileExpansionBanner({ OnProfilePageActivate, isExpanded }: BannerProps) {
 
     return (
         <>
             <div
-                className={`relative bottom-18 flex flex-col gap-2 bg-clip-padding backdrop-filter backdrop-blur-xl transform-all origin-bottom transition-transform duration-200 ease-in-out border-2 border-bay-of-many-600 z-0 h-30 w-12 p-1 items-center justify-center select-none rounded-full overflow-hidden mt-2`}
+                className={`fixed flex bottom-6 flex-col left-[54vw] gap-2 bg-clip-padding backdrop-filter backdrop-blur-xl transform-all origin-bottom transition-transform duration-200 ease-in-out border-2 border-bay-of-many-600 z-0 h-38 w-12 p-1 items-center justify-center select-none rounded-full overflow-hidden mt-2`}
                 style={{
                     scale: isExpanded ? "1" : "0",
                     background: `linear-gradient(to bottom,rgba(0, 66, 244, 0.7),rgba(43, 127, 255, 0.7),rgba(124, 134, 255, 0.7)`,
@@ -25,7 +25,7 @@ function ProfileExpansionBanner({ isExpanded, OnProfileActivate }: BannerProps) 
 
                 <div
                     className="flex transform-all invert transition-transform duration-100 hover:scale-115 active:scale-85"
-                    onClick={OnProfileActivate}
+                    onClick={OnProfilePageActivate}
                 >
 
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
@@ -54,27 +54,33 @@ function ProfileExpansionBanner({ isExpanded, OnProfileActivate }: BannerProps) 
 
                 </div>
 
+                <div
+                    className="flex transform-all w-6 h-6 invert transition-transform duration-100 hover:scale-115 active:scale-85"
+                >
+                    
+                </div>
+
             </div>
         </>
     )
 }
 
 interface props {
-    OnProfileActivate?: () => void,
+    OnProfilePageActivate : () => void
+    ToggleProfileExpansion?: () => void,
+    IsProfileExpanded : boolean
 }
 
-export default function ProfileOpening({ OnProfileActivate }: props) {
-
-    const [expanded, toggleExpansion] = useState<boolean>(false)
+export default function ProfileOpening({ IsProfileExpanded, ToggleProfileExpansion, OnProfilePageActivate }: props) {
 
     return (
         <div
             className="flex-row"
         >
-            <ProfileExpansionBanner isExpanded={expanded} OnProfileActivate={OnProfileActivate!} />
+            <ProfileExpansionBanner isExpanded={IsProfileExpanded} OnProfilePageActivate={OnProfilePageActivate} />
 
             <div
-                className="flex relative bottom-16 z-5 hover:scale-105 active:scale-92 bg-clip-padding backdrop-filter backdrop-blur-xl transform-all transition-transform duration-50 select-none w-12 h-12 p-1 bg-bay-of-many-800 shadow-2xl border-2 border-bay-of-many-600 rounded-full items-center justify-center"
+                className="fixed flex bottom-5 left-[54vw] z-5 hover:scale-105 active:scale-92 bg-clip-padding backdrop-filter backdrop-blur-xl transform-all transition-transform duration-50 select-none w-12 h-12 bg-bay-of-many-800 shadow-2xl border-2 border-bay-of-many-600 rounded-full items-center justify-center"
                 style={{
                     background: `linear-gradient(to bottom,rgba(0, 66, 244, 0.7),rgba(43, 127, 255, 0.7),rgba(124, 134, 255, 0.7)`,
                 }}
@@ -83,7 +89,7 @@ export default function ProfileOpening({ OnProfileActivate }: props) {
                 {/*this holds all of the section buttons */}
 
                 <div
-                    onClick={() => { toggleExpansion(!expanded) }}
+                    onClick={ToggleProfileExpansion}
                     className="flex z-25 items-center justify-between overflow-hidden w-10 h-10 rounded-full"
                 >
                     <img src={Template} className="w-full h-full" />
