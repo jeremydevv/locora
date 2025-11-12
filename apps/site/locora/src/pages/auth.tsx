@@ -75,12 +75,25 @@ function AuthenticationPage() {
 
         const tokenPromise = await getTurnstileToken()
 
-        DisplayFeedback("Logging in...")
+        const Body = JSON.stringify({
+            TurnstileToken : tokenPromise,
+            Info : info,
+            Password : passwordInput
+        })
+
+        request(`/v1/auth/default`, {
+            method: "POST",
+            body : Body,
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+
     }
 
     async function LoginViaSocialConnector(connector: "google" | "microsoft") {
 
-        const Data = request(`/v1/auth/${connector}`, {
+        const Data = request(`/v1/auth/${connector}/login`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

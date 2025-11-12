@@ -16,16 +16,16 @@ router.options("*", (req : Request) => {
     }));
 });
 
+router.post("default/*", (req : Request, env : Env, context : any) => {
+    return DefaultEntry(req,env,context)
+})
+
 router.get("google/*", (req : Request) => {
     return GoogleEntry(req)
 })
 
 router.get("microsoft/*", (req : Request) => {
     return MicrosoftEntry(req)
-})
-
-router.get("default/*", (req : Request) => {
-    return DefaultEntry(req)
 })
 
 export const handleAuth = (req: Request, env: Env) => router.handle(req, env);

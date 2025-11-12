@@ -76,9 +76,6 @@ ipcMain.handle("open-authentication-window", async () => {
     AuthenticationWindow.show();
     AuthenticationWindow.focus();
   });
-  AuthenticationWindow.on("blur", () => {
-    console.log("Unfocused");
-  });
 });
 ipcMain.handle("token-update", async (_, userId, token) => {
 });

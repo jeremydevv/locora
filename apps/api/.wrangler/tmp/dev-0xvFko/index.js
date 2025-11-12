@@ -66,11 +66,46 @@ function entry_default2(req) {
 }
 __name(entry_default2, "default");
 
+// src/routes/v1/Auth/Default/VerifyTurnstile.ts
+async function VerifyTurnstileToken(req, token, env3, ip) {
+  const formData = new URLSearchParams();
+  formData.append("secret", env3.LOGIN_SITE_TURNSTILE);
+  formData.append("response", token);
+  if (ip) formData.append("remoteip", ip);
+  console.log(env3.LOGIN_SITE_TURNSTILE, ip, token);
+  const res = await fetch(
+    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+    {
+      method: "POST",
+      body: formData
+    }
+  );
+  const data = await res.json();
+  if (data.success) {
+    return true;
+  }
+  return false;
+}
+__name(VerifyTurnstileToken, "VerifyTurnstileToken");
+
 // src/routes/v1/Auth/Default/entry.ts
-function entry_default3(req) {
-  return JSONResponse(req, {
-    message: "Default"
-  }, 200);
+async function entry_default3(req, env3, context) {
+  const Body = await req.json();
+  if (!Body) {
+    console.log("Malformed request.");
+    return JSONResponse(req, {
+      message: "Issue with Verification"
+    }, 400);
+  }
+  const UserIP = req.headers.get("CF-Connecting-IP") || "";
+  const TurnstileToken = Body.TurnstileToken;
+  const ValidTurnstileToken = await VerifyTurnstileToken(req, TurnstileToken, env3, UserIP);
+  if (!ValidTurnstileToken) {
+    console.log("The Turnstile Token was invalid");
+    return JSONResponse(req, {
+      message: "Issue with Verification"
+    }, 400);
+  }
 }
 __name(entry_default3, "default");
 
@@ -81,14 +116,14 @@ router.options("*", (req) => {
     status: 200
   }));
 });
+router.post("default/*", (req, env3, context) => {
+  return entry_default3(req, env3, context);
+});
 router.get("google/*", (req) => {
   return entry_default(req);
 });
 router.get("microsoft/*", (req) => {
   return entry_default2(req);
-});
-router.get("default/*", (req) => {
-  return entry_default3(req);
 });
 var handleAuth = /* @__PURE__ */ __name((req, env3) => router.handle(req, env3), "handleAuth");
 
@@ -3797,7 +3832,7 @@ router2.options("*", (req) => {
     status: 200
   }));
 });
-async function VerifyTurnstileToken(req, token, env3, ip) {
+async function VerifyTurnstileToken2(req, token, env3, ip) {
   if (!token) {
     return JSONResponse(
       req,
@@ -3842,7 +3877,7 @@ async function VerifyTurnstileToken(req, token, env3, ip) {
     400
   );
 }
-__name(VerifyTurnstileToken, "VerifyTurnstileToken");
+__name(VerifyTurnstileToken2, "VerifyTurnstileToken");
 async function Add_To_Waitlist(req, env3) {
   const { success } = await env3.WaitlistRatelimiter.limit({ key: req.headers.get("CF-Connecting-IP") || "" });
   if (!success) {
@@ -3857,7 +3892,7 @@ async function Add_To_Waitlist(req, env3) {
     return JSONResponse(req, { status: "error", message: "Invalid email or phone number." }, 400);
   }
   const InputType = EmailValid === true ? "email" : "phone";
-  const TurnstileValid = await VerifyTurnstileToken(req, body.turnstile_token, env3, IP);
+  const TurnstileValid = await VerifyTurnstileToken2(req, body.turnstile_token, env3, IP);
   if (!TurnstileValid) {
     return TurnstileValid;
   }
@@ -3921,7 +3956,7 @@ var drainBody = /* @__PURE__ */ __name(async (request, env3, _ctx, middlewareCtx
 }, "drainBody");
 var middleware_ensure_req_body_drained_default = drainBody;
 
-// .wrangler/tmp/bundle-U1njbj/middleware-insertion-facade.js
+// .wrangler/tmp/bundle-u41zeG/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default
 ];
@@ -3952,7 +3987,7 @@ function __facade_invoke__(request, env3, ctx, dispatch, finalMiddleware) {
 }
 __name(__facade_invoke__, "__facade_invoke__");
 
-// .wrangler/tmp/bundle-U1njbj/middleware-loader.entry.ts
+// .wrangler/tmp/bundle-u41zeG/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class ___Facade_ScheduledController__ {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;

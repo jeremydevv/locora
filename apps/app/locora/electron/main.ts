@@ -114,9 +114,6 @@ ipcMain.handle("open-authentication-window",async () => {
     AuthenticationWindow.focus()
   })
 
-  AuthenticationWindow.on("blur",()=>{
-    console.log("Unfocused")
-  })
 })
 
 
