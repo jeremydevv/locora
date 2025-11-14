@@ -12,21 +12,31 @@ import { isValidEmail, standardizePhoneNumber } from "../utilities/infoValidator
 import { isNumericalString } from "framer-motion"
 import request from "../utilities/request"
 import { input } from "framer-motion/client"
+import Divider from "../components/divider"
+import SocialConnectors from "../components/socialconnections"
+import InputField from "../components/inputfield"
 
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_LOGIN_SITE_TURNSTILE
 
 function AuthenticationPage() {
 
+    const [currentPage, setPage] = useState<string>("Login")
+
     const [feedback, setFeedback] = useState("")
 
     const [inputStatus, setInputStatus] = useState<boolean | null>(null)
 
+    const [username, setUsername] = useState("")
     const [info, setInfo] = useState("")
     const [passwordInput, setPasswordInput] = useState("")
 
     const [widgetId, setWidgetId] = useState<string | null>(null)
 
     const RenderedCloudflare = useRef<boolean>(false)
+
+    function ChangePage(newPage: "Login" | "Register") {
+        setPage(newPage)
+    }
 
     async function getTurnstileToken() {
         const token = await new Promise<string>((resolve, reject) => {
@@ -63,7 +73,18 @@ function AuthenticationPage() {
         setInputStatus(IsValid)
     }
 
+    /*
+        return cases:
+            social connector? :
+                redirects user to oAuth -> 
+                    redirects back to locora.org/auth?=xxxxxx
+                    tells us that they dont have an account w/ that email
+            default method? :
+                    returns the data of the user
+                    tells us that they dont have an account w/ that email
+    */
     async function LoginViaPasswordEmail() {
+
         if (info === "" || passwordInput === "") {
             DisplayFeedback("Please fill out all fields.")
             return
@@ -76,14 +97,14 @@ function AuthenticationPage() {
         const tokenPromise = await getTurnstileToken()
 
         const Body = JSON.stringify({
-            TurnstileToken : tokenPromise,
-            Info : info,
-            Password : passwordInput
+            TurnstileToken: tokenPromise,
+            Info: info,
+            Password: passwordInput
         })
 
-        request(`/v1/auth/default`, {
+        request(`/v1/auth/default/login`, {
             method: "POST",
-            body : Body,
+            body: Body,
             headers: {
                 "Content-Type": "application/json",
             },
@@ -94,6 +115,60 @@ function AuthenticationPage() {
     async function LoginViaSocialConnector(connector: "google" | "microsoft") {
 
         const Data = request(`/v1/auth/${connector}/login`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+
+        const Parsed = (await Data).json
+
+        console.log(Parsed)
+
+    }
+
+    /*
+        return cases:
+            social connector? :
+                goes to oAuth and attempts to sign up
+                tells us that the account has already been registered w/ that email
+            default? :
+                returns the data of the new account
+                tells us that the account has already been registered w/ that email
+    */
+    async function RegisterViaEmailAndPassword() {
+
+        if (info === "" || passwordInput === "" || username == "") {
+            DisplayFeedback("Please fill out all fields.")
+            return
+        }
+
+        if (!inputStatus) {
+            DisplayFeedback("Please enter a valid email or phone number.")
+        }
+
+        const tokenPromise = await getTurnstileToken()
+
+        const Body = JSON.stringify({
+            TurnstileToken: tokenPromise,
+            Username: username,
+            Info: info,
+            Password: passwordInput
+        })
+
+        await request(`/v1/auth/default/register`, {
+            method: "POST",
+            body: Body,
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+
+    }
+
+    async function RegisterViaSocialConnector(connector: "google" | "microsoft") {
+
+        const Data = request(`/v1/auth/${connector}/register`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -162,94 +237,136 @@ function AuthenticationPage() {
                             rgba(124, 134, 255, 0.2))`
                         }}
                     >
-
-                        <div
-                            className="flex flex-col gap-4 px-5 mt-2"
-                        >
-                            <h1
-                                className="text-white text-center font-bold text-2xl"
-                            >
-                                Log in or Sign up
-                            </h1>
-
-                            <div
-                                className="flex p-2 gap-4"
-                            >
-                                <div
-                                    className="flex flex-col gap-3"
-                                >
-                                    <BaseButton
-                                        otherProps="w-full gap-2"
-                                        type="white" onClick={() => { LoginViaSocialConnector("google") }}
+                        {
+                            currentPage === "Login" ? (
+                                <>
+                                    <div
+                                        className="flex flex-col gap-4 px-5 mt-2"
                                     >
-                                        <img src={Google} className="h-5 w-5" />
-                                        <p className="text-black font-semibold">Continue with Google</p>
-                                    </BaseButton>
+                                        <h1
+                                            className="text-white text-center font-bold text-2xl"
+                                        >
+                                            Log in
+                                        </h1>
 
-                                    <BaseButton
-                                        otherProps="w-full gap-2"
-                                        type="white" onClick={() => { LoginViaSocialConnector("microsoft") }}
+                                        <SocialConnectors
+                                            GoogleConnector={() => { LoginViaSocialConnector("google") }}
+                                            MicrosoftConnector={() => { LoginViaSocialConnector("microsoft") }}
+                                        />
+
+                                    </div>
+
+                                    <Divider />
+
+                                    <InputField id="email" fieldLabel="Email" value={info} placeholder="johndoe@gmail.com" inputType="email" middleware={InputLinter} />
+
+                                    <InputField id="password" fieldLabel="Password" value={passwordInput} placeholder="Password" inputType="password" middleware={setPasswordInput} />
+
+                                    <p
+                                        className="text-center font-semibold text-balance text-red-600 text-sm mb-[-8px]"
+                                        style={{
+                                            display: feedback === "" ? "none" : "block"
+                                        }}
                                     >
-                                        <img src={Microsoft} className="h-5 w-5" />
-                                        <p className="text-black font-semibold">Continue with Microsoft</p>
-                                    </BaseButton>
+                                        {feedback}
+                                    </p>
+
+                                    <div
+                                        className="flex flex-col gap-2"
+                                    >
+
+                                        <BaseButton text="Continue" type="default" otherProps="flex gap-2" onClick={LoginViaPasswordEmail}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="m12.75 15 3-3m0 0-3-3m3 3h-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                            </svg>
+                                        </BaseButton>
+
+                                        <div
+                                            className="flex p-1 gap-3 justify-between"
+                                        >
+                                            <a href="/reset-password" className="text-sm text-white underline hover:text-gray-200 self-start">Forgot password?</a>
+                                            <a onClick={() => { ChangePage("Register") }} className="text-sm text-white underline hover:text-gray-200 self-start">New? Register now.</a>
+                                        </div>
+                                    </div>
+                                </>
+                            ) : (
+                                <div>
+                                    <div
+                                        className="flex flex-col gap-4 px-5 mt-2"
+                                    >
+
+                                        <h1
+                                            className="text-white text-center font-bold text-2xl"
+                                        >
+                                            Sign up
+                                        </h1>
+
+                                        <SocialConnectors
+                                            GoogleConnector={() => { RegisterViaSocialConnector("google") }}
+                                            MicrosoftConnector={() => { RegisterViaSocialConnector("microsoft") }}
+                                        />
+
+                                    </div>
+
+                                    <Divider />
+
+                                    <InputField
+                                        id="username"
+                                        fieldLabel="Username"
+                                        value={username}
+                                        placeholder="slimeysnufs"
+                                        middleware={setUsername}
+                                    />
+
+                                    <InputField
+                                        id="newAccountEmail"
+                                        fieldLabel="Email"
+                                        value={info}
+                                        placeholder="johndoe@gmail.com"
+                                        inputType="email"
+                                        middleware={InputLinter}
+                                    />
+
+                                    <InputField
+                                        id="newAccountPassword"
+                                        fieldLabel="Password"
+                                        value={passwordInput}
+                                        placeholder="Password"
+                                        inputType="password"
+                                        middleware={setPasswordInput}
+                                    />
+
+                                    <p
+                                        className="text-center mt-2 font-semibold text-balance text-red-600 text-sm mb-[-8px]"
+                                        style={{
+                                            display: feedback === "" ? "none" : "block"
+                                        }}
+                                    >
+                                        {feedback}
+                                    </p>
+
+                                    <div
+                                        className="flex flex-col mt-5"
+                                    >
+                                        <BaseButton text="Register" type="default" otherProps="flex gap-2" onClick={RegisterViaEmailAndPassword}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
+                                                <path fill-rule="evenodd" d="M16.5 3.75a1.5 1.5 0 0 1 1.5 1.5v13.5a1.5 1.5 0 0 1-1.5 1.5h-6a1.5 1.5 0 0 1-1.5-1.5V15a.75.75 0 0 0-1.5 0v3.75a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V5.25a3 3 0 0 0-3-3h-6a3 3 0 0 0-3 3V9A.75.75 0 1 0 9 9V5.25a1.5 1.5 0 0 1 1.5-1.5h6Zm-5.03 4.72a.75.75 0 0 0 0 1.06l1.72 1.72H2.25a.75.75 0 0 0 0 1.5h10.94l-1.72 1.72a.75.75 0 1 0 1.06 1.06l3-3a.75.75 0 0 0 0-1.06l-3-3a.75.75 0 0 0-1.06 0Z" clip-rule="evenodd" />
+                                            </svg>
+                                        </BaseButton>
+
+                                        <div
+                                            className="mt-2"
+                                        >
+                                            <a onClick={() => { ChangePage("Login") }} className="text-sm text-white underline hover:text-gray-200 self-start">Already Registered? Log in.</a>
+                                        </div>
+                                    </div>
 
                                 </div>
+                            )
+                        }
 
-                            </div>
-
-                        </div>
-
-                        <div
-                            className="w-64 h-px rounded-xl bg-white/70 m-2"
-                        >
-                            {/* divider */}
-                        </div>
-
-                        <div
-                            className="flex flex-col gap-3 mb-2"
-                        >
-                            <div>
-                                <p className="text-white text-lg sm:text-base">
-                                    Email or Phone Number
-                                </p>
-                                <BaseInput id="email" borderType={inputStatus === true ? "Normal" : "Red"} input={info} placeholder="johndoe@gmail.com" inputType="email" OnChange={(msg) => (InputLinter(msg.target.value))} />
-                            </div>
-
-                            <div>
-                                <p className="text-white">
-                                    Password
-                                </p>
-                                <BaseInput id="password" input={passwordInput} placeholder="Password" inputType="password" OnChange={(msg) => { setPasswordInput(msg.target.value) }} />
-                            </div>
-
-                            <p
-                                className="text-center font-semibold text-balance text-red-600 text-sm mb-[-8px]"
-                                style={{
-                                    display: feedback === "" ? "none" : "block"
-                                }}
-                            >
-                                {feedback}
-                            </p>
-
-                        </div>
-
-                        <div
-                            className="flex flex-col gap-2"
-                        >
-                            <div
-                                id="turnstile-container"
-                                className="w-full"
-                            ></div>
-
-                            <BaseButton text="Continue" type="default" otherProps="flex gap-2" onClick={LoginViaPasswordEmail}>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="m12.75 15 3-3m0 0-3-3m3 3h-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                </svg>
-                            </BaseButton>
-                            <a href="/reset-password" className="text-sm text-white underline hover:text-gray-200 self-start">Forgot password?</a>
-                        </div>
-
+                        {/* turnstile div, dont delete please */}
+                        <div id="turnstile-container" className="w-full" />
                     </div>
 
                     <div
@@ -260,7 +377,7 @@ function AuthenticationPage() {
                     </div>
 
                 </div>
-            </main>
+            </main >
 
         </>
     )

@@ -16,15 +16,15 @@ router.options("*", (req : Request) => {
     }));
 });
 
-router.post("default/*", (req : Request, env : Env, context : any) => {
+router.post("/default/*", async (req : Request, env : Env, context : any) => {
     return DefaultEntry(req,env,context)
 })
 
-router.get("google/*", (req : Request) => {
+router.get("/google/*", async (req : Request) => {
     return GoogleEntry(req)
 })
 
-router.get("microsoft/*", (req : Request) => {
+router.get("/microsoft/*", async (req : Request) => {
     return MicrosoftEntry(req)
 })
 

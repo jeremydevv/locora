@@ -7,6 +7,7 @@ export default async function(req : Request, env : Env, context : any) {
 
     const Body : {
         TurnstileToken : string,
+        Username? : string
         Info : string,
         Password : string,
     } = await req.json()

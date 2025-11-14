@@ -29,6 +29,6 @@ export default async function VerifyTurnstileToken(req : Request, token : string
         return true;
     }
 
-    return false
+    return false;
 
 }

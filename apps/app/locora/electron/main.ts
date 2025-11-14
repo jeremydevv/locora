@@ -69,7 +69,7 @@ function CreateMainApplication() {
 
 ipcMain.handle("open-authentication-window",async () => {
   const AuthenticationWindow = new BrowserWindow({
-    width : 480,
+    width : 700,
     height : 720,
 
     maxWidth : 480,
@@ -102,6 +102,8 @@ ipcMain.handle("open-authentication-window",async () => {
       backgroundThrottling : false,
     }
   })
+
+  AuthenticationWindow.webContents.openDevTools()
 
   if (process.env.NODE_ENV == "development") {
     AuthenticationWindow.loadURL("http://localhost:5173/auth")
