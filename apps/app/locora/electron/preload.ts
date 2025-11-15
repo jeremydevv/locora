@@ -22,6 +22,13 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
 
 })
 
+globalThis.addEventListener("message", (event) => {
+    console.log(event,event.data)
+    if (event.data?.type == "locora-authentication") {
+        ipcRenderer.send("authenticated",event.data)
+    }
+})
+
 contextBridge.exposeInMainWorld("electronAPI", {
   windowAction: (action: "minimize" | "maximize" | "close") => ipcRenderer.send("window-action", action),
   onWindowMaximize: (callback: () => void) => ipcRenderer.on("window-maximized", callback),

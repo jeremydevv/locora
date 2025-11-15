@@ -3,8 +3,6 @@ const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT;
 function getApiBaseUrl() {
     const wholeUrl = window.location.hostname;
 
-    console.log(wholeUrl);
-
     if (ENVIRONMENT === "dev") {
         return "http://127.0.0.1:8787";
     } else {

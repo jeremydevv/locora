@@ -14,8 +14,6 @@ export default async function VerifyTurnstileToken(req : Request, token : string
     formData.append("response", token);
     if (ip) formData.append("remoteip", ip);
 
-    console.log(env.LOGIN_SITE_TURNSTILE,ip,token)
-
     const res = await fetch(
         "https://challenges.cloudflare.com/turnstile/v0/siteverify",
         {

@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain, protocol } from 'electron'
 import { fileURLToPath } from 'node:url'
 
 import path from 'node:path'
@@ -16,6 +16,7 @@ export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist')
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 'public') : RENDERER_DIST
 
 let win: BrowserWindow | null
+let authWin: BrowserWindow | null
 
 app.setName('Locora')
 app.setAppUserModelId('org.locora.app')
@@ -68,9 +69,9 @@ function CreateMainApplication() {
 }
 
 ipcMain.handle("open-authentication-window",async () => {
-  const AuthenticationWindow = new BrowserWindow({
-    width : 700,
-    height : 720,
+  authWin = new BrowserWindow({
+    width : 480,
+    height : 780,
 
     maxWidth : 480,
     maxHeight : 780,
@@ -100,24 +101,22 @@ ipcMain.handle("open-authentication-window",async () => {
       nodeIntegration : false,
       contextIsolation : true,
       backgroundThrottling : false,
+      preload : path.join(__dirname,"preload-authentication.mjs")
     }
   })
 
-  AuthenticationWindow.webContents.openDevTools()
-
   if (process.env.NODE_ENV == "development") {
-    AuthenticationWindow.loadURL("http://localhost:5173/auth")
+    authWin.loadURL("http://localhost:5173/auth")
   } else {
-    AuthenticationWindow.loadURL("https://locora.org/auth")
+    authWin.loadURL("https://locora.org/auth")
   }
 
-  AuthenticationWindow.once("ready-to-show",() => {
-    AuthenticationWindow.show()
-    AuthenticationWindow.focus()
+  authWin.once("ready-to-show",() => {
+    authWin?.show()
+    authWin?.focus()
   })
 
 })
-
 
 ipcMain.handle("token-update", async (_,userId : string, token: string) => {
 })
@@ -163,4 +162,16 @@ ipcMain.on("window-action", (_, action: WindowAction) => {
   }
 });
 
-app.whenReady().then(CreateMainApplication)
+app.whenReady().then(CreateMainApplication).then(() => {
+  protocol.registerStringProtocol('locora',(request,callback) => {
+    const url = new URL(request.url)
+
+    const idToken = url.searchParams.get("idToken")
+    const uid = url.searchParams.get("uid")
+
+    console.log(idToken,uid)
+
+    authWin?.close()
+    callback({data: "OK" , mimeType: "text/plain"})
+  })
+})

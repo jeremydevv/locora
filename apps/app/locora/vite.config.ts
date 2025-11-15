@@ -6,6 +6,12 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  optimizeDeps : {
+    exclude : ['keytar']
+  },
+  ssr: {
+    external : ['keytar']
+  },
   plugins: [
     react(),
     electron({

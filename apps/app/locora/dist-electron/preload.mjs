@@ -18,6 +18,12 @@ electron.contextBridge.exposeInMainWorld("ipcRenderer", {
     return electron.ipcRenderer.invoke(channel, ...omit);
   }
 });
+globalThis.addEventListener("message", (event) => {
+  console.log(event, event.data);
+  if (event.data?.type == "locora-authentication") {
+    electron.ipcRenderer.send("authenticated", event.data);
+  }
+});
 electron.contextBridge.exposeInMainWorld("electronAPI", {
   windowAction: (action) => electron.ipcRenderer.send("window-action", action),
   onWindowMaximize: (callback) => electron.ipcRenderer.on("window-maximized", callback),

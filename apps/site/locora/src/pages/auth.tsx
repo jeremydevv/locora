@@ -15,6 +15,7 @@ import { input } from "framer-motion/client"
 import Divider from "../components/divider"
 import SocialConnectors from "../components/socialconnections"
 import InputField from "../components/inputfield"
+import TranslateErrorCode from "../utilities/ErrorCodeTranslation"
 
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_LOGIN_SITE_TURNSTILE
 
@@ -40,8 +41,12 @@ function AuthenticationPage() {
 
     async function getTurnstileToken() {
         const token = await new Promise<string>((resolve, reject) => {
+            if (widgetId) {
+                // @ts-ignore
+                window.turnstile.reset()
+            }
             // @ts-ignore
-            window.turnstile.execute('#turnstile-container', {
+            const id = window.turnstile.execute('#turnstile-container', {
                 callback: (t: string) => resolve(t),
                 'error-callback': () => reject(new Error('Turnstile execution failed')),
             })
@@ -102,13 +107,23 @@ function AuthenticationPage() {
             Password: passwordInput
         })
 
-        request(`/v1/auth/default/login`, {
+        const data = await request(`/v1/auth/default/login`, {
             method: "POST",
             body: Body,
             headers: {
                 "Content-Type": "application/json",
             },
         })
+
+        const Results : {success : boolean, message : string, userdata : Record<string,string>} = await data.json()
+        
+        if (!Results.success || !Results.userdata || !Results.userdata.idToken) {
+            DisplayFeedback(TranslateErrorCode(Results.message) || "An issue occured...")
+        } else {
+            DisplayFeedback("You have successfully logged in!")
+        }
+
+        window.location.href = `locora://authenticated?idToken=${Results.userdata.idToken}&uid=${Results.userdata.localId}`
 
     }
 
@@ -156,13 +171,23 @@ function AuthenticationPage() {
             Password: passwordInput
         })
 
-        await request(`/v1/auth/default/register`, {
+        const data = await request(`/v1/auth/default/register`, {
             method: "POST",
             body: Body,
             headers: {
                 "Content-Type": "application/json",
             },
         })
+
+        const Results : {success : boolean, message : string, userdata : Record<string,string>} = await data.json()
+        
+        if (!Results.success || !Results.userdata || !Results.userdata.idToken) {
+            DisplayFeedback(TranslateErrorCode(Results.message) || "An issue occured...")
+        } else {
+            DisplayFeedback("You have successfully signed up!")
+        }
+
+        window.location.href = `locora://authenticated?idToken=${Results.userdata.idToken}&uid=${Results.userdata.localId}`
 
     }
 
@@ -284,7 +309,6 @@ function AuthenticationPage() {
                                         <div
                                             className="flex p-1 gap-3 justify-between"
                                         >
-                                            <a href="/reset-password" className="text-sm text-white underline hover:text-gray-200 self-start">Forgot password?</a>
                                             <a onClick={() => { ChangePage("Register") }} className="text-sm text-white underline hover:text-gray-200 self-start">New? Register now.</a>
                                         </div>
                                     </div>
@@ -350,7 +374,7 @@ function AuthenticationPage() {
                                     >
                                         <BaseButton text="Register" type="default" otherProps="flex gap-2" onClick={RegisterViaEmailAndPassword}>
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
-                                                <path fill-rule="evenodd" d="M16.5 3.75a1.5 1.5 0 0 1 1.5 1.5v13.5a1.5 1.5 0 0 1-1.5 1.5h-6a1.5 1.5 0 0 1-1.5-1.5V15a.75.75 0 0 0-1.5 0v3.75a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V5.25a3 3 0 0 0-3-3h-6a3 3 0 0 0-3 3V9A.75.75 0 1 0 9 9V5.25a1.5 1.5 0 0 1 1.5-1.5h6Zm-5.03 4.72a.75.75 0 0 0 0 1.06l1.72 1.72H2.25a.75.75 0 0 0 0 1.5h10.94l-1.72 1.72a.75.75 0 1 0 1.06 1.06l3-3a.75.75 0 0 0 0-1.06l-3-3a.75.75 0 0 0-1.06 0Z" clip-rule="evenodd" />
+                                                <path fillRule="evenodd" d="M16.5 3.75a1.5 1.5 0 0 1 1.5 1.5v13.5a1.5 1.5 0 0 1-1.5 1.5h-6a1.5 1.5 0 0 1-1.5-1.5V15a.75.75 0 0 0-1.5 0v3.75a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V5.25a3 3 0 0 0-3-3h-6a3 3 0 0 0-3 3V9A.75.75 0 1 0 9 9V5.25a1.5 1.5 0 0 1 1.5-1.5h6Zm-5.03 4.72a.75.75 0 0 0 0 1.06l1.72 1.72H2.25a.75.75 0 0 0 0 1.5h10.94l-1.72 1.72a.75.75 0 1 0 1.06 1.06l3-3a.75.75 0 0 0 0-1.06l-3-3a.75.75 0 0 0-1.06 0Z" clip-rule="evenodd" />
                                             </svg>
                                         </BaseButton>
 
