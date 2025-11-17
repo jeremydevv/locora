@@ -106,7 +106,7 @@ ipcMain.handle("open-authentication-window",async () => {
   })
 
   if (process.env.NODE_ENV == "development") {
-    authWin.loadURL("http://localhost:5173/auth")
+    authWin.loadURL("http://localhost:3000/auth")
   } else {
     authWin.loadURL("https://locora.org/auth")
   }
