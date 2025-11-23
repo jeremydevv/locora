@@ -18,8 +18,15 @@ const SelectionEnum: Record<number, string> = {
   4: "Profile",
 }
 
+type DeviceTypes = "win32" | "darwin" | "linux"
+
 function App() {
   const [curSelection, setSelection] = useState<number>(1)
+  const [curPlatform , setPlatform] = useState<DeviceTypes>("win32")
+
+  window.electronAPI?.onPlatform((_,platform) => {
+    setPlatform(platform as DeviceTypes)
+  }) 
 
   function SwitchPage(newSection: number) {
     setSelection(newSection)
@@ -37,7 +44,7 @@ function App() {
           <div
             className='absolute justify-center items-center w-full flex z-30 top-0'
           >
-            <Taskbar />
+            <Taskbar platform={curPlatform || "win32"}/>
             <BottomBar
               homeActivated={() => SwitchPage(1)}
               exploreActivate={() => SwitchPage(2)}

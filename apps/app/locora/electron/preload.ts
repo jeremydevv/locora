@@ -19,7 +19,6 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
     const [channel, ...omit] = args
     return ipcRenderer.invoke(channel, ...omit)
   },
-
 })
 
 globalThis.addEventListener("message", (event) => {
@@ -30,6 +29,9 @@ globalThis.addEventListener("message", (event) => {
 })
 
 contextBridge.exposeInMainWorld("electronAPI", {
+  onPlatform(callback: (event: Electron.IpcRendererEvent, platform: string) => void) {
+    ipcRenderer.on('platform', (_, platform) => callback(_,platform))
+  },
   windowAction: (action: "minimize" | "maximize" | "close") => ipcRenderer.send("window-action", action),
   onWindowMaximize: (callback: () => void) => ipcRenderer.on("window-maximized", callback),
   onWindowUnmaximize: (callback: () => void) => ipcRenderer.on("window-unmaximized", callback),
@@ -44,6 +46,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
 declare global {
   interface Window {
     electronAPI?: {
+      onPlatform: (callback: (event: Electron.IpcRendererEvent, platform: string) => void) => void;
       windowAction: (action: WindowAction) => void;
       onWindowMaximize: (callback: () => void) => void;
       onWindowUnmaximize: (callback: () => void) => void;

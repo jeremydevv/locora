@@ -2,6 +2,7 @@ import Template from "../assets/pfptemp.png"
 import BaseButton from "../components/button";
 
 import Clouds from "../assets/Clouds3.png"
+import { useState } from "react";
 
 function ProfileElement() {
     return (
@@ -112,15 +113,16 @@ function ProfileElement() {
 function NotLoggedInElement() {
 
     function OpenAuthPopup() {
+        console.log("Opening authentication window...")
         window.electronAPI?.openAuthenticationWindow()
     }
 
     return (
         <div
-            className="h-full w-full px-[30vw] py-[30vh]"
+            className="h-full w-full flex justify-center items-center"
         >
             <div
-                className="flex flex-col bg-bay-of-many-500 justify-between gap-5 p-15 drop-shadow-2xl rounded-3xl w-full h-full z-2"
+                className="flex flex-col bg-bay-of-many-500 w-[40vw] h-[40vh] gap-5 p-15 drop-shadow-2xl rounded-3xl z-2"
             >
                 <div
                     className="flex gap-3"
@@ -157,11 +159,7 @@ function NotLoggedInElement() {
 
 export default function Profile() {
 
-    const UserToken = window.electronAPI?.fetchSessionToken("currentUser");
-
-    console.log("opened profile")
-
-    console.log(UserToken)
+    const [UserToken , setUserToken] = useState<string>("")
 
     return (
         <>
@@ -171,7 +169,7 @@ export default function Profile() {
 
                 <img src={Clouds} className="absolute top-0 left-0 opacity-5 w-full z-0 animate-float select:none" />
 
-                {UserToken !== null ? <NotLoggedInElement /> : <ProfileElement />}
+                {UserToken !== "" ? <ProfileElement /> : <NotLoggedInElement />}
 
             </div>
         </>

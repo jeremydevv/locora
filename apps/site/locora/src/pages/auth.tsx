@@ -1,17 +1,13 @@
 import { Helmet } from "react-helmet-async"
 
 import Clouds from "../assets/Clouds3.png"
-import BaseInput from "../components/baseinput"
 import BaseButton from "../components/button"
 
-import Google from "../assets/Google.png"
-import Microsoft from "../assets/Microsoft.png"
 import LocaraIcon from "../assets/BorderedLocora.png"
-import React, { memo, useCallback, useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { isValidEmail, standardizePhoneNumber } from "../utilities/infoValidators"
 import { isNumericalString } from "framer-motion"
 import request from "../utilities/request"
-import { input } from "framer-motion/client"
 import Divider from "../components/divider"
 import SocialConnectors from "../components/socialconnections"
 import InputField from "../components/inputfield"
@@ -101,29 +97,34 @@ function AuthenticationPage() {
 
         const tokenPromise = await getTurnstileToken()
 
-        const Body = JSON.stringify({
-            TurnstileToken: tokenPromise,
-            Info: info,
-            Password: passwordInput
-        })
+        try {
+            const Body = JSON.stringify({
+                TurnstileToken: tokenPromise,
+                Info: info,
+                Password: passwordInput
+            })
 
-        const data = await request(`/v1/auth/default/login`, {
-            method: "POST",
-            body: Body,
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
+            const data = await request(`/v1/auth/default/login`, {
+                method: "POST",
+                body: Body,
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
 
-        const Results : {success : boolean, message : string, userdata : Record<string,string>} = await data.json()
-        
-        if (!Results.success || !Results.userdata || !Results.userdata.idToken) {
-            DisplayFeedback(TranslateErrorCode(Results.message) || "An issue occured...")
-        } else {
-            DisplayFeedback("You have successfully logged in!")
+            const Results: { success: boolean, message: string, userdata: Record<string, string> } = await data.json()
+
+            if (!Results.success || !Results.userdata || !Results.userdata.idToken) {
+                DisplayFeedback(TranslateErrorCode(Results.message) || "An issue occured...")
+            } else {
+                DisplayFeedback("You have successfully logged in!")
+            }
+
+            window.location.href = `locora://authenticated?idToken=${Results.userdata.idToken}&uid=${Results.userdata.localId}`
+        } catch (err) {
+            DisplayFeedback("An issue occured...")
+            console.log(err)
         }
-
-        window.location.href = `locora://authenticated?idToken=${Results.userdata.idToken}&uid=${Results.userdata.localId}`
 
     }
 
@@ -164,30 +165,35 @@ function AuthenticationPage() {
 
         const tokenPromise = await getTurnstileToken()
 
-        const Body = JSON.stringify({
-            TurnstileToken: tokenPromise,
-            Username: username,
-            Info: info,
-            Password: passwordInput
-        })
+        try {
+            const Body = JSON.stringify({
+                TurnstileToken: tokenPromise,
+                Username: username,
+                Info: info,
+                Password: passwordInput
+            })
 
-        const data = await request(`/v1/auth/default/register`, {
-            method: "POST",
-            body: Body,
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
+            const data = await request(`/v1/auth/default/register`, {
+                method: "POST",
+                body: Body,
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
 
-        const Results : {success : boolean, message : string, userdata : Record<string,string>} = await data.json()
-        
-        if (!Results.success || !Results.userdata || !Results.userdata.idToken) {
-            DisplayFeedback(TranslateErrorCode(Results.message) || "An issue occured...")
-        } else {
-            DisplayFeedback("You have successfully signed up!")
+            const Results: { success: boolean, message: string, userdata: Record<string, string> } = await data.json()
+
+            if (!Results.success || !Results.userdata || !Results.userdata.idToken) {
+                DisplayFeedback(TranslateErrorCode(Results.message) || "An issue occured...")
+            } else {
+                DisplayFeedback("You have successfully signed up!")
+            }
+
+            window.location.href = `locora://authenticated?idToken=${Results.userdata.idToken}&uid=${Results.userdata.localId}`
+        } catch (err) {
+            DisplayFeedback("An issue occured...")
+            console.log(err)
         }
-
-        window.location.href = `locora://authenticated?idToken=${Results.userdata.idToken}&uid=${Results.userdata.localId}`
 
     }
 

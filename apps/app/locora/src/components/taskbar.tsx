@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 
 import RestoreWindowImage from "../assets/restore.png";
 
-export default function Taskbar() {
+export default function Taskbar({ platform = "win32"}: { platform?: "darwin" | "win32" | "linux" }) {
 
     const [isMaximized, setIsMaximized] = useState(false);
 
@@ -34,11 +34,20 @@ export default function Taskbar() {
             >
 
                 {/* Title */}
-                <div
-                    className="flex p-3 gap-3 h-full items-center justify-center"
-                >
-                    <img src={LocoraIcon} alt="Locora Icon" className="w-5 h-5 select:none" />
-                </div>
+                {
+                    platform !== "darwin" ? (
+                        <div
+                            className="flex p-3 gap-3 h-full items-center justify-center"
+                        >
+                            <img src={LocoraIcon} alt="Locora Icon" className="w-5 h-5 select:none" />
+                        </div>
+                    ) : 
+                    (
+                        <>
+                            <span className="w-12" />
+                        </>
+                    )
+                }
 
                 <div>
                     <p
@@ -49,41 +58,55 @@ export default function Taskbar() {
                 </div>
 
                 {/* Buttons (min, max, close) */}
-                <div
-                    className="flex h-full items-center justify-center select-none no-drag"
-                >
+                {
+                    platform !== "darwin" ? (
+                        <div
+                            className="flex h-full items-center justify-center select-none no-drag"
+                        >
 
-                    <SystemButton
-                        OnActivate={() => windowAction("minimize")}
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="white">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14" />
-                        </svg>
-                    </SystemButton>
-
-                    <SystemButton
-                        OnActivate={() => windowAction("maximize")}
-                    >
-                        {
-                            isMaximized ? (
-                                <img src={RestoreWindowImage} className="invert w-4 h-4"/>
-                            ) : (
+                            <SystemButton
+                                OnActivate={() => windowAction("minimize")}
+                            >
                                 <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="white">
-                                    <rect x="4" y="4" width="16" height="16" strokeWidth={2} rx={2} stroke="white" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14" />
                                 </svg>
-                            )
-                        }
-                    </SystemButton>
+                            </SystemButton>
 
-                    <SystemButton
-                        OnActivate={() => windowAction("close")}
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="white">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </SystemButton>
+                            <SystemButton
+                                OnActivate={() => windowAction("maximize")}
+                            >
+                                {
+                                    isMaximized ? (
+                                        <img src={RestoreWindowImage} className="invert w-4 h-4" />
+                                    ) : (
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="white">
+                                            <rect x="4" y="4" width="16" height="16" strokeWidth={2} rx={2} stroke="white" />
+                                        </svg>
+                                    )
+                                }
+                            </SystemButton>
 
-                </div>
+                            <SystemButton
+                                OnActivate={() => windowAction("close")}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="white">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </SystemButton>
+
+                        </div>
+                    ) : (<></>)
+                }
+
+                {
+                    platform === "darwin" ? (
+                        <div
+                            className="flex p-3 gap-3 h-full items-center justify-center"
+                        >
+                            <img src={LocoraIcon} alt="Locora Icon" className="w-5 h-5 select:none" />
+                        </div>
+                    ) : (<></>)
+                }
 
             </div>
         </>

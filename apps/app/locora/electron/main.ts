@@ -3,7 +3,6 @@ import { fileURLToPath } from 'node:url'
 
 import path from 'node:path'
 import { WindowAction } from '../types'
-//import { DeleteSessionToken, LoadSessionToken, UpdateSessionToken } from './SessionHandling/KeyHandler'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -21,6 +20,8 @@ let authWin: BrowserWindow | null
 app.setName('Locora')
 app.setAppUserModelId('org.locora.app')
 
+const TitleBarStyle = process.platform !== 'darwin' ? 'hidden' : 'hiddenInset'
+
 function CreateMainApplication() {
   win = new BrowserWindow({
 
@@ -34,7 +35,7 @@ function CreateMainApplication() {
 
     title: 'Locora',
 
-    titleBarStyle: 'hidden',
+    titleBarStyle: TitleBarStyle,
     autoHideMenuBar: false,
     frame: false,
 
@@ -53,7 +54,9 @@ function CreateMainApplication() {
 
   win.webContents.on('did-finish-load', () => {
     win?.webContents.send('main-process-message', (new Date).toLocaleString())
+    win?.webContents.send('platform', process.platform)
   })
+
 
   win.webContents.openDevTools();
 
@@ -82,7 +85,7 @@ ipcMain.handle("open-authentication-window",async () => {
     
     fullscreenable : false,
 
-    title: 'Locora',
+    title: 'Locora | Authentication',
 
     accentColor: '#323876',
 
@@ -91,9 +94,8 @@ ipcMain.handle("open-authentication-window",async () => {
     icon: path.join(process.env.VITE_PUBLIC, 'BorderedLocora.png'),
 
     parent : undefined,
-    alwaysOnTop : true,
+    alwaysOnTop : process.platform !== "darwin",
     focusable : true,
-    modal : true,
     show : false,
 
     webPreferences : {
@@ -101,30 +103,26 @@ ipcMain.handle("open-authentication-window",async () => {
       nodeIntegration : false,
       contextIsolation : true,
       backgroundThrottling : false,
-      preload : path.join(__dirname,"preload-authentication.mjs")
+      preload : path.join(__dirname,"preload.mjs")
     }
   })
 
   if (process.env.NODE_ENV == "development") {
-    authWin.loadURL("http://localhost:3000/auth")
+    authWin.loadURL("http://localhost:3067/auth")
   } else {
     authWin.loadURL("https://locora.org/auth")
   }
 
-  authWin.once("ready-to-show",() => {
+  if (process.platform === "darwin") {
+    authWin?.show()
+  }
+
+  authWin.on("ready-to-show", () => {
     authWin?.show()
     authWin?.focus()
+    authWin?.webContents.openDevTools();
   })
 
-})
-
-ipcMain.handle("token-update", async (_,userId : string, token: string) => {
-})
-
-ipcMain.handle("token-fetch", async (_,userId : string) => {
-})
-
-ipcMain.handle("token-delete", async (_,userId : string) => {
 })
 
 app.on('window-all-closed', () => {
@@ -169,9 +167,15 @@ app.whenReady().then(CreateMainApplication).then(() => {
     const idToken = url.searchParams.get("idToken")
     const uid = url.searchParams.get("uid")
 
-    console.log(idToken,uid)
+    authWin?.webContents.send("authenticated",{
+      idToken : idToken,
+      uid : uid
+    })
 
-    authWin?.close()
+    setTimeout(() => {
+      authWin?.close()
+    }, 1000);
+
     callback({data: "OK" , mimeType: "text/plain"})
   })
 })

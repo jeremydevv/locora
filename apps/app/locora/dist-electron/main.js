@@ -11,6 +11,7 @@ let win;
 let authWin;
 app.setName("Locora");
 app.setAppUserModelId("org.locora.app");
+const TitleBarStyle = process.platform !== "darwin" ? "hidden" : "hiddenInset";
 function CreateMainApplication() {
   win = new BrowserWindow({
     minWidth: 800,
@@ -19,7 +20,7 @@ function CreateMainApplication() {
     width: 1080,
     height: 720,
     title: "Locora",
-    titleBarStyle: "hidden",
+    titleBarStyle: TitleBarStyle,
     autoHideMenuBar: false,
     frame: false,
     accentColor: "#323876",
@@ -32,6 +33,7 @@ function CreateMainApplication() {
   });
   win.webContents.on("did-finish-load", () => {
     win?.webContents.send("main-process-message", (/* @__PURE__ */ new Date()).toLocaleString());
+    win?.webContents.send("platform", process.platform);
   });
   win.webContents.openDevTools();
   win.on("maximize", () => win.webContents.send("window-maximized"));
@@ -52,38 +54,35 @@ ipcMain.handle("open-authentication-window", async () => {
     minHeight: 780,
     autoHideMenuBar: true,
     fullscreenable: false,
-    title: "Locora",
+    title: "Locora | Authentication",
     accentColor: "#323876",
     roundedCorners: true,
     icon: path.join(process.env.VITE_PUBLIC, "BorderedLocora.png"),
     parent: void 0,
-    alwaysOnTop: true,
+    alwaysOnTop: process.platform !== "darwin",
     focusable: true,
-    modal: true,
     show: false,
     webPreferences: {
       sandbox: false,
       nodeIntegration: false,
       contextIsolation: true,
       backgroundThrottling: false,
-      preload: path.join(__dirname$1, "preload-authentication.mjs")
+      preload: path.join(__dirname$1, "preload.mjs")
     }
   });
   if (process.env.NODE_ENV == "development") {
-    authWin.loadURL("http://localhost:3000/auth");
+    authWin.loadURL("http://localhost:3067/auth");
   } else {
     authWin.loadURL("https://locora.org/auth");
   }
-  authWin.once("ready-to-show", () => {
+  if (process.platform === "darwin") {
+    authWin?.show();
+  }
+  authWin.on("ready-to-show", () => {
     authWin?.show();
     authWin?.focus();
+    authWin?.webContents.openDevTools();
   });
-});
-ipcMain.handle("token-update", async (_, userId, token) => {
-});
-ipcMain.handle("token-fetch", async (_, userId) => {
-});
-ipcMain.handle("token-delete", async (_, userId) => {
 });
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
@@ -119,8 +118,13 @@ app.whenReady().then(CreateMainApplication).then(() => {
     const url = new URL(request.url);
     const idToken = url.searchParams.get("idToken");
     const uid = url.searchParams.get("uid");
-    console.log(idToken, uid);
-    authWin?.close();
+    authWin?.webContents.send("authenticated", {
+      idToken,
+      uid
+    });
+    setTimeout(() => {
+      authWin?.close();
+    }, 1e3);
     callback({ data: "OK", mimeType: "text/plain" });
   });
 });

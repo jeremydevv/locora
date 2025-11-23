@@ -25,6 +25,9 @@ globalThis.addEventListener("message", (event) => {
   }
 });
 electron.contextBridge.exposeInMainWorld("electronAPI", {
+  onPlatform(callback) {
+    electron.ipcRenderer.on("platform", (_, platform) => callback(_, platform));
+  },
   windowAction: (action) => electron.ipcRenderer.send("window-action", action),
   onWindowMaximize: (callback) => electron.ipcRenderer.on("window-maximized", callback),
   onWindowUnmaximize: (callback) => electron.ipcRenderer.on("window-unmaximized", callback),

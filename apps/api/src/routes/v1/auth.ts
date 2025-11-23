@@ -10,7 +10,8 @@ import DefaultEntry from "./Auth/Default/entry"
 
 const router = Router({ base: "/v1/auth/" });
 
-router.options("*", (req : Request) => {
+router.options("/*", (req : Request) => {
+    console.log("CORS Preflight Request Received");
     return Corsify(req, new Response(null, {
         status : 200
     }));

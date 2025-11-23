@@ -4,7 +4,7 @@ function getApiBaseUrl() {
     const wholeUrl = window.location.hostname;
 
     if (ENVIRONMENT === "dev") {
-        return "http://127.0.0.1:8787";
+        return "http://localhost:6767";
     } else {
 
         if (wholeUrl === "locora.org") {
