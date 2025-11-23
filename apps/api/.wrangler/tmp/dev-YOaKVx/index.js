@@ -19,10 +19,10 @@ var p = o("image/png");
 var d = o("image/webp");
 
 // src/routes/utils/OriginValidate.ts
-var ValidOrigins = ["https://locora.org", "https://api.locora.org", "http://localhost:5173", "https://waitlist-dev.locora.pages.dev", "https://development.locora.pages.dev"];
+var ValidOrigins = ["https://locora.org", "https://api.locora.org", "http://localhost:5173", "https://waitlist-dev.locora.pages.dev", "https://development.locora.pages.dev", "http://localhost:3067", "http://localhost:3068"];
 function OriginValidate(origin) {
   if (!origin) return false;
-  if (origin?.startsWith("http://localhost")) return true;
+  if (origin?.startsWith("http://localhost") || origin?.startsWith("https://localhost")) return true;
   if (ValidOrigins.includes(origin)) return true;
   return false;
 }
@@ -30,8 +30,11 @@ __name(OriginValidate, "OriginValidate");
 
 // src/routes/utils/Corsify.ts
 function Corsify_default(req, res) {
+  const origin = req.headers.get("Origin");
+  const IsAllowedOrigin = OriginValidate(origin || "");
+  console.log(origin);
   const headers = new Headers(res.headers);
-  headers.set("Access-Control-Allow-Origin", OriginValidate(req.headers.get("Origin")) && req.headers.get("Origin") || "https://locora.org");
+  headers.set("Access-Control-Allow-Origin", IsAllowedOrigin && origin ? origin : "https://locora.org");
   headers.set("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
   headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
   return new Response(res.body, {
@@ -190,6 +193,7 @@ async function SignUpWithEmailAndPassword(req, email, password, username, env3) 
         message: "Issue with datastores."
       }, 500);
     }
+    console.log(Body);
     return JSONResponse(req, {
       success: true,
       message: "Signed up successfully",
@@ -246,7 +250,8 @@ __name(entry_default3, "default");
 
 // src/routes/v1/auth.ts
 var router = e({ base: "/v1/auth/" });
-router.options("*", (req) => {
+router.options("/*", (req) => {
+  console.log("CORS Preflight Request Received");
   return Corsify_default(req, new Response(null, {
     status: 200
   }));
@@ -4091,7 +4096,7 @@ var drainBody = /* @__PURE__ */ __name(async (request, env3, _ctx, middlewareCtx
 }, "drainBody");
 var middleware_ensure_req_body_drained_default = drainBody;
 
-// .wrangler/tmp/bundle-xSaXgV/middleware-insertion-facade.js
+// .wrangler/tmp/bundle-1GQGme/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default
 ];
@@ -4122,7 +4127,7 @@ function __facade_invoke__(request, env3, ctx, dispatch, finalMiddleware) {
 }
 __name(__facade_invoke__, "__facade_invoke__");
 
-// .wrangler/tmp/bundle-xSaXgV/middleware-loader.entry.ts
+// .wrangler/tmp/bundle-1GQGme/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class ___Facade_ScheduledController__ {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;

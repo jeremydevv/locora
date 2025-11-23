@@ -44,7 +44,6 @@ export default async function(req : Request, env : Env, context : any) {
         return LogInWithEmailAndPassword(req,Body.Info,Body.Password,env)
     } else if(Action == "register") {
         if (Body.Username == null || Body.Username === "") MalformedData();
-        
         return SignUpWithEmailAndPassword(req,Body.Info,Body.Password,Body.Username!,env)
     }
 

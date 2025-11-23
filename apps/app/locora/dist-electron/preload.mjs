@@ -18,12 +18,6 @@ electron.contextBridge.exposeInMainWorld("ipcRenderer", {
     return electron.ipcRenderer.invoke(channel, ...omit);
   }
 });
-globalThis.addEventListener("message", (event) => {
-  console.log(event, event.data);
-  if (event.data?.type == "locora-authentication") {
-    electron.ipcRenderer.send("authenticated", event.data);
-  }
-});
 electron.contextBridge.exposeInMainWorld("electronAPI", {
   onPlatform(callback) {
     electron.ipcRenderer.on("platform", (_, platform) => callback(_, platform));
@@ -33,8 +27,24 @@ electron.contextBridge.exposeInMainWorld("electronAPI", {
   onWindowUnmaximize: (callback) => electron.ipcRenderer.on("window-unmaximized", callback),
   offWindowMaximize: (callback) => electron.ipcRenderer.removeListener("window-maximized", callback),
   offWindowUnmaximize: (callback) => electron.ipcRenderer.removeListener("window-unmaximized", callback),
-  openAuthenticationWindow: () => electron.ipcRenderer.invoke("open-authentication-window"),
-  updateSessionToken: (userId, token) => electron.ipcRenderer.invoke("token-update", userId, token),
-  fetchSessionToken: (userId) => electron.ipcRenderer.invoke("token-fetch", userId),
-  deleteSessionToken: (userId) => electron.ipcRenderer.invoke("token-delete", userId)
+  openAuthenticationWindow: () => electron.ipcRenderer.invoke("open-authentication-window")
+});
+electron.contextBridge.exposeInMainWorld("authAPI", {
+  getIdToken: () => electron.ipcRenderer.invoke("get-id-token"),
+  getRefreshToken: () => electron.ipcRenderer.invoke("get-refresh-token"),
+  getUid: () => electron.ipcRenderer.invoke("get-uid"),
+  onAuthenticationChange: (callback) => {
+    electron.ipcRenderer.on("authenticated", (_, data) => {
+      callback({
+        uid: data.uid || "",
+        idToken: data.idToken || "",
+        refreshToken: data.refreshToken || ""
+      });
+    });
+    return () => {
+      electron.ipcRenderer.off("authenticated", () => {
+      });
+    };
+  },
+  getSession: () => electron.ipcRenderer.invoke("get-session")
 });

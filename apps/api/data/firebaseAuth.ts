@@ -114,6 +114,8 @@ async function SignUpWithEmailAndPassword(req : Request, email : string, passwor
             },500)
         }
 
+        console.log(Body)
+
         return JSONResponse(req, {
             success: true,
             message: "Signed up successfully",

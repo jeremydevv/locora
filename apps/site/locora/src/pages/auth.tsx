@@ -120,7 +120,7 @@ function AuthenticationPage() {
                 DisplayFeedback("You have successfully logged in!")
             }
 
-            window.location.href = `locora://authenticated?idToken=${Results.userdata.idToken}&uid=${Results.userdata.localId}`
+            window.location.href = `locora://authenticated?idToken=${Results.userdata.idToken}&uid=${Results.userdata.localId}&refreshToken=${Results.userdata.refreshToken}`
         } catch (err) {
             DisplayFeedback("An issue occured...")
             console.log(err)
@@ -187,9 +187,10 @@ function AuthenticationPage() {
                 DisplayFeedback(TranslateErrorCode(Results.message) || "An issue occured...")
             } else {
                 DisplayFeedback("You have successfully signed up!")
-            }
+            }  
 
-            window.location.href = `locora://authenticated?idToken=${Results.userdata.idToken}&uid=${Results.userdata.localId}`
+            window.location.href = `locora://authenticated?idToken=${Results.userdata.idToken}&uid=${Results.userdata.localId}&refreshToken=${Results.userdata.refreshToken}`
+
         } catch (err) {
             DisplayFeedback("An issue occured...")
             console.log(err)

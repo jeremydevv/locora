@@ -1,5 +1,5 @@
 import { ipcRenderer, contextBridge } from 'electron'
-import { WindowAction } from '../types'
+import { DataPayload, WindowAction } from '../types'
 
 // --------- Expose some API to the Renderer process ---------
 contextBridge.exposeInMainWorld('ipcRenderer', {
@@ -21,13 +21,6 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
   },
 })
 
-globalThis.addEventListener("message", (event) => {
-    console.log(event,event.data)
-    if (event.data?.type == "locora-authentication") {
-        ipcRenderer.send("authenticated",event.data)
-    }
-})
-
 contextBridge.exposeInMainWorld("electronAPI", {
   onPlatform(callback: (event: Electron.IpcRendererEvent, platform: string) => void) {
     ipcRenderer.on('platform', (_, platform) => callback(_,platform))
@@ -38,10 +31,28 @@ contextBridge.exposeInMainWorld("electronAPI", {
   offWindowMaximize: (callback: () => void) => ipcRenderer.removeListener("window-maximized", callback),
   offWindowUnmaximize: (callback: () => void) => ipcRenderer.removeListener("window-unmaximized", callback),
   openAuthenticationWindow : () => ipcRenderer.invoke("open-authentication-window"),
-  updateSessionToken : (userId: string, token: string) => ipcRenderer.invoke("token-update", userId, token),
-  fetchSessionToken : (userId: string) => ipcRenderer.invoke("token-fetch", userId),
-  deleteSessionToken : (userId: string) => ipcRenderer.invoke("token-delete", userId),
 });
+
+contextBridge.exposeInMainWorld("authAPI", {
+    getIdToken : () => ipcRenderer.invoke("get-id-token"),
+    getRefreshToken : () => ipcRenderer.invoke("get-refresh-token"),
+    getUid : () => ipcRenderer.invoke("get-uid"),
+
+    onAuthenticationChange : (callback : ({uid,idToken,refreshToken} : DataPayload) => void) => {
+        ipcRenderer.on("authenticated", (_, data : DataPayload) => {
+            callback({
+                uid : data.uid || "",
+                idToken : data.idToken || "",
+                refreshToken : data.refreshToken || ""
+            })
+        })
+        return () => {
+            ipcRenderer.off("authenticated", () => {})
+        }
+    },
+
+    getSession : () => ipcRenderer.invoke("get-session"),
+})
 
 declare global {
   interface Window {
@@ -53,9 +64,13 @@ declare global {
       offWindowMaximize: (callback: () => void) => void;
       offWindowUnmaximize: (callback: () => void) => void;
       openAuthenticationWindow : () => Promise<void>,
-      updateSessionToken : (userId: string, token: string) => null,
-      fetchSessionToken : (userId: string) => string,
-      deleteSessionToken : (userId: string) => null,
     };
+    authAPI?: {
+        getIdToken : (callback : (idToken : string | null) => void) => Promise<string | null>,
+        getRefreshToken : (callback : (refreshToken : string | null) => void) => Promise<string | null>,
+        getUid : (callback : (uid : string | null) => void) => Promise<string | null>,
+        getSession : (callback : (sessionData : DataPayload) => void) => Promise<Record<string,string> | null>,
+        onAuthenticationChange : (callback : ({uid,idToken,refreshToken} : DataPayload) => void) => () => void
+    }
   }
 }

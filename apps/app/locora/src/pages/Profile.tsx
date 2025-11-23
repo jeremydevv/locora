@@ -2,7 +2,9 @@ import Template from "../assets/pfptemp.png"
 import BaseButton from "../components/button";
 
 import Clouds from "../assets/Clouds3.png"
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { GetIdToken, GetRefreshToken, GetUid } from "../data/AuthStore";
+import { DataPayload } from "../../types";
 
 function ProfileElement() {
     return (
@@ -159,7 +161,33 @@ function NotLoggedInElement() {
 
 export default function Profile() {
 
-    const [UserToken , setUserToken] = useState<string>("")
+    const [isLoading, setLoadingStatus] = useState<boolean>(true)
+    const [idToken, setIdToken] = useState<string>("")
+    const [uid, setUID] = useState<string>("")
+
+    useEffect(() => {
+        setLoadingStatus(true)
+
+        const SessionData = async () => {
+            const idToken = await GetIdToken()
+            const uid = await GetUid()
+
+            setIdToken(idToken || "")
+            setUID(uid || "")
+            setLoadingStatus(false)
+        }
+
+        SessionData()
+
+        window.authAPI?.onAuthenticationChange(({uid,idToken} : DataPayload) => {
+            console.log("Authentication change detected. New UID:", uid, "New ID Token:", idToken)
+            setIdToken(idToken || "")
+            setUID(uid || "") 
+        })
+
+        console.log(idToken)
+
+    }, [])
 
     return (
         <>
@@ -169,7 +197,7 @@ export default function Profile() {
 
                 <img src={Clouds} className="absolute top-0 left-0 opacity-5 w-full z-0 animate-float select:none" />
 
-                {UserToken !== "" ? <ProfileElement /> : <NotLoggedInElement />}
+                {idToken !== ("") ? <ProfileElement /> : <NotLoggedInElement />}
 
             </div>
         </>

@@ -1,8 +1,12 @@
-import { app, BrowserWindow, ipcMain, protocol } from 'electron'
+import { app, BrowserWindow, globalShortcut, ipcMain, ipcRenderer, protocol } from 'electron'
 import { fileURLToPath } from 'node:url'
+import Store from 'electron-store'
+const userStorage = new Store()
 
 import path from 'node:path'
-import { WindowAction } from '../types'
+
+import { DataPayload, WindowAction } from '../types'
+import Keytar from 'keytar'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -28,7 +32,7 @@ function CreateMainApplication() {
     minWidth: 800,
     minHeight: 600,
 
-    maxHeight : 1920,
+    maxHeight: 1920,
 
     width: 1080,
     height: 720,
@@ -58,8 +62,6 @@ function CreateMainApplication() {
   })
 
 
-  win.webContents.openDevTools();
-
   win.on("maximize", () => win!.webContents.send("window-maximized"));
   win.on("unmaximize", () => win!.webContents.send("window-unmaximized"));
 
@@ -71,19 +73,19 @@ function CreateMainApplication() {
   }
 }
 
-ipcMain.handle("open-authentication-window",async () => {
+ipcMain.handle("open-authentication-window", async () => {
   authWin = new BrowserWindow({
-    width : 480,
-    height : 780,
+    width: 480,
+    height: 780,
 
-    maxWidth : 480,
-    maxHeight : 780,
+    maxWidth: 480,
+    maxHeight: 780,
 
-    minWidth : 480,
-    minHeight : 780,
-    autoHideMenuBar : true,
-    
-    fullscreenable : false,
+    minWidth: 480,
+    minHeight: 780,
+    autoHideMenuBar: true,
+
+    fullscreenable: false,
 
     title: 'Locora | Authentication',
 
@@ -93,17 +95,17 @@ ipcMain.handle("open-authentication-window",async () => {
 
     icon: path.join(process.env.VITE_PUBLIC, 'BorderedLocora.png'),
 
-    parent : undefined,
-    alwaysOnTop : process.platform !== "darwin",
-    focusable : true,
-    show : false,
+    parent: undefined,
+    alwaysOnTop: process.platform !== "darwin",
+    focusable: true,
+    show: false,
 
-    webPreferences : {
-      sandbox : false,
-      nodeIntegration : false,
-      contextIsolation : true,
-      backgroundThrottling : false,
-      preload : path.join(__dirname,"preload.mjs")
+    webPreferences: {
+      sandbox: false,
+      nodeIntegration: false,
+      contextIsolation: true,
+      backgroundThrottling: false,
+      preload: path.join(__dirname, "preload.mjs")
     }
   })
 
@@ -120,7 +122,6 @@ ipcMain.handle("open-authentication-window",async () => {
   authWin.on("ready-to-show", () => {
     authWin?.show()
     authWin?.focus()
-    authWin?.webContents.openDevTools();
   })
 
 })
@@ -160,22 +161,78 @@ ipcMain.on("window-action", (_, action: WindowAction) => {
   }
 });
 
+let data : DataPayload = {
+  idToken: null,
+  uid: null,
+  refreshToken: null
+}
+
+// handling auth requests
+
+ipcMain.handle("get-id-token", async () => {
+
+  if (data.idToken !== null) {
+    return data.idToken
+  }
+
+  return Keytar.getPassword("org.locora.app", `${userStorage.get("uid")}-idToken` || "")
+
+})
+
+ipcMain.handle("get-uid", async () => {
+  return localStorage.getItem("locora-uid")
+})
+
+ipcMain.handle("get-refresh-token", async () => {
+  return Keytar.getPassword("org.locora.app", `${userStorage.get("uid")}-refreshToken` || "")
+})
+
+ipcMain.handle("get-session", async () => {
+  return {
+    idToken: data.idToken,
+    uid: data.uid,
+    refreshToken: data.refreshToken
+  }
+})
+
 app.whenReady().then(CreateMainApplication).then(() => {
-  protocol.registerStringProtocol('locora',(request,callback) => {
+
+  globalShortcut.register('CommandOrControl+Shift+I', () => {
+    authWin?.webContents.toggleDevTools()
+    win?.webContents.toggleDevTools()
+  })
+
+  protocol.registerStringProtocol('locora', (request, callback) => {
     const url = new URL(request.url)
+
+    console.log("Custom protocol triggered:", url.href);
 
     const idToken = url.searchParams.get("idToken")
     const uid = url.searchParams.get("uid")
+    const refreshToken = url.searchParams.get("refreshToken")
 
-    authWin?.webContents.send("authenticated",{
-      idToken : idToken,
-      uid : uid
+    // keeping in localStorage and Keytar for persistence
+    userStorage.set("uid", uid || "")
+
+    Keytar.setPassword("org.locora.app", `${uid}-idToken` || "" , idToken || "")
+    Keytar.setPassword("org.locora.app", `${uid}-refreshToken` || "" , idToken || "")
+
+    // keeping in main.ts
+    data.idToken = idToken
+    data.uid = uid
+    data.refreshToken = refreshToken
+
+    // sending for current session view
+    win?.webContents.send("authenticated", {
+      idToken: idToken,
+      uid: uid,
+      refreshToken: refreshToken
     })
 
     setTimeout(() => {
       authWin?.close()
-    }, 1000);
+    }, 500);
 
-    callback({data: "OK" , mimeType: "text/plain"})
   })
+
 })

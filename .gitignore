@@ -1,7 +1,5 @@
 
-.env
-.env.*
-!.env.example        # Keep a safe example env (no secrets)
+!.env.example
 *.local
 .dev.vars
 
