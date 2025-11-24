@@ -1,0 +1,34 @@
+name: TypeScript Lint
+
+on: 
+  push:
+    paths:
+      - 'apps/site/locora/**'
+      - '.github/workflows/typescript.yml'
+  pull_request:
+    paths:
+      - 'apps/site/locora/**'
+      - '.github/workflows/typescript.yml'
+
+jobs:
+  linter:
+    runs-on: ubuntu-latest
+    name: TypeScript Lint
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: apps/site/locora
+        run: npm ci
+
+      - name: Run TypeScript Linter
+        working-directory: apps/site/locora
+        uses: AntonKornus/TypeScript-Linter@1.0.0
+        with:
+          folder: .

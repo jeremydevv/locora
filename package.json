@@ -1,0 +1,9 @@
+{
+    "scripts": {
+        "dev": "concurrently \"npm run dev --prefix apps/site/locora\" \"npm run dev --prefix apps/api\" \"npm run dev --prefix apps/app/locora\""
+    },
+    "devDependencies": {
+        "concurrently": "^9.2.1",
+        "wrangler": "^4.50.0"
+    }
+}
