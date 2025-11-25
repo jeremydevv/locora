@@ -5,14 +5,48 @@ import Clouds from "../assets/Clouds3.png"
 import { useEffect, useState } from "react";
 import { GetIdToken, GetUid } from "../data/AuthStore";
 import { DataPayload } from "../../types";
+import { GetUserAttribute } from "../data/user/information/displayInformation";
 
-function ProfileElement({uid, idToken} : DataPayload) {
+function ProfileElement({ uid, idToken }: DataPayload) {
 
     function Logout() {
         if (idToken === "") return
         window.authAPI?.logout()
         window.location.reload()
     }
+
+    const [Username, setUsername] = useState<string>("")
+    const [DisplayUsername, setDisplayUsername] = useState<string>("")
+    const [SuccessfullyFetched , setSuccessfullyFetched] = useState<boolean>(false)
+
+    useEffect(() => {
+        if(SuccessfullyFetched) return
+
+        async function LoadUsername() {
+            const username = await GetUserAttribute(idToken!, "username")
+            console.log(username)
+            setUsername(username)
+        }
+
+        async function LoadDisplayUsername() {
+            const displayName = await GetUserAttribute(idToken!, "displayName")
+            console.log(displayName)
+            setDisplayUsername(displayName)
+        }
+
+        async function RunAll() {
+            try {
+                await Promise.all([LoadUsername(), LoadDisplayUsername()])
+                setSuccessfullyFetched(true)
+                console.log("User attributes loaded successfully")
+            } catch(err) {
+                console.log("Error loading user attributes",err)
+            }
+        }
+
+        RunAll()
+
+    }, [idToken])
 
     return (
         <div
@@ -21,7 +55,7 @@ function ProfileElement({uid, idToken} : DataPayload) {
 
             {/* top side with banner + profile picture */}
             <div
-                className="flex flex-col gap-4 items-center z-10 pr-[38vw] pt-[30vh] justify-center w-full h-[25vh] bg-bay-of-many-600/40"
+                className="flex flex-col gap-4 items-center z-10 pr-[50vw] pt-[30vh] justify-center w-full h-[25vh] bg-bay-of-many-600/40"
             >
 
                 <div
@@ -79,13 +113,13 @@ function ProfileElement({uid, idToken} : DataPayload) {
                     <h1
                         className="text-6xl font-bold"
                     >
-                        Jeremy Mathew
+                        {DisplayUsername}
                     </h1>
 
                     <h2
                         className="text-2xl font-semibold text-white/70"
                     >
-                        @jeremymathew
+                        @{Username}
                     </h2>
 
                     <p
@@ -209,11 +243,8 @@ export default function Profile() {
             <div
                 className="w-full min-h-screen flex justify-center overflow-x-hidden"
             >
-
                 <img src={Clouds} className="absolute top-0 left-0 opacity-5 w-full z-0 animate-float select:none" />
-
-                {idToken !== ("") ? <ProfileElement idToken={idToken} uid={uid} refreshToken={""} /> : <NotLoggedInElement />}
-
+                {idToken !== "" ? <ProfileElement key={idToken} idToken={idToken} uid={uid} refreshToken={""} /> : <NotLoggedInElement />}
             </div>
         </>
     )

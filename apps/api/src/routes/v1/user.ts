@@ -11,7 +11,7 @@ const router = Router({ base: "/v1/users/" });
 router.options("*", (req : Request) => {
     return Corsify(req, new Response(null, {
         status : 200
-    }));
+    }),true);
 })
 
 router.post("*", async (req : Request, env : Env) => {
@@ -25,7 +25,7 @@ router.post("*", async (req : Request, env : Env) => {
         },401)
     }
 
-    return UserPostEntry(req,env)
+    return await UserPostEntry(req,env)
 })
 
 router.get("*", async (req : Request, env : Env) => {
@@ -39,7 +39,7 @@ router.get("*", async (req : Request, env : Env) => {
         },401)
     }
 
-    return UserGetEntry(req,env)
+    return await UserGetEntry(req,env)
 })
 
 export const handleUser = (req: Request, env: Env) => router.handle(req, env);

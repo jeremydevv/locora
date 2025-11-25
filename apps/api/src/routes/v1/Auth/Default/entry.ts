@@ -10,6 +10,7 @@ export default async function(req : Request, env : Env, context : any) {
     const Body : {
         TurnstileToken : string,
         Username? : string
+        Name? : string
         Info : string,
         Password : string,
     } = await req.json()
@@ -43,8 +44,8 @@ export default async function(req : Request, env : Env, context : any) {
     if (Action == "login") {
         return LogInWithEmailAndPassword(req,Body.Info,Body.Password,env)
     } else if(Action == "register") {
-        if (Body.Username == null || Body.Username === "") MalformedData();
-        return SignUpWithEmailAndPassword(req,Body.Info,Body.Password,Body.Username!,env)
+        if (Body.Username == null || Body.Username === "" || Body.Name === "" || Body.Name == null) MalformedData();
+        return SignUpWithEmailAndPassword(req,Body.Info,Body.Password,Body.Username!,Body.Name!,env)
     }
 
     return JSONResponse(req,{

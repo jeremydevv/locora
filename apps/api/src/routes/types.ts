@@ -13,4 +13,16 @@ export interface RequestWaitlistAdd {
     turnstile_token: string;
 }
 
+export interface DataPayload {
+    username : string;
+    displayName : string;
+    
+    bio : string;
+    profilePictureURL : string;
+    bannerPictureURL : string;
+
+    createdAt : string;
+    coins : string;
+}
+
 export default {};

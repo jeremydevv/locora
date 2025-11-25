@@ -1,5 +1,5 @@
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import PageSwitch from './components/pageswitch'
 import Taskbar from './components/taskbar'
@@ -27,6 +27,12 @@ function App() {
   window.electronAPI?.onPlatform((_,platform) => {
     setPlatform(platform as DeviceTypes)
   }) 
+
+  useEffect(() => {
+    window.electronAPI?.getDeviceType().then((platform) => {
+      setPlatform(platform as DeviceTypes)
+    })
+  }, [])
 
   function SwitchPage(newSection: number) {
     setSelection(newSection)

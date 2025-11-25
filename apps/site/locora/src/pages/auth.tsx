@@ -24,6 +24,8 @@ function AuthenticationPage() {
     const [inputStatus, setInputStatus] = useState<boolean | null>(null)
 
     const [username, setUsername] = useState("")
+    const [name, setName] = useState("")
+
     const [info, setInfo] = useState("")
     const [passwordInput, setPasswordInput] = useState("")
 
@@ -154,7 +156,7 @@ function AuthenticationPage() {
     */
     async function RegisterViaEmailAndPassword() {
 
-        if (info === "" || passwordInput === "" || username == "") {
+        if (info === "" || passwordInput === "" || username == "" || name == "") {
             DisplayFeedback("Please fill out all fields.")
             return
         }
@@ -169,6 +171,7 @@ function AuthenticationPage() {
             const Body = JSON.stringify({
                 TurnstileToken: tokenPromise,
                 Username: username,
+                Name: name,
                 Info: info,
                 Password: passwordInput
             })
@@ -258,7 +261,7 @@ function AuthenticationPage() {
                     className="w-screen h-screen flex-col bg-bay-of-many-500 flex items-center justify-center"
                 >
 
-                    <img src={Clouds} className="absolute xl:bottom-5 lg:bottom-5 animate-float invert opacity-8 w-full bottom-10" />
+                    <img src={Clouds} className="absolute xl:bottom-10 lg:bottom-8 animate-float invert opacity-8 w-full bottom-10" />
 
                     <div
                         className="border-2 border-bay-of-many-400 bg-clip-padding backdrop-filter backdrop-blur-xl flex-col drop-shadow-2xl rounded-2xl p-10 flex gap-5 items-center justify-center"
@@ -340,6 +343,14 @@ function AuthenticationPage() {
                                     </div>
 
                                     <Divider />
+
+                                    <InputField
+                                        id="name"
+                                        fieldLabel="Name"
+                                        value={name}
+                                        placeholder="John Doe"
+                                        middleware={setName}
+                                    />
 
                                     <InputField
                                         id="username"

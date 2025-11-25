@@ -179,6 +179,10 @@ ipcMain.handle("get-id-token", async () => {
 
 })
 
+ipcMain.handle("get-device-type", async () => {
+  return process.platform
+})
+
 ipcMain.handle("get-uid", async () => {
   return localStorage.getItem("locora-uid")
 })
@@ -208,6 +212,16 @@ ipcMain.handle("logout", async () => {
   data.uid = null
 
   return true
+})
+
+ipcMain.handle("get-session-information", async (_,key : string) => {
+  return userStorage.get(key)
+})
+
+ipcMain.handle("save-session-information", async (_, newData) => {
+  for (const key in newData) {
+    userStorage.set(key, (newData as any)[key])
+  }
 })
 
 app.whenReady().then(CreateMainApplication).then(() => {

@@ -41,7 +41,7 @@ export default function BottomBar({homeActivated, exploreActivate, bookmarkActiv
     return (
         <>
             <div
-                className="absolute flex flex-col w-full h-12 z-25 bottom-5 p-1 gap-2 items-center justify-center"
+                className="flex flex-row w-full h-12 z-25 p-1 gap-2 items-center justify-center"
             >
                 <PageSwitch OnHomeActivate={HomeActivated} OnBookmarkActivate={BookmarkActivated} OnExploreActivate={ExploreActivated}/>
                 <ProfileOpening IsProfileExpanded={expanded} ToggleProfileExpansion={ToggleProfileVisibility} OnProfilePageActivate={ProfileActivated} />

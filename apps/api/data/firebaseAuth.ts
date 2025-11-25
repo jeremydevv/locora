@@ -64,7 +64,7 @@ async function LogInWithEmailAndPassword(req: Request, email: string, password: 
 
 }
 
-async function SignUpWithEmailAndPassword(req : Request, email : string, password : string, username : string, env : Env) {
+async function SignUpWithEmailAndPassword(req : Request, email : string, password : string, username : string, name : string, env : Env) {
     try {
         const Data = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${env.FIREBASE_API_KEY}`, {
             method: "POST",
@@ -105,6 +105,7 @@ async function SignUpWithEmailAndPassword(req : Request, email : string, passwor
         const RecordRes = await CreateUserRecord(Body.localId,Body.idToken,{
             email : Body.email,
             username : username,
+            name : name
         },env)
 
         if (!RecordRes) {

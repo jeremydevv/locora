@@ -1,4 +1,4 @@
-import { ipcRenderer, contextBridge } from 'electron'
+import { ipcRenderer, contextBridge, IpcRenderer } from 'electron'
 import { DataPayload, WindowAction } from '../types'
 
 // --------- Expose some API to the Renderer process ---------
@@ -25,6 +25,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
   onPlatform(callback: (event: Electron.IpcRendererEvent, platform: string) => void) {
     ipcRenderer.on('platform', (_, platform) => callback(_,platform))
   },
+  getDeviceType : () => ipcRenderer.invoke("get-device-type"),
   windowAction: (action: "minimize" | "maximize" | "close") => ipcRenderer.send("window-action", action),
   onWindowMaximize: (callback: () => void) => ipcRenderer.on("window-maximized", callback),
   onWindowUnmaximize: (callback: () => void) => ipcRenderer.on("window-unmaximized", callback),
@@ -38,6 +39,9 @@ contextBridge.exposeInMainWorld("authAPI", {
     getRefreshToken : () => ipcRenderer.invoke("get-refresh-token"),
     getUid : () => ipcRenderer.invoke("get-uid"),
     logout : () => ipcRenderer.invoke("logout"),
+
+    getCachedSessionData: () => ipcRenderer.invoke("get-session-information") as Promise<DataPayload>,
+    saveSessionData: (data : DataPayload) => ipcRenderer.invoke("save-session-information", data),
 
     onAuthenticationChange : (callback : ({uid,idToken,refreshToken} : DataPayload) => void) => {
         ipcRenderer.on("authenticated", (_, data : DataPayload) => {
@@ -59,6 +63,7 @@ declare global {
   interface Window {
     electronAPI?: {
       onPlatform: (callback: (event: Electron.IpcRendererEvent, platform: string) => void) => void;
+      getDeviceType : () => Promise<string>;
       windowAction: (action: WindowAction) => void;
       onWindowMaximize: (callback: () => void) => void;
       onWindowUnmaximize: (callback: () => void) => void;
@@ -71,6 +76,10 @@ declare global {
         getRefreshToken : (callback : (refreshToken : string | null) => void) => Promise<string | null>,
         getUid : (callback : (uid : string | null) => void) => Promise<string | null>,
         getSession : (callback : (sessionData : DataPayload) => void) => Promise<Record<string,string> | null>,
+
+        getCachedSessionData: (callback : (key : string) => (string)) => Promise<DataPayload>,
+        saveSessionData: (data : DataPayload) => Promise<void>,
+
         onAuthenticationChange : (callback : ({uid,idToken,refreshToken} : DataPayload) => void) => () => void
         logout : () => Promise<void>,
     }

@@ -29,6 +29,13 @@ export default {
             return Response.redirect("https://locora.org", 302);
         }
 
+        if (request.method === "OPTIONS") {
+            if (request.headers.get("Authorization")) {
+                return Corsify(request,new Response(null, { status: 200 }),true);
+            }
+            return Corsify(request,new Response(null, { status: 200 }));
+        }
+
         if (!(OriginValidate(request.headers.get("Origin")!))) {
             return Corsify(request,new Response("Forbidden Access", { status: 403 }));
         }

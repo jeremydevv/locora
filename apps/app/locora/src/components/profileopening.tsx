@@ -1,10 +1,4 @@
-import { useState } from "react"
 import Template from "../assets/pfptemp.png"
-
-import Bookmark from "../assets/Bookmark.png"
-import Compass from "../assets/Compass.png"
-import HomeIcon from "../assets/Home.png"
-import Imagebutton from "./imagebutton"
 
 interface BannerProps {
     OnProfilePageActivate: () => void,
@@ -16,7 +10,7 @@ function ProfileExpansionBanner({ OnProfilePageActivate, isExpanded }: BannerPro
     return (
         <>
             <div
-                className={`fixed flex bottom-6 flex-col left-[54vw] gap-2 bg-clip-padding backdrop-filter backdrop-blur-xl transform-all origin-bottom transition-transform duration-200 ease-in-out border-2 border-bay-of-many-600 z-0 h-38 w-12 p-1 items-center justify-center select-none rounded-full overflow-hidden mt-2`}
+                className={`fixed flex bottom-6 flex-col left-[55vw] gap-2 bg-clip-padding backdrop-filter backdrop-blur-xl transform-all origin-bottom transition-transform duration-200 ease-in-out border-2 border-bay-of-many-600 z-0 h-38 w-12 p-1 items-center justify-center select-none rounded-full overflow-hidden mt-2`}
                 style={{
                     scale: isExpanded ? "1" : "0",
                     background: `linear-gradient(to bottom,rgba(0, 66, 244, 0.7),rgba(43, 127, 255, 0.7),rgba(124, 134, 255, 0.7)`,
@@ -80,7 +74,7 @@ export default function ProfileOpening({ IsProfileExpanded, ToggleProfileExpansi
             <ProfileExpansionBanner isExpanded={IsProfileExpanded} OnProfilePageActivate={OnProfilePageActivate} />
 
             <div
-                className="fixed flex bottom-5 left-[54vw] z-5 hover:scale-105 active:scale-92 bg-clip-padding backdrop-filter backdrop-blur-xl transform-all transition-transform duration-50 select-none w-12 h-12 bg-bay-of-many-800 shadow-2xl border-2 border-bay-of-many-600 rounded-full items-center justify-center"
+                className="fixed flex bottom-5 left-[55vw] z-5 hover:scale-105 active:scale-92 bg-clip-padding backdrop-filter backdrop-blur-xl transform-all transition-transform duration-50 select-none w-12 h-12 bg-bay-of-many-800 shadow-2xl border-2 border-bay-of-many-600 rounded-full items-center justify-center"
                 style={{
                     background: `linear-gradient(to bottom,rgba(0, 66, 244, 0.7),rgba(43, 127, 255, 0.7),rgba(124, 134, 255, 0.7)`,
                 }}

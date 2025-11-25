@@ -16190,6 +16190,9 @@ ipcMain$1.handle("get-id-token", async () => {
   }
   return Keytar.getPassword("org.locora.app", `${userStorage.get("uid")}-idToken` || "");
 });
+ipcMain$1.handle("get-device-type", async () => {
+  return process.platform;
+});
 ipcMain$1.handle("get-uid", async () => {
   return localStorage.getItem("locora-uid");
 });
@@ -16212,6 +16215,14 @@ ipcMain$1.handle("logout", async () => {
   data.refreshToken = null;
   data.uid = null;
   return true;
+});
+ipcMain$1.handle("get-session-information", async (_, key) => {
+  return userStorage.get(key);
+});
+ipcMain$1.handle("save-session-information", async (_, newData) => {
+  for (const key in newData) {
+    userStorage.set(key, newData[key]);
+  }
 });
 app$1.whenReady().then(CreateMainApplication).then(() => {
   globalShortcut.register("CommandOrControl+Shift+I", () => {

@@ -1,4 +1,4 @@
-const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT;
+const ENVIRONMENT = import.meta.env.VITE_ENVIORNMENT;
 
 function getApiBaseUrl() {
 
@@ -11,6 +11,9 @@ function getApiBaseUrl() {
 
 async function request(path: string, options?: RequestInit) {
     const baseUrl = getApiBaseUrl();
+
+    console.log(baseUrl + path)
+
     return fetch(`${baseUrl}${path}`, options);
 }
 
