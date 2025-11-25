@@ -122,7 +122,7 @@ function AuthenticationPage() {
                 DisplayFeedback("You have successfully logged in!")
             }
 
-            window.location.href = `locora://authenticated?idToken=${Results.userdata.idToken}&uid=${Results.userdata.localId}&refreshToken=${Results.userdata.refreshToken}`
+            window.location.href = `locora://authenticated?idToken=${Results.userdata.idToken}&uid=${Results.userdata.localId}&refreshToken=${Results.userdata.refreshToken}&expiresIn=${Results.userdata.expiresIn}`
         } catch (err) {
             DisplayFeedback("An issue occured...")
             console.log(err)
@@ -186,13 +186,15 @@ function AuthenticationPage() {
 
             const Results: { success: boolean, message: string, userdata: Record<string, string> } = await data.json()
 
+            console.log(Results)
+
             if (!Results.success || !Results.userdata || !Results.userdata.idToken) {
                 DisplayFeedback(TranslateErrorCode(Results.message) || "An issue occured...")
             } else {
                 DisplayFeedback("You have successfully signed up!")
             }  
 
-            window.location.href = `locora://authenticated?idToken=${Results.userdata.idToken}&uid=${Results.userdata.localId}&refreshToken=${Results.userdata.refreshToken}`
+            window.location.href = `locora://authenticated?idToken=${Results.userdata.idToken}&uid=${Results.userdata.localId}&refreshToken=${Results.userdata.refreshToken}&expiresIn=${Results.userdata.expiresIn}`
 
         } catch (err) {
             DisplayFeedback("An issue occured...")

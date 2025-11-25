@@ -8,6 +8,7 @@ build/
 .out/
 .cache/
 .next/
+tmp/
 
 node_modules/
 .pnpm-store/

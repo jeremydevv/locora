@@ -13,16 +13,14 @@ async function GetIdToken(): Promise<string | null> {
         return Payload.idToken
     }
 
-    const result = await window.authAPI?.getIdToken((idToken) => {
-        return idToken
-    })
+    const idToken = await window.authAPI?.getIdToken()
 
-    if (result) {
-        Payload.idToken = result
-        return result
+    if (!idToken) {
+        return ""
     }
 
-    return null
+    return idToken
+
 }
 
 async function GetUid(): Promise<string | null> {

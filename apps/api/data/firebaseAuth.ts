@@ -1,7 +1,9 @@
 // default methods
 
 import { Env } from "../src/routes/types"
+import InternalError from "../src/routes/utils/InternalError"
 import JSONResponse from "../src/routes/utils/JSONResponse"
+import MalformedData from "../src/routes/utils/MalformedRequest"
 import { CreateUserRecord } from "./firebaseUserData"
 
 async function LogInWithEmailAndPassword(req: Request, email: string, password: string, env: Env) {
@@ -28,6 +30,7 @@ async function LogInWithEmailAndPassword(req: Request, email: string, password: 
             idToken: string,
             refreshToken: string
             localId: string
+            expiresIn : string
         } = await Data.json()
 
         if (!Data.ok) {
@@ -53,6 +56,7 @@ async function LogInWithEmailAndPassword(req: Request, email: string, password: 
                 idToken: Body.idToken,
                 refreshToken: Body.refreshToken,
                 localId: Body.localId,
+                expiresIn : Body.expiresIn
             }
         }, 200)
     } catch (error) {
@@ -115,8 +119,6 @@ async function SignUpWithEmailAndPassword(req : Request, email : string, passwor
             },500)
         }
 
-        console.log(Body)
-
         return JSONResponse(req, {
             success: true,
             message: "Signed up successfully",
@@ -125,6 +127,7 @@ async function SignUpWithEmailAndPassword(req : Request, email : string, passwor
                 idToken: Body.idToken,
                 refreshToken: Body.refreshToken,
                 localId: Body.localId,
+                expiresIn : Body.expiresIn
             }
         }, 200)
 
@@ -146,7 +149,15 @@ async function VerifyIdToken(idToken : string, env : Env) {
             })
         })
 
+        const Parsed : {
+            users : Array<Record<string,string>>
+        } = await Data.json()
+
         if (!Data.ok) {
+            return false
+        }
+
+        if (!Parsed.users || Parsed.users.length === 0) {
             return false
         }
 
@@ -155,6 +166,57 @@ async function VerifyIdToken(idToken : string, env : Env) {
     } catch (error) {
         return false
     }
+}
+
+async function RefreshIdToken(req : Request, env : Env) {
+
+    const Body : {
+        RefreshToken? : string
+    } = await req.json()
+
+    if (!Body || !Body.RefreshToken) {
+        return MalformedData(req)
+    }
+
+    const RefreshToken = Body.RefreshToken
+
+    try {
+
+        const Data = await fetch(`https://securetoken.googleapis.com/v1/token?key=${env.FIREBASE_API_KEY}`, {
+            method : "POST",
+            body : `grant_type=refresh_token&refresh_token=${RefreshToken}`,
+            headers : {
+                "Content-Type" : "application/x-www-form-urlencoded"
+            }
+        })
+
+        const Results : {
+            error? : object
+            id_token : string,
+            refresh_token : string,
+            expires_in : string
+            local_id : string
+        } = await Data.json()
+
+        if (!Data.ok) {
+            console.log(Results, Results.error)
+            return InternalError(req)
+        }
+
+        return JSONResponse(req,{
+            success : true,
+            message : "Token was updated correctly.",
+            idToken : Results.id_token,
+            uid : Results.local_id,
+            expiresIn : Results.expires_in,
+            refreshToken : Results.refresh_token
+        },200)
+
+    } catch(err) {
+        console.log(err)
+        return InternalError(req)
+    }
+
 }
 
 // google methods
@@ -169,4 +231,4 @@ function LogInWithMicrosoft() {
 
 }
 
-export {SignUpWithEmailAndPassword, LogInWithEmailAndPassword, LogInWithGoogle, LogInWithMicrosoft, VerifyIdToken}
+export {SignUpWithEmailAndPassword, LogInWithEmailAndPassword, LogInWithGoogle, LogInWithMicrosoft, VerifyIdToken, RefreshIdToken}

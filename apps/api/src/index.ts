@@ -7,6 +7,7 @@ import {handleWaitlist} from "./routes/v1/waitlist";
 import Corsify from "./routes/utils/Corsify";
 import OriginValidate from "./routes/utils/OriginValidate";
 import { handleUser } from "./routes/v1/user";
+import JSONResponse from "./routes/utils/JSONResponse";
 
 const router = Router();
 
@@ -30,14 +31,13 @@ export default {
         }
 
         if (request.method === "OPTIONS") {
-            if (request.headers.get("Authorization")) {
-                return Corsify(request,new Response(null, { status: 200 }),true);
-            }
             return Corsify(request,new Response(null, { status: 200 }));
         }
 
-        if (!(OriginValidate(request.headers.get("Origin")!))) {
-            return Corsify(request,new Response("Forbidden Access", { status: 403 }));
+        if (!(OriginValidate(request.headers.get("Origin")!)) && (!(request.headers.get("Authorization")))) {
+            return JSONResponse(request,{
+                Message : "Origin is not valid"
+            },403)
         }
 
         return router.handle(request, env, ctx);

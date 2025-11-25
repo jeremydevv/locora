@@ -7,6 +7,8 @@ import { Env } from "../types";
 import GoogleEntry from "./Auth/Google/entry";
 import MicrosoftEntry from "./Auth/Microsoft/entry"
 import DefaultEntry from "./Auth/Default/entry"
+import MalformedData from "../utils/MalformedRequest";
+import { RefreshIdToken } from "../../../data/firebaseAuth";
 
 const router = Router({ base: "/v1/auth/" });
 
@@ -17,15 +19,20 @@ router.options("/*", (req : Request) => {
 });
 
 router.post("/default/*", async (req : Request, env : Env, context : any) => {
-    return DefaultEntry(req,env,context)
+    return await DefaultEntry(req,env,context)
 })
 
-router.get("/google/*", async (req : Request) => {
+router.post("/google/*", async (req : Request) => {
     return GoogleEntry(req)
 })
 
-router.get("/microsoft/*", async (req : Request) => {
+router.post("/microsoft/*", async (req : Request) => {
     return MicrosoftEntry(req)
+})
+
+router.post("/refresh", async (req : Request, env : Env) => {
+    if (!req.body) return MalformedData(req);
+    return await RefreshIdToken(req,env)
 })
 
 export const handleAuth = (req: Request, env: Env) => router.handle(req, env);

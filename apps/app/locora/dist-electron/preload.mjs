@@ -35,14 +35,17 @@ electron.contextBridge.exposeInMainWorld("authAPI", {
   getRefreshToken: () => electron.ipcRenderer.invoke("get-refresh-token"),
   getUid: () => electron.ipcRenderer.invoke("get-uid"),
   logout: () => electron.ipcRenderer.invoke("logout"),
+  getExpiresIn: () => electron.ipcRenderer.invoke("get-expires-in"),
   getCachedSessionData: () => electron.ipcRenderer.invoke("get-session-information"),
   saveSessionData: (data) => electron.ipcRenderer.invoke("save-session-information", data),
+  refreshSessionData: () => electron.ipcRenderer.invoke("refresh-session-data"),
   onAuthenticationChange: (callback) => {
     electron.ipcRenderer.on("authenticated", (_, data) => {
       callback({
         uid: data.uid || "",
         idToken: data.idToken || "",
-        refreshToken: data.refreshToken || ""
+        refreshToken: data.refreshToken || "",
+        expiresIn: data.expiresIn || ""
       });
     });
     return () => {

@@ -492,7 +492,7 @@ if (!IS_WINDOWS) {
 if (IS_LINUX) {
   Signals.push("SIGIO", "SIGPOLL", "SIGPWR", "SIGSTKFLT");
 }
-class Interceptor {
+let Interceptor$1 = class Interceptor {
   /* CONSTRUCTOR */
   constructor() {
     this.callbacks = /* @__PURE__ */ new Set();
@@ -529,9 +529,9 @@ class Interceptor {
     };
     this.hook();
   }
-}
-const Interceptor$1 = new Interceptor();
-const whenExit = Interceptor$1.register;
+};
+const Interceptor2 = new Interceptor$1();
+const whenExit = Interceptor2.register;
 const Temp = {
   /* VARIABLES */
   store: {},
@@ -16068,6 +16068,11 @@ class ElectronStore extends Conf {
     }
   }
 }
+function baseAPIUrl() {
+  {
+    return "http://localhost:6767";
+  }
+}
 const userStorage = new ElectronStore();
 const __dirname$1 = path.dirname(fileURLToPath(import.meta.url));
 process.env.APP_ROOT = path.join(__dirname$1, "..");
@@ -16182,22 +16187,23 @@ ipcMain$1.on("window-action", (_, action) => {
 let data = {
   idToken: null,
   uid: null,
-  refreshToken: null
+  refreshToken: null,
+  expiresIn: null
 };
 ipcMain$1.handle("get-id-token", async () => {
   if (data.idToken !== null) {
     return data.idToken;
   }
-  return Keytar.getPassword("org.locora.app", `${userStorage.get("uid")}-idToken` || "");
+  return await Keytar.getPassword("org.locora.app", `${userStorage.get("uid")}-idToken` || "");
 });
 ipcMain$1.handle("get-device-type", async () => {
   return process.platform;
 });
 ipcMain$1.handle("get-uid", async () => {
-  return localStorage.getItem("locora-uid");
+  return userStorage.get("uid");
 });
 ipcMain$1.handle("get-refresh-token", async () => {
-  return Keytar.getPassword("org.locora.app", `${userStorage.get("uid")}-refreshToken` || "");
+  return await Keytar.getPassword("org.locora.app", `${userStorage.get("uid")}-refreshToken` || "");
 });
 ipcMain$1.handle("get-session", async () => {
   return {
@@ -16206,10 +16212,15 @@ ipcMain$1.handle("get-session", async () => {
     refreshToken: data.refreshToken
   };
 });
+ipcMain$1.handle("get-expires-in", async () => {
+  return userStorage.get("expiresIn");
+});
 ipcMain$1.handle("logout", async () => {
   const uid = userStorage.get("uid");
-  await Keytar.deletePassword("org.locora.app", `${uid}-idToken`);
-  await Keytar.deletePassword("org.locora.app", `${uid}-refreshToken`);
+  await Promise.all([
+    Keytar.deletePassword("org.locora.app", `${uid}-idToken`),
+    Keytar.deletePassword("org.locora.app", `${uid}-refreshToken`)
+  ]);
   userStorage.delete("uid");
   data.idToken = null;
   data.refreshToken = null;
@@ -16224,27 +16235,67 @@ ipcMain$1.handle("save-session-information", async (_, newData) => {
     userStorage.set(key, newData[key]);
   }
 });
+ipcMain$1.handle("refresh-session-data", async () => {
+  try {
+    const Data = await fetch(baseAPIUrl() + "/v1/auth/refresh", {
+      body: JSON.stringify({
+        RefreshToken: await Keytar.getPassword(`org.locora.app`, `${userStorage.get("uid")}-refreshToken`)
+      }),
+      headers: {
+        "Authorization": `Bearer ${await Keytar.getPassword(`org.locora.app`, `${userStorage.get("uid")}-idToken`)}`
+      },
+      method: "POST"
+    });
+    const Results = await Data.json();
+    if (!Data.ok) {
+      console.log(Results);
+      return;
+    }
+    userStorage.set("uid", Results.uid || "");
+    if (!Results.expiresIn) {
+      userStorage.set("expiresIn", Date.now() + 0 || "");
+    } else {
+      userStorage.set("expiresIn", Date.now() + Results.expiresIn || "");
+    }
+    await Promise.all([
+      Keytar.setPassword("org.locora.app", `${Results.uid}-idToken` || "", Results.idToken || ""),
+      Keytar.setPassword("org.locora.app", `${Results.uid}-refreshToken` || "", Results.refreshToken || "")
+    ]);
+    return Results;
+  } catch (err) {
+    console.log(err);
+  }
+});
 app$1.whenReady().then(CreateMainApplication).then(() => {
   globalShortcut.register("CommandOrControl+Shift+I", () => {
     authWin?.webContents.toggleDevTools();
     win?.webContents.toggleDevTools();
   });
-  protocol.registerStringProtocol("locora", (request, callback) => {
-    const url = new URL(request.url);
-    console.log("Custom protocol triggered:", url.href);
+  protocol.registerStringProtocol("locora", async (request2, callback) => {
+    const url = new URL(request2.url);
     const idToken = url.searchParams.get("idToken");
     const uid = url.searchParams.get("uid");
     const refreshToken = url.searchParams.get("refreshToken");
+    const expiresIn = url.searchParams.get("expiresIn");
     userStorage.set("uid", uid || "");
-    Keytar.setPassword("org.locora.app", `${uid}-idToken` || "", idToken || "");
-    Keytar.setPassword("org.locora.app", `${uid}-refreshToken` || "", idToken || "");
+    if (!expiresIn) {
+      userStorage.set("expiresIn", Date.now() + 0 || "");
+    } else {
+      userStorage.set("expiresIn", Date.now() + expiresIn || "");
+    }
+    await Promise.all([
+      Keytar.setPassword("org.locora.app", `${uid}-idToken` || "", idToken || ""),
+      Keytar.setPassword("org.locora.app", `${uid}-refreshToken` || "", refreshToken || "")
+    ]);
     data.idToken = idToken;
     data.uid = uid;
     data.refreshToken = refreshToken;
+    data.expiresIn = userStorage.get("expiresIn");
     win?.webContents.send("authenticated", {
       idToken,
       uid,
-      refreshToken
+      refreshToken,
+      expiresIn
     });
     setTimeout(() => {
       authWin?.close();

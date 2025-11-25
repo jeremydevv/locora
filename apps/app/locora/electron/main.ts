@@ -7,6 +7,9 @@ import path from 'node:path'
 
 import { DataPayload, WindowAction } from '../types'
 import Keytar from 'keytar'
+import request from '../src/utilities/fetch'
+import { json } from 'node:stream/consumers'
+import baseAPIUrl from '../src/utilities/BaseAPIUrl'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -164,7 +167,8 @@ ipcMain.on("window-action", (_, action: WindowAction) => {
 let data : DataPayload = {
   idToken: null,
   uid: null,
-  refreshToken: null
+  refreshToken: null,
+  expiresIn : null
 }
 
 // handling auth requests
@@ -175,7 +179,7 @@ ipcMain.handle("get-id-token", async () => {
     return data.idToken
   }
 
-  return Keytar.getPassword("org.locora.app", `${userStorage.get("uid")}-idToken` || "")
+  return await Keytar.getPassword("org.locora.app", `${userStorage.get("uid")}-idToken` || "")
 
 })
 
@@ -184,11 +188,11 @@ ipcMain.handle("get-device-type", async () => {
 })
 
 ipcMain.handle("get-uid", async () => {
-  return localStorage.getItem("locora-uid")
+  return userStorage.get("uid")
 })
 
 ipcMain.handle("get-refresh-token", async () => {
-  return Keytar.getPassword("org.locora.app", `${userStorage.get("uid")}-refreshToken` || "")
+  return await Keytar.getPassword("org.locora.app", `${userStorage.get("uid")}-refreshToken` || "")
 })
 
 ipcMain.handle("get-session", async () => {
@@ -199,11 +203,17 @@ ipcMain.handle("get-session", async () => {
   }
 })
 
+ipcMain.handle("get-expires-in", async () => {
+  return userStorage.get("expiresIn")
+})
+
 ipcMain.handle("logout", async () => {
   const uid = userStorage.get("uid") as string
 
-  await Keytar.deletePassword("org.locora.app", `${uid}-idToken`)
-  await Keytar.deletePassword("org.locora.app", `${uid}-refreshToken`)
+  await Promise.all([
+    Keytar.deletePassword("org.locora.app", `${uid}-idToken`),
+    Keytar.deletePassword("org.locora.app", `${uid}-refreshToken`)
+  ])
 
   userStorage.delete("uid")
 
@@ -224,6 +234,48 @@ ipcMain.handle("save-session-information", async (_, newData) => {
   }
 })
 
+ipcMain.handle("refresh-session-data", async () => {
+
+  try {
+    
+    const Data = await fetch(baseAPIUrl() + "/v1/auth/refresh", {
+      body : JSON.stringify({
+        RefreshToken : await Keytar.getPassword(`org.locora.app`,`${userStorage.get("uid")}-refreshToken`)
+      }),
+      headers : {
+        "Authorization" : `Bearer ${await Keytar.getPassword(`org.locora.app`,`${userStorage.get("uid")}-idToken`)}`
+      },
+      method : "POST"
+    })
+
+    const Results : DataPayload = await Data.json()
+
+    if (!Data.ok) {
+      console.log(Results)
+      return
+    }
+
+    userStorage.set("uid", Results.uid || "")
+
+    if (!Results.expiresIn) {
+      userStorage.set("expiresIn", (Date.now() + 0) || "")
+    } else {
+      userStorage.set("expiresIn", (Date.now() + Results.expiresIn) || "")
+    }
+
+    await Promise.all([
+      Keytar.setPassword("org.locora.app", `${Results.uid}-idToken` || "" , Results.idToken || ""),
+      Keytar.setPassword("org.locora.app", `${Results.uid}-refreshToken` || "" , Results.refreshToken || "")
+    ])
+
+    return Results
+
+  } catch(err) {
+    console.log(err)
+  }
+
+})
+
 app.whenReady().then(CreateMainApplication).then(() => {
 
   globalShortcut.register('CommandOrControl+Shift+I', () => {
@@ -231,31 +283,40 @@ app.whenReady().then(CreateMainApplication).then(() => {
     win?.webContents.toggleDevTools()
   })
 
-  protocol.registerStringProtocol('locora', (request, callback) => {
+  protocol.registerStringProtocol('locora', async (request, callback) => {
     const url = new URL(request.url)
-
-    console.log("Custom protocol triggered:", url.href);
 
     const idToken = url.searchParams.get("idToken")
     const uid = url.searchParams.get("uid")
     const refreshToken = url.searchParams.get("refreshToken")
+    const expiresIn = url.searchParams.get("expiresIn")
 
     // keeping in localStorage and Keytar for persistence
     userStorage.set("uid", uid || "")
 
-    Keytar.setPassword("org.locora.app", `${uid}-idToken` || "" , idToken || "")
-    Keytar.setPassword("org.locora.app", `${uid}-refreshToken` || "" , idToken || "")
+    if (!expiresIn) {
+      userStorage.set("expiresIn", (Date.now() + 0) || "")
+    } else {
+      userStorage.set("expiresIn", (Date.now() + expiresIn) || "")
+    }
+
+    await Promise.all([
+      Keytar.setPassword("org.locora.app", `${uid}-idToken` || "" , idToken || ""),
+      Keytar.setPassword("org.locora.app", `${uid}-refreshToken` || "" , refreshToken || "")
+    ])
 
     // keeping in main.ts
     data.idToken = idToken
     data.uid = uid
     data.refreshToken = refreshToken
+    data.expiresIn = userStorage.get("expiresIn") as string
 
     // sending for current session view
     win?.webContents.send("authenticated", {
       idToken: idToken,
       uid: uid,
-      refreshToken: refreshToken
+      refreshToken: refreshToken,
+      expiresIn: expiresIn
     })
 
     setTimeout(() => {
