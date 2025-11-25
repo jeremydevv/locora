@@ -52,7 +52,7 @@ async function FetchUserRecord(uid : string, idToken : string, env: Env) {
     const ProjectID = env.FIREBASE_PROJECT_ID
 
     try {
-        const Result = await fetch(`https://firestore.googleapis.com/v1/projects/${ProjectID}` + `/databases/locora-user-data/documents/users/${uid}`, {
+        const Result = await fetch(`https://firestore.googleapis.com/v1/projects/${ProjectID}/databases/locora-user-data/documents/users/${uid}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -66,9 +66,9 @@ async function FetchUserRecord(uid : string, idToken : string, env: Env) {
             return null
         }
 
-        const ResultData = await Result.json()
+        const ResultData : {fields : Record<string,string>} = await Result.json()
 
-        return ResultData
+        return ResultData.fields
     } catch (error) {
         console.log(error)
         return null

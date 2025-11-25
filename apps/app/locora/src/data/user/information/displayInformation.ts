@@ -11,6 +11,7 @@ async function GetUserDisplayPayload(idToken: string): Promise<UserDisplayInform
     }
 
     try {
+
         const Data = await request("/v1/users/information/display", {
             method: "GET",
             headers: {
@@ -25,11 +26,9 @@ async function GetUserDisplayPayload(idToken: string): Promise<UserDisplayInform
         const Res = await Data.json()
 
         displayPayloadCached = true
-        displayPayload = Data
+        displayPayload = Res.data
 
-        console.log(Res)
-
-        return Res as UserDisplayInformation
+        return Res.data as UserDisplayInformation
     } catch (error) {
         throw error
     }

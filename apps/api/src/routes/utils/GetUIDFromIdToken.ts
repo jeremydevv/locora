@@ -19,8 +19,6 @@ export default async function getUidFromIdToken(idToken: string, env : Env) {
             }
         )
 
-        console.log(Result)
-
         if (!Result.ok) {
             return false
         }
@@ -28,6 +26,8 @@ export default async function getUidFromIdToken(idToken: string, env : Env) {
         const tokenData : {
             users : Array<{localId : string}>
         } = await Result.json()
+
+        console.log(tokenData.users[0])
 
         if (!(tokenData.users) || (tokenData.users.length === 0)) {
             console.log("no user data was returned")

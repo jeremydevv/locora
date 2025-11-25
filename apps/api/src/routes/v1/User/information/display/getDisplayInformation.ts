@@ -1,6 +1,8 @@
 import { FetchUserRecord } from "../../../../../../data/firebaseUserData";
 import { DataPayload, Env } from "../../../../types";
+import cleanFirebaseData from "../../../../utils/CleanFirebaseData";
 import getUidFromIdToken from "../../../../utils/GetUIDFromIdToken";
+import InternalError from "../../../../utils/InternalError";
 import JSONResponse from "../../../../utils/JSONResponse";
 import MalformedData from "../../../../utils/MalformedRequest";
 import Unauthorized from "../../../../utils/Unauthorized";
@@ -15,14 +17,21 @@ export default async function GetDisplayInformation(req : Request, env : Env) {
         return Unauthorized(req)
     }
 
-    const UserRecordData : DataPayload = await FetchUserRecord(uid, idToken, env) as DataPayload;
+    const userData = await FetchUserRecord(uid, idToken, env)
+
+    if (!userData) {
+        return InternalError(req)
+    }
+
+    const CleanedUserRecordData : DataPayload = cleanFirebaseData(userData);
 
     return JSONResponse(req,{
         success : true,
         message : "Get Display information endpoint working",
         data : {
-            displayName : UserRecordData.displayName,
-            username : UserRecordData.username
+            displayName : CleanedUserRecordData.displayName,
+            username : CleanedUserRecordData.username,
+            bio : CleanedUserRecordData.bio
         }
     },200);
 

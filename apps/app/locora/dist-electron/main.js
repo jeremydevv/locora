@@ -492,7 +492,7 @@ if (!IS_WINDOWS) {
 if (IS_LINUX) {
   Signals.push("SIGIO", "SIGPOLL", "SIGPWR", "SIGSTKFLT");
 }
-let Interceptor$1 = class Interceptor {
+class Interceptor {
   /* CONSTRUCTOR */
   constructor() {
     this.callbacks = /* @__PURE__ */ new Set();
@@ -529,9 +529,9 @@ let Interceptor$1 = class Interceptor {
     };
     this.hook();
   }
-};
-const Interceptor2 = new Interceptor$1();
-const whenExit = Interceptor2.register;
+}
+const Interceptor$1 = new Interceptor();
+const whenExit = Interceptor$1.register;
 const Temp = {
   /* VARIABLES */
   store: {},
@@ -16248,19 +16248,22 @@ ipcMain$1.handle("refresh-session-data", async () => {
     });
     const Results = await Data.json();
     if (!Data.ok) {
-      console.log(Results);
       return;
     }
     userStorage.set("uid", Results.uid || "");
     if (!Results.expiresIn) {
       userStorage.set("expiresIn", Date.now() + 0 || "");
+      data.expiresIn = String(Date.now() + 0);
     } else {
-      userStorage.set("expiresIn", Date.now() + Results.expiresIn || "");
+      userStorage.set("expiresIn", String(Date.now() + Results.expiresIn) || "");
     }
     await Promise.all([
       Keytar.setPassword("org.locora.app", `${Results.uid}-idToken` || "", Results.idToken || ""),
       Keytar.setPassword("org.locora.app", `${Results.uid}-refreshToken` || "", Results.refreshToken || "")
     ]);
+    data.uid = Results.uid;
+    data.refreshToken = Results.refreshToken;
+    data.idToken = Results.idToken;
     return Results;
   } catch (err) {
     console.log(err);

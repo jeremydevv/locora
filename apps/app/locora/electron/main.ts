@@ -251,7 +251,6 @@ ipcMain.handle("refresh-session-data", async () => {
     const Results : DataPayload = await Data.json()
 
     if (!Data.ok) {
-      console.log(Results)
       return
     }
 
@@ -259,14 +258,19 @@ ipcMain.handle("refresh-session-data", async () => {
 
     if (!Results.expiresIn) {
       userStorage.set("expiresIn", (Date.now() + 0) || "")
+      data.expiresIn = String(Date.now() + 0)
     } else {
-      userStorage.set("expiresIn", (Date.now() + Results.expiresIn) || "")
+      userStorage.set("expiresIn", String(Date.now() + Results.expiresIn) || "")
     }
 
     await Promise.all([
       Keytar.setPassword("org.locora.app", `${Results.uid}-idToken` || "" , Results.idToken || ""),
       Keytar.setPassword("org.locora.app", `${Results.uid}-refreshToken` || "" , Results.refreshToken || "")
     ])
+
+    data.uid = Results.uid
+    data.refreshToken = Results.refreshToken
+    data.idToken = Results.idToken
 
     return Results
 
@@ -291,7 +295,6 @@ app.whenReady().then(CreateMainApplication).then(() => {
     const refreshToken = url.searchParams.get("refreshToken")
     const expiresIn = url.searchParams.get("expiresIn")
 
-    // keeping in localStorage and Keytar for persistence
     userStorage.set("uid", uid || "")
 
     if (!expiresIn) {
