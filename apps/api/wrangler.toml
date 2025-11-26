@@ -2,13 +2,14 @@ name = "locora-api"
 main = "src/index.ts"
 compatibility_date = "2025-10-06"
 
-dev = {hostname = "localhost", port = 6767}
+[dev]
+port = 6767
+local_protocol = "http"
 
 [vars]
 ENVIRONMENT = "dev"
 
-[[services]]
-binding = "WaitlistRatelimiter"
-service = "ratelimiter"
-type = "Rate limiter"
+[[ratelimits]]
+name = "WaitlistRatelimiter"
 namespace_id = "1"
+simple = {limit = 5, period = 60}
