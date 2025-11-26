@@ -16255,7 +16255,7 @@ ipcMain$1.handle("refresh-session-data", async () => {
       userStorage.set("expiresIn", Date.now() + 0 || "");
       data.expiresIn = String(Date.now() + 0);
     } else {
-      userStorage.set("expiresIn", String(Date.now() + Results.expiresIn) || "");
+      userStorage.set("expiresIn", String(+Date.now() + +Results.expiresIn) || "");
     }
     await Promise.all([
       Keytar.setPassword("org.locora.app", `${Results.uid}-idToken` || "", Results.idToken || ""),
@@ -16274,17 +16274,17 @@ app$1.whenReady().then(CreateMainApplication).then(() => {
     authWin?.webContents.toggleDevTools();
     win?.webContents.toggleDevTools();
   });
-  protocol.registerStringProtocol("locora", async (request2, callback) => {
-    const url = new URL(request2.url);
+  protocol.registerStringProtocol("locora", async (request, _) => {
+    const url = new URL(request.url);
     const idToken = url.searchParams.get("idToken");
     const uid = url.searchParams.get("uid");
     const refreshToken = url.searchParams.get("refreshToken");
     const expiresIn = url.searchParams.get("expiresIn");
     userStorage.set("uid", uid || "");
     if (!expiresIn) {
-      userStorage.set("expiresIn", Date.now() + 0 || "");
+      userStorage.set("expiresIn", +Date.now() + 0 || "");
     } else {
-      userStorage.set("expiresIn", Date.now() + expiresIn || "");
+      userStorage.set("expiresIn", +Date.now() + +expiresIn || "");
     }
     await Promise.all([
       Keytar.setPassword("org.locora.app", `${uid}-idToken` || "", idToken || ""),

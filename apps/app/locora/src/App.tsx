@@ -1,7 +1,6 @@
 
 import { useEffect, useState } from 'react'
 import './App.css'
-import PageSwitch from './components/pageswitch'
 import Taskbar from './components/taskbar'
 
 // pages

@@ -12,6 +12,8 @@ async function CheckForTokenValidity() : Promise<string> {
         return ""
     }
 
+    console.log(Date.now() , expiresIn, Date.now() >= +expiresIn)
+
     if (Date.now() >= +expiresIn) {
         console.log("the expiresIn says that its expired, refreshing session")
         const newPayload : DataPayload = await window.authAPI?.refreshSessionData() as DataPayload

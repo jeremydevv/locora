@@ -1,4 +1,4 @@
-import { app, BrowserWindow, globalShortcut, ipcMain, ipcRenderer, protocol } from 'electron'
+import { app, BrowserWindow, globalShortcut, ipcMain, protocol } from 'electron'
 import { fileURLToPath } from 'node:url'
 import Store from 'electron-store'
 const userStorage = new Store()
@@ -7,8 +7,6 @@ import path from 'node:path'
 
 import { DataPayload, WindowAction } from '../types'
 import Keytar from 'keytar'
-import request from '../src/utilities/fetch'
-import { json } from 'node:stream/consumers'
 import baseAPIUrl from '../src/utilities/BaseAPIUrl'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -260,7 +258,7 @@ ipcMain.handle("refresh-session-data", async () => {
       userStorage.set("expiresIn", (Date.now() + 0) || "")
       data.expiresIn = String(Date.now() + 0)
     } else {
-      userStorage.set("expiresIn", String(Date.now() + Results.expiresIn) || "")
+      userStorage.set("expiresIn", String(+Date.now() + +Results.expiresIn) || "")
     }
 
     await Promise.all([
@@ -287,7 +285,7 @@ app.whenReady().then(CreateMainApplication).then(() => {
     win?.webContents.toggleDevTools()
   })
 
-  protocol.registerStringProtocol('locora', async (request, callback) => {
+  protocol.registerStringProtocol('locora', async (request, _) => {
     const url = new URL(request.url)
 
     const idToken = url.searchParams.get("idToken")
@@ -298,9 +296,9 @@ app.whenReady().then(CreateMainApplication).then(() => {
     userStorage.set("uid", uid || "")
 
     if (!expiresIn) {
-      userStorage.set("expiresIn", (Date.now() + 0) || "")
+      userStorage.set("expiresIn", (+Date.now() + 0) || "")
     } else {
-      userStorage.set("expiresIn", (Date.now() + expiresIn) || "")
+      userStorage.set("expiresIn", (+Date.now() + +expiresIn) || "")
     }
 
     await Promise.all([

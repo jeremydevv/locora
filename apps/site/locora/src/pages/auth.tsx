@@ -116,6 +116,8 @@ function AuthenticationPage() {
 
             const Results: { success: boolean, message: string, userdata: Record<string, string> } = await data.json()
 
+            console.log(Results)
+
             if (!Results.success || !Results.userdata || !Results.userdata.idToken) {
                 DisplayFeedback(TranslateErrorCode(Results.message) || "An issue occured...")
             } else {

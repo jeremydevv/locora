@@ -1,4 +1,4 @@
-import { ipcRenderer, contextBridge, IpcRenderer, Data } from 'electron'
+import { ipcRenderer, contextBridge } from 'electron'
 import { DataPayload, WindowAction } from '../types'
 
 // --------- Expose some API to the Renderer process ---------
