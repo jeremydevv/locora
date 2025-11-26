@@ -1,7 +1,4 @@
-import { useState } from "react"
 import Imagebutton from "./imagebutton"
-
-import LocoraImage from "../assets/BorderedLocora.png"
 
 import Bookmark from "../assets/Bookmark.png"
 import Compass from "../assets/Compass.png"

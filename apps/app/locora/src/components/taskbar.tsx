@@ -1,4 +1,3 @@
-import { ipcRenderer } from "electron";
 import LocoraIcon from "../assets/BorderedLocora.png";
 import SystemButton from "./systembutton";
 import { WindowAction } from "../../types";

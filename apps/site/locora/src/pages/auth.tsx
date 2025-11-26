@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet-async"
 import Clouds from "../assets/Clouds3.png"
 import BaseButton from "../components/button"
 
-import LocaraIcon from "../assets/BorderedLocora.png"
+import LocoraIcon from "../assets/BorderedLocora.png"
 import { useEffect, useRef, useState } from "react"
 import { isValidEmail, standardizePhoneNumber } from "../utilities/infoValidators"
 import { isNumericalString } from "framer-motion"
@@ -119,14 +119,14 @@ function AuthenticationPage() {
             console.log(Results)
 
             if (!Results.success || !Results.userdata || !Results.userdata.idToken) {
-                DisplayFeedback(TranslateErrorCode(Results.message) || "An issue occured...")
+                DisplayFeedback(TranslateErrorCode(Results.message) || "An issue occurred...")
             } else {
                 DisplayFeedback("You have successfully logged in!")
             }
 
             window.location.href = `locora://authenticated?idToken=${Results.userdata.idToken}&uid=${Results.userdata.localId}&refreshToken=${Results.userdata.refreshToken}&expiresIn=${Results.userdata.expiresIn}`
         } catch (err) {
-            DisplayFeedback("An issue occured...")
+            DisplayFeedback("An issue occurred...")
             console.log(err)
         }
 
@@ -191,7 +191,7 @@ function AuthenticationPage() {
             console.log(Results)
 
             if (!Results.success || !Results.userdata || !Results.userdata.idToken) {
-                DisplayFeedback(TranslateErrorCode(Results.message) || "An issue occured...")
+                DisplayFeedback(TranslateErrorCode(Results.message) || "An issue occurred...")
             } else {
                 DisplayFeedback("You have successfully signed up!")
             }  
@@ -199,7 +199,7 @@ function AuthenticationPage() {
             window.location.href = `locora://authenticated?idToken=${Results.userdata.idToken}&uid=${Results.userdata.localId}&refreshToken=${Results.userdata.refreshToken}&expiresIn=${Results.userdata.expiresIn}`
 
         } catch (err) {
-            DisplayFeedback("An issue occured...")
+            DisplayFeedback("An issue occurred...")
             console.log(err)
         }
 
@@ -256,7 +256,7 @@ function AuthenticationPage() {
                 <meta property="og:url" content="https://locora.org" />
                 <meta property="og:type" content="website" />
                 <link rel="canonical" href="https://locora.org/auth" />
-                {/* this page shouldnt be indexable */}
+                {/* this page should not be indexable */}
                 <meta name="robots" content="noindex, nofollow" />
             </Helmet>
 
@@ -418,7 +418,7 @@ function AuthenticationPage() {
                     <div
                         className="flex flex-col items-center mt-4"
                     >
-                        <img src={LocaraIcon} className="h-5 w-5" />
+                        <img src={LocoraIcon} className="h-5 w-5" />
                         <p className="text-xs text-white mt-2">By continuing, you agree to Locora's Terms of Service and Privacy Policy.</p>
                     </div>
 

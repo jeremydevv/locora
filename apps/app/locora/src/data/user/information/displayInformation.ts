@@ -1,7 +1,7 @@
 import request from "../../../utilities/fetch"
 import { UserDisplayInformation } from "../UserTypes"
 
-let displayPayload: UserDisplayInformation | {} = {}
+let displayPayload: UserDisplayInformation | Record<any,any> = {}
 let displayPayloadCached = false
 
 async function GetUserDisplayPayload(idToken: string): Promise<UserDisplayInformation> {
@@ -30,7 +30,16 @@ async function GetUserDisplayPayload(idToken: string): Promise<UserDisplayInform
 
         return Res.data as UserDisplayInformation
     } catch (error) {
-        throw error
+        console.log(error)
+        return {
+            username : "Loading",
+            displayName : "Loading",
+            bio : "Loading",
+            profilePictureURL : "",
+            bannerPictureURL: "",
+            coins : "",
+            createdAt : ""
+        }
     }
 
 }

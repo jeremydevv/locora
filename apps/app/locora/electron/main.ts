@@ -162,7 +162,7 @@ ipcMain.on("window-action", (_, action: WindowAction) => {
   }
 });
 
-let data : DataPayload = {
+const data : DataPayload = {
   idToken: null,
   uid: null,
   refreshToken: null,
@@ -228,7 +228,7 @@ ipcMain.handle("get-session-information", async (_,key : string) => {
 
 ipcMain.handle("save-session-information", async (_, newData) => {
   for (const key in newData) {
-    userStorage.set(key, (newData as any)[key])
+    userStorage.set(key, newData[key])
   }
 })
 
@@ -285,7 +285,7 @@ app.whenReady().then(CreateMainApplication).then(() => {
     win?.webContents.toggleDevTools()
   })
 
-  protocol.registerStringProtocol('locora', async (request, _) => {
+  protocol.registerStringProtocol('locora', async (request) => {
     const url = new URL(request.url)
 
     const idToken = url.searchParams.get("idToken")

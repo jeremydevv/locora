@@ -7,7 +7,7 @@ import { GetIdToken, GetUid } from "../data/AuthStore";
 import { DataPayload } from "../../types";
 import { GetUserAttribute } from "../data/user/information/displayInformation";
 
-function ProfileElement({ uid, idToken }: DataPayload) {
+function ProfileElement({ idToken }: DataPayload) {
 
     function Logout() {
         if (idToken === "") return
@@ -213,20 +213,16 @@ function NotLoggedInElement() {
 
 export default function Profile() {
 
-    const [isLoading, setLoadingStatus] = useState<boolean>(true)
     const [idToken, setIdToken] = useState<string>("")
     const [uid, setUID] = useState<string>("")
 
     useEffect(() => {
-        setLoadingStatus(true)
-
         const SessionData = async () => {
             const idToken = await GetIdToken()
             const uid = await GetUid()
 
             setIdToken(idToken || "")
             setUID(uid || "")
-            setLoadingStatus(false)
         }
 
         SessionData()
@@ -244,7 +240,7 @@ export default function Profile() {
                 className="w-full min-h-screen flex justify-center overflow-x-hidden"
             >
                 <img src={Clouds} className="absolute top-0 left-0 opacity-5 w-full z-0 animate-float select:none" />
-                {idToken !== "" ? <ProfileElement key={idToken} idToken={idToken} uid={uid} refreshToken={""} /> : <NotLoggedInElement />}
+                {idToken !== "" ? <ProfileElement key={idToken} idToken={idToken} uid={uid} refreshToken={""} expiresIn={""} /> : <NotLoggedInElement />}
             </div>
         </>
     )
