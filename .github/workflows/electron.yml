@@ -4,14 +4,22 @@ on:
   push:
     branches: ["*"]
   pull_request:
-    branches: ["*"]
+    branches: 
+      - main
+      - development
 
 jobs:
   build:
-    runs-on: ubuntu-latest
     strategy:
       matrix:
-        platform: [mac, win, linux]
+        include: 
+          - os: macos-latest
+            platform: mac
+          - os: windows-latest
+            platform: win
+          - os: ubuntu-latest
+            platform: linux
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout code
@@ -40,8 +48,8 @@ jobs:
         run: |
           npx electron-builder --${{ matrix.platform }} --publish never
 
-      - name: Posting to Github Release
-        id: create_release
+      - name: Create Release
+        if: github.event_name == 'push' && (github.ref_name == 'main' || github.ref_name == 'development')
         uses: actions/create-release@v1
         with:
           tag_name: ${{ github.ref_name }}
@@ -52,7 +60,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload binaries to release
+      - name: Upload Release Binaries
+        if: github.event_name == 'push' && (github.ref_name == 'main' || github.ref_name == 'development')
         uses: softprops/action-gh-release@v1
         with:
           files: apps/app/locora/dist/**/*
