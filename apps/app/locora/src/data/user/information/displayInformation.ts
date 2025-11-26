@@ -1,7 +1,7 @@
 import request from "../../../utilities/fetch"
 import { UserDisplayInformation } from "../UserTypes"
 
-//@ts-ignore
+//@ts-expect-error
 let displayPayload: UserDisplayInformation | Record<string, unknown> = {}
 let displayPayloadCached = false
 
