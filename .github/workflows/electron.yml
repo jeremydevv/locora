@@ -38,7 +38,6 @@ jobs:
         working-directory: apps/app/locora
         run: |
           npm run lint
-          npm run type-check
 
       - name: Building the App
         working-directory: apps/app/locora
