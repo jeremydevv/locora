@@ -13,7 +13,8 @@ interface buttonProps {
     children?: React.ReactNode;
     hasBackground?: boolean;
     CurrentlyYielding? : boolean,
-    onClick?: (...args : any[]) => void;
+    //@ts-ignore
+    onClick?: (...args : any) => void;
 }
 
 const sizesToText = {
@@ -38,7 +39,7 @@ export default function BaseButton({
 }: buttonProps) {
     let BaseStyle = "text-white py-2 cursor-pointer px-3 rounded-lg drop-shadow-lg font-semibold flex items-center justify-center ";
 
-    let SizeAnimations =
+    const SizeAnimations =
         "hover:scale-105 active:scale-97 transition-transform duration-10 ease-in-out style-smooth ";
 
     BaseStyle += SizeAnimations;
