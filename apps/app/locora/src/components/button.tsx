@@ -13,8 +13,7 @@ interface buttonProps {
     children?: React.ReactNode;
     hasBackground?: boolean;
     CurrentlyYielding? : boolean,
-    //@ts-ignore
-    onClick?: (...args : any) => void;
+    onClick?: (...args : unknown[]) => void;
 }
 
 const sizesToText = {

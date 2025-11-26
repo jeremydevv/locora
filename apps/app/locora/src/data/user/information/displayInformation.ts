@@ -2,7 +2,7 @@ import request from "../../../utilities/fetch"
 import { UserDisplayInformation } from "../UserTypes"
 
 //@ts-ignore
-let displayPayload: UserDisplayInformation | Record<any,any> = {}
+let displayPayload: UserDisplayInformation | Record<string, unknown> = {}
 let displayPayloadCached = false
 
 async function GetUserDisplayPayload(idToken: string): Promise<UserDisplayInformation> {
