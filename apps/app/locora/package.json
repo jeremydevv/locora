@@ -1,6 +1,7 @@
 {
-  "name": "Locora",
+  "name": "locora",
   "productName": "Locora",
+  "author": "Jeremy Mathew",
   "description": "A local-business discovery app",
   "private": true,
   "version": "1.0.0",
@@ -39,5 +40,25 @@
     "vite-plugin-electron": "^0.28.6",
     "vite-plugin-electron-renderer": "^0.14.5"
   },
-  "main": "dist-electron/main.js"
+  "main": "dist-electron/main.js",
+  "build": {
+    "appId": "org.locora.app",
+    "productName": "Locora",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "dist-electron/**/*",
+      "dist/**/*"
+    ],
+    "mac": {
+      "target": ["dmg", "zip"]
+    },
+    "win": {
+      "target": ["nsis", "zip"]
+    },
+    "linux": {
+      "target": ["AppImage", "deb", "zip"]
+    }
+  }
 }

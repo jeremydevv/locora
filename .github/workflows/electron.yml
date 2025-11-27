@@ -61,13 +61,18 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: locora-${{ matrix.platform }}
-          path: apps/app/locora/dist/**/*
+          path: |
+            apps/app/locora/dist/**/*.dmg
+            apps/app/locora/dist/**/*.zip
+            apps/app/locora/dist/**/*.exe
+            apps/app/locora/dist/**/*.AppImage
+            apps/app/locora/dist/**/*.deb
 
   release:
     needs: build
     runs-on: ubuntu-latest
     if: github.event_name == 'push' &&
-      (github.event_name == 'push' && (github.ref_name == 'main' || github.ref_name == 'development'))
+      (github.ref_name == 'main' || github.ref_name == 'development')
 
     steps:
       - name: Download artifacts
@@ -78,7 +83,7 @@ jobs:
       - name: Create Release
         uses: actions/create-release@v1
         with:
-          tag_name: ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}-${{ github.run_number }}
           release_name: "Build for ${{ github.ref_name }}"
           draft: false
           prerelease: true
