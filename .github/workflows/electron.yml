@@ -25,6 +25,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Changing env
+        run: |
+          sed -i.bak '/^VITE_ENVIORNMENT=/d' apps/app/locora/.env
+          echo "VITE_ENVIORNMENT=${GITHUB_REF_NAME}" >> apps/app/locora/.env
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
