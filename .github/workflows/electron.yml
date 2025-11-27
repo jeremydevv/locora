@@ -28,6 +28,7 @@ jobs:
       - name: Changing env
         run: |
           grep -v '^VITE_ENVIORNMENT=' apps/app/locora/.env > apps/app/locora/.env.tmp
+          rm -f apps/app/locora/.env
           mv apps/app/locora/.env.tmp apps/app/locora/.env
           echo "VITE_ENVIORNMENT=${GITHUB_REF_NAME}" >> apps/app/locora/.env
 
