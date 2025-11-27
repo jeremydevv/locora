@@ -27,7 +27,8 @@ jobs:
 
       - name: Changing env
         run: |
-          sed -i.bak '/^VITE_ENVIORNMENT=/d' apps/app/locora/.env
+          grep -v '^VITE_ENVIORNMENT=' apps/app/locora/.env > apps/app/locora/.env.tmp
+          mv apps/app/locora/.env.tmp apps/app/locora/.env
           echo "VITE_ENVIORNMENT=${GITHUB_REF_NAME}" >> apps/app/locora/.env
 
       - name: Setup Node
