@@ -50,7 +50,7 @@ jobs:
 
       - name: Upload artifacts
         if: github.event_name == 'push' || github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: locora-${{ matrix.platform }}
           path: apps/app/locora/dist/**/*
@@ -63,7 +63,7 @@ jobs:
 
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           path: release_artifacts
 
