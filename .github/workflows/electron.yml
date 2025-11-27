@@ -34,7 +34,7 @@ jobs:
         working-directory: apps/app/locora
         run: npm ci
         
-      - name: Lint & type check
+      - name: Lint
         working-directory: apps/app/locora
         run: |
           npm run lint
@@ -48,8 +48,26 @@ jobs:
         run: |
           npx electron-builder --${{ matrix.platform }} --publish never
 
+      - name: Upload artifacts
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v3
+        with:
+          name: locora-${{ matrix.platform }}
+          path: apps/app/locora/dist/**/*
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' || 
+      (github.event_name == 'push' && (github.ref_name == 'main' || github.ref_name == 'development'))
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: release_artifacts
+
       - name: Create Release
-        if: github.event_name == 'push' && (github.ref_name == 'main' || github.ref_name == 'development')
         uses: actions/create-release@v1
         with:
           tag_name: ${{ github.ref_name }}
@@ -60,10 +78,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload Release Binaries
-        if: github.event_name == 'push' && (github.ref_name == 'main' || github.ref_name == 'development')
+      - name: Upload All Binaries to Release
         uses: softprops/action-gh-release@v1
         with:
-          files: apps/app/locora/dist/**/*
+          files: release_artifacts/**/* 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
