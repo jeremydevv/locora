@@ -1,10 +1,12 @@
 {
   "name": "locora",
   "productName": "Locora",
-  "author": "Jeremy Mathew",
+  "author": {
+    "name" : "Jeremy Mathew",
+    "email": "contact@slimeysnufs.dev"
+  },
   "description": "A local-business discovery app",
   "private": true,
-  "email" : "contact@slimeysnufs.dev",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
@@ -45,7 +47,6 @@
   "build": {
     "appId": "org.locora.app",
     "productName": "Locora",
-    "email": "contact@slimeysnufs.dev",
     "directories": {
       "output": "dist"
     },
