@@ -4,6 +4,7 @@
   "author": "Jeremy Mathew",
   "description": "A local-business discovery app",
   "private": true,
+  "email" : "contact@slimeysnufs.dev",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
