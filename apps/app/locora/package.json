@@ -56,13 +56,12 @@
       "dist/**/*"
     ],
     "mac": {
-      "target": ["dmg", "zip"]
+      "target": ["dmg", "zip"],
+      "icon" : "public/BorderedLocora.icns"
     },
     "win": {
-      "target": ["nsis", "zip"]
-    },
-    "linux": {
-      "target": ["AppImage", "deb", "zip"]
+      "target": ["nsis", "zip"],
+      "icon" : "public/BorderedLocora.ico"
     }
   }
 }
