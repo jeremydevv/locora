@@ -5,6 +5,7 @@
     "name" : "Jeremy Mathew",
     "email": "contact@slimeysnufs.dev"
   },
+  "homepage": "https://locora.org",
   "description": "A local-business discovery app",
   "private": true,
   "version": "1.0.0",
