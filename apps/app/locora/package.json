@@ -45,6 +45,7 @@
   "build": {
     "appId": "org.locora.app",
     "productName": "Locora",
+    "email": "contact@slimeysnufs.dev",
     "directories": {
       "output": "dist"
     },
