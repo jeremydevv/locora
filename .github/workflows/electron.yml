@@ -17,8 +17,6 @@ jobs:
             platform: mac
           - os: windows-latest
             platform: win
-          - os: ubuntu-latest
-            platform: linux
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -65,8 +63,6 @@ jobs:
             apps/app/locora/dist/**/*.dmg
             apps/app/locora/dist/**/*.zip
             apps/app/locora/dist/**/*.exe
-            apps/app/locora/dist/**/*.AppImage
-            apps/app/locora/dist/**/*.deb
 
   release:
     needs: build
