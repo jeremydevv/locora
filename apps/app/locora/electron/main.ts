@@ -14,6 +14,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 process.env.APP_ROOT = path.join(__dirname, '..')
 
 export const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
+export const Enviornment = process.env['Enviornment']
 export const MAIN_DIST = path.join(process.env.APP_ROOT, 'dist-electron')
 export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist')
 
@@ -110,10 +111,12 @@ ipcMain.handle("open-authentication-window", async () => {
     }
   })
 
-  if (process.env.NODE_ENV == "development") {
+  if (Enviornment == "dev") {
     authWin.loadURL("http://localhost:3067/auth")
-  } else {
+  } else if(Enviornment == "main") {
     authWin.loadURL("https://locora.org/auth")
+  } else {
+    authWin.loadURL(`https://${Enviornment}.locora.pages.dev`)
   }
 
   if (process.platform === "darwin") {
