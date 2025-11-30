@@ -40,14 +40,6 @@ jobs:
           node-version: 20
           cache: "npm"
 
-      - name: Cache Electron
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache/electron
-            ~/.cache/electron-builder
-          key: ${{ runner.os }}-electron-${{ hashFiles('**/package-lock.json') }}
-
       - name: Install dependencies
         working-directory: apps/app/locora
         run: npm ci
@@ -89,20 +81,12 @@ jobs:
         with:
           path: release_artifacts
 
-      - name: Create Release
-        uses: actions/create-release@v1
-        with:
-          tag_name: ${{ github.ref_name }}-${{ github.run_number }}
-          release_name: "Build for ${{ github.ref_name }}"
-          draft: false
-          prerelease: true
-          body: "Automated build for branch ${{ github.ref_name }}"
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-
-      - name: Upload All Binaries to Release
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: release_artifacts/**/* 
+          tag_name: ${{ github.ref_name }}-${{ github.run_number }}
+          name: "Build for ${{ github.ref_name }}"
+          prerelease: true
+          files: release_artifacts/**/*
         env:
           GITHUB_TOKEN: ${{ github.token }}
