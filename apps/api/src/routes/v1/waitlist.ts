@@ -1,5 +1,4 @@
 import { Router } from "itty-router";
-import { google } from "googleapis";
 
 import Corsify from "../utils/Corsify";
 import JSONResponse from "../utils/JSONResponse";

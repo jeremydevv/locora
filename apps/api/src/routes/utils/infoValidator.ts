@@ -13,9 +13,5 @@ function isValidPhoneNumber(phoneNumber: string) {
     return parsedNum?.isValid() ? parsedNum.formatInternational().trim() : null
 }
 
-function ParsePhoneNumber(number : string) {
-    
-}
-
 export { isValidEmail, isValidPhoneNumber }
 

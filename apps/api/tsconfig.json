@@ -13,5 +13,5 @@
     },
     "include": [
         "src"
-    ]
+, "data/firebaseAuth.ts", "data/firebaseUserData.ts"    ]
 }

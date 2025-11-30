@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 interface inputProps {
     id : string,
     input? : string
@@ -5,14 +7,17 @@ interface inputProps {
     inputType? : "" | "password" | "email"
     OnChange : (e : React.ChangeEvent<HTMLInputElement>) => void
     borderType? : "Red" | "Normal"
+    children?: React.ReactNode;
 }
 
-export default function BaseInput({id , OnChange , placeholder , input , inputType , borderType = "Normal"} : inputProps) {
+function BaseInput({id , OnChange , placeholder , input , inputType , borderType = "Normal", children} : inputProps) {
 
     return (
         <div 
-            className={`flex opacity-100 border-2 rounded-xl bg-bay-of-many-300`}
-            style={{borderColor : borderType === "Red" ? "red" : "blue"}}
+            className={`flex opacity-100 border-[1.5px] rounded-xl bg-bay-of-many-300`}
+            style={{
+                borderColor : borderType === "Red" ? "red" : "rgba(14, 50, 134, 1)",
+            }}
         >
             <input
                 id={id}
@@ -22,9 +27,12 @@ export default function BaseInput({id , OnChange , placeholder , input , inputTy
                 type={inputType || "text"}
                 onChange={OnChange}
             >
-                
+
             </input>
+            {children}
         </div>
     )
 
 }
+
+export default memo(BaseInput);

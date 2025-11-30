@@ -1,8 +1,17 @@
 import OriginValidate from "./OriginValidate";
 
-export default function (req : Request, res : Response) {
+export default function (req : Request, res : Response, hasAuthHeader? : boolean) {
+    const origin = req.headers.get("Origin");
+    const IsAllowedOrigin = OriginValidate(origin || "");
+
     const headers = new Headers(res.headers);
-    headers.set("Access-Control-Allow-Origin", OriginValidate(req.headers.get("Origin")!) && (req.headers.get("Origin")) || "https://locora.org");
+
+    if (!headers.get("Authorization") || hasAuthHeader) {
+        headers.set("Access-Control-Allow-Origin", IsAllowedOrigin && origin ? origin : "https://locora.org");
+    } else {
+        headers.set("Access-Control-Allow-Origin", "*");
+    }
+
     headers.set("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
     headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
