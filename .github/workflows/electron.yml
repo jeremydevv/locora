@@ -37,6 +37,14 @@ jobs:
           node-version: 20
           cache: "npm"
 
+      - name: Cache Electron
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/electron
+            ~/.cache/electron-builder
+          key: ${{ runner.os }}-electron-${{ hashFiles('**/package-lock.json') }}
+
       - name: Install dependencies
         working-directory: apps/app/locora
         run: npm ci
