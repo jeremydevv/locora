@@ -6,6 +6,8 @@ import {handleAuth} from "./routes/v1/auth";
 import {handleWaitlist} from "./routes/v1/waitlist";
 import Corsify from "./routes/utils/Corsify";
 import OriginValidate from "./routes/utils/OriginValidate";
+import { handleUser } from "./routes/v1/user";
+import JSONResponse from "./routes/utils/JSONResponse";
 
 const router = Router();
 
@@ -16,6 +18,7 @@ router.get("/", () => {
 
 router.all("/v1/auth/*", handleAuth)
 router.all("/v1/waitlist/*", handleWaitlist);
+router.all("/v1/users/*", handleUser);
 
 router.all("*", (req : Request) => Corsify(req,new Response("Not Found", { status: 404 })));
 
@@ -27,8 +30,14 @@ export default {
             return Response.redirect("https://locora.org", 302);
         }
 
-        if (!(OriginValidate(request.headers.get("Origin")!))) {
-            return Corsify(request,new Response("Forbidden Access", { status: 403 }));
+        if (request.method === "OPTIONS") {
+            return Corsify(request,new Response(null, { status: 200 }));
+        }
+
+        if (!(OriginValidate(request.headers.get("Origin")!)) && (!(request.headers.get("Authorization")))) {
+            return JSONResponse(request,{
+                Message : "Origin is not valid"
+            },403)
         }
 
         return router.handle(request, env, ctx);

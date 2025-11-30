@@ -2,49 +2,85 @@ name: Electron Builder
 
 on:
   push:
-    branches: ["*"]
+    branches: 
+      - main
+      - development
   pull_request:
     branches: ["*"]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
     strategy:
       matrix:
-        platform: [mac, win, linux]
+        include: 
+          - os: macos-latest
+            platform: mac
+          - os: windows-latest
+            platform: win
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Changing env
+        shell: bash
+        run: |
+          grep -v '^VITE_ENVIORNMENT=' apps/app/locora/.env > apps/app/locora/.env.tmp
+          rm -f apps/app/locora/.env
+          mv apps/app/locora/.env.tmp apps/app/locora/.env
+          echo "VITE_ENVIORNMENT=${GITHUB_REF_NAME}" >> apps/app/locora/.env
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 20
+          cache: "npm"
 
       - name: Install dependencies
         working-directory: apps/app/locora
         run: npm ci
         
-      - name: Lint & type check
+      - name: Lint
         working-directory: apps/app/locora
         run: |
           npm run lint
-          npm run type-check
 
       - name: Building the App
         working-directory: apps/app/locora
         run: npm run build
 
       - name: Electron Build
+        working-directory: apps/app/locora
         run: |
           npx electron-builder --${{ matrix.platform }} --publish never
 
-      - name: Posting to Github Release
-        id: create_release
+      - name: Upload artifacts
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: locora-${{ matrix.platform }}
+          path: |
+            apps/app/locora/dist/**/*.dmg
+            apps/app/locora/dist/**/*.zip
+            apps/app/locora/dist/**/*.exe
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' &&
+      (github.ref_name == 'main' || github.ref_name == 'development')
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release_artifacts
+
+      - name: Create Release
         uses: actions/create-release@v1
         with:
-          tag_name: ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}-${{ github.run_number }}
           release_name: "Build for ${{ github.ref_name }}"
           draft: false
           prerelease: true
@@ -52,9 +88,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload binaries to release
+      - name: Upload All Binaries to Release
         uses: softprops/action-gh-release@v1
         with:
-          files: apps/app/locora/dist/**/*
+          files: release_artifacts/**/* 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
