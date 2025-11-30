@@ -13,6 +13,8 @@ on:
 
 jobs:
   build:
+    if: github.event_name == "push" &&
+      (github.ref_name == 'main' || github.ref_name == 'development')
     strategy:
       matrix:
         include: 
