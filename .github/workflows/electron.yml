@@ -1,5 +1,8 @@
 name: Electron Builder
 
+permissions:
+  contents: write
+
 on:
   push:
     branches: 
@@ -37,6 +40,14 @@ jobs:
           node-version: 20
           cache: "npm"
 
+      - name: Cache Electron
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/electron
+            ~/.cache/electron-builder
+          key: ${{ runner.os }}-electron-${{ hashFiles('**/package-lock.json') }}
+
       - name: Install dependencies
         working-directory: apps/app/locora
         run: npm ci
@@ -64,6 +75,7 @@ jobs:
             apps/app/locora/dist/**/*.dmg
             apps/app/locora/dist/**/*.zip
             apps/app/locora/dist/**/*.exe
+          retention-days: ${{ github.ref_name == 'main' && 90 || 1 }}
 
   release:
     needs: build
@@ -86,11 +98,11 @@ jobs:
           prerelease: true
           body: "Automated build for branch ${{ github.ref_name }}"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Upload All Binaries to Release
         uses: softprops/action-gh-release@v1
         with:
           files: release_artifacts/**/* 
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
