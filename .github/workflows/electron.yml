@@ -1,5 +1,8 @@
 name: Electron Builder
 
+permissions:
+  contents: write
+
 on:
   push:
     branches: 
