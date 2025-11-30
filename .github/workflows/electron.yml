@@ -64,6 +64,7 @@ jobs:
             apps/app/locora/dist/**/*.dmg
             apps/app/locora/dist/**/*.zip
             apps/app/locora/dist/**/*.exe
+          retention-days: ${{ github.ref_name == 'main' && 90 || 1 }}
 
   release:
     needs: build
