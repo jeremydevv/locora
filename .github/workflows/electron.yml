@@ -13,6 +13,8 @@ on:
 
 jobs:
   build:
+    if: github.event_name == "push" &&
+      (github.ref_name == 'main' || github.ref_name == 'development')
     strategy:
       matrix:
         include: 
@@ -26,13 +28,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Changing env
+      - name: Set VITE_ENVIRONMENT in .env
         shell: bash
+        working-directory: apps/app/locora
         run: |
-          grep -v '^VITE_ENVIORNMENT=' apps/app/locora/.env > apps/app/locora/.env.tmp
-          rm -f apps/app/locora/.env
-          mv apps/app/locora/.env.tmp apps/app/locora/.env
-          echo "VITE_ENVIORNMENT=${GITHUB_REF_NAME}" >> apps/app/locora/.env
+          touch .env
+          sed -i.bak '/^VITE_ENVIRONMENT=/d' .env
+          echo "VITE_ENVIRONMENT=${{ github.ref_name }}" >> .env
+          cat .env
 
       - name: Setup Node
         uses: actions/setup-node@v3

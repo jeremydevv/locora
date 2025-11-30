@@ -1,4 +1,4 @@
-const ENVIRONMENT = import.meta.env.VITE_ENVIORNMENT;
+const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT;
 
 export default function baseAPIUrl() {
     if (ENVIRONMENT === "dev") {
