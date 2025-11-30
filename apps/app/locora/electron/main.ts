@@ -8,13 +8,16 @@ import path from 'node:path'
 import { DataPayload, WindowAction } from '../types'
 import Keytar from 'keytar'
 import baseAPIUrl from '../src/utilities/BaseAPIUrl'
+import dotenv from 'dotenv'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+dotenv.config({ path: path.join(__dirname, '../.env') })
 
 process.env.APP_ROOT = path.join(__dirname, '..')
 
 export const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
-export const Environment = process.env['Environment']
+export const Environment = process.env['VITE_ENVIRONMENT']
 export const MAIN_DIST = path.join(process.env.APP_ROOT, 'dist-electron')
 export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist')
 
@@ -116,7 +119,7 @@ ipcMain.handle("open-authentication-window", async () => {
   } else if(Environment == "main") {
     authWin.loadURL("https://locora.org/auth")
   } else {
-    authWin.loadURL(`https://${Environment}.locora.pages.dev`)
+    authWin.loadURL(`https://${Environment}.locora.pages.dev/auth`)
   }
 
   if (process.platform === "darwin") {

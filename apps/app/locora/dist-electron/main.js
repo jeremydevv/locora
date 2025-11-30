@@ -10,6 +10,10 @@ import os from "node:os";
 import "node:events";
 import "node:stream";
 import Keytar from "keytar";
+import require$$0$1 from "fs";
+import require$$1$1 from "path";
+import require$$2$1 from "os";
+import require$$3$2 from "crypto";
 const isObject = (value) => {
   const type2 = typeof value;
   return value !== null && (type2 === "object" || type2 === "function");
@@ -7288,7 +7292,7 @@ const title$4 = "Core vocabulary meta-schema";
 const type$5 = ["object", "boolean"];
 const properties$6 = { "$id": { "$ref": "#/$defs/uriReferenceString", "$comment": "Non-empty fragments not allowed.", "pattern": "^[^#]*#?$" }, "$schema": { "$ref": "#/$defs/uriString" }, "$ref": { "$ref": "#/$defs/uriReferenceString" }, "$anchor": { "$ref": "#/$defs/anchorString" }, "$dynamicRef": { "$ref": "#/$defs/uriReferenceString" }, "$dynamicAnchor": { "$ref": "#/$defs/anchorString" }, "$vocabulary": { "type": "object", "propertyNames": { "$ref": "#/$defs/uriString" }, "additionalProperties": { "type": "boolean" } }, "$comment": { "type": "string" }, "$defs": { "type": "object", "additionalProperties": { "$dynamicRef": "#meta" } } };
 const $defs$1 = { "anchorString": { "type": "string", "pattern": "^[A-Za-z_][-A-Za-z0-9._]*$" }, "uriString": { "type": "string", "format": "uri" }, "uriReferenceString": { "type": "string", "format": "uri-reference" } };
-const require$$4 = {
+const require$$4$1 = {
   $schema: $schema$4,
   $id: $id$5,
   $vocabulary: $vocabulary$3,
@@ -7357,7 +7361,7 @@ function requireJsonSchema202012() {
   const applicator2 = require$$1;
   const unevaluated2 = require$$2;
   const content = require$$3$1;
-  const core2 = require$$4;
+  const core2 = require$$4$1;
   const format2 = require$$5;
   const metadata2 = require$$6;
   const validation2 = require$$7;
@@ -13633,31 +13637,31 @@ function requireSemver$1() {
   const parseOptions = requireParseOptions();
   const { compareIdentifiers } = requireIdentifiers();
   class SemVer {
-    constructor(version, options) {
+    constructor(version2, options) {
       options = parseOptions(options);
-      if (version instanceof SemVer) {
-        if (version.loose === !!options.loose && version.includePrerelease === !!options.includePrerelease) {
-          return version;
+      if (version2 instanceof SemVer) {
+        if (version2.loose === !!options.loose && version2.includePrerelease === !!options.includePrerelease) {
+          return version2;
         } else {
-          version = version.version;
+          version2 = version2.version;
         }
-      } else if (typeof version !== "string") {
-        throw new TypeError(`Invalid version. Must be a string. Got type "${typeof version}".`);
+      } else if (typeof version2 !== "string") {
+        throw new TypeError(`Invalid version. Must be a string. Got type "${typeof version2}".`);
       }
-      if (version.length > MAX_LENGTH) {
+      if (version2.length > MAX_LENGTH) {
         throw new TypeError(
           `version is longer than ${MAX_LENGTH} characters`
         );
       }
-      debug("SemVer", version, options);
+      debug("SemVer", version2, options);
       this.options = options;
       this.loose = !!options.loose;
       this.includePrerelease = !!options.includePrerelease;
-      const m = version.trim().match(options.loose ? re2[t.LOOSE] : re2[t.FULL]);
+      const m = version2.trim().match(options.loose ? re2[t.LOOSE] : re2[t.FULL]);
       if (!m) {
-        throw new TypeError(`Invalid Version: ${version}`);
+        throw new TypeError(`Invalid Version: ${version2}`);
       }
-      this.raw = version;
+      this.raw = version2;
       this.major = +m[1];
       this.minor = +m[2];
       this.patch = +m[3];
@@ -13907,12 +13911,12 @@ function requireParse() {
   if (hasRequiredParse) return parse_1;
   hasRequiredParse = 1;
   const SemVer = requireSemver$1();
-  const parse = (version, options, throwErrors = false) => {
-    if (version instanceof SemVer) {
-      return version;
+  const parse = (version2, options, throwErrors = false) => {
+    if (version2 instanceof SemVer) {
+      return version2;
     }
     try {
-      return new SemVer(version, options);
+      return new SemVer(version2, options);
     } catch (er) {
       if (!throwErrors) {
         return null;
@@ -13929,8 +13933,8 @@ function requireValid$1() {
   if (hasRequiredValid$1) return valid_1;
   hasRequiredValid$1 = 1;
   const parse = requireParse();
-  const valid2 = (version, options) => {
-    const v = parse(version, options);
+  const valid2 = (version2, options) => {
+    const v = parse(version2, options);
     return v ? v.version : null;
   };
   valid_1 = valid2;
@@ -13942,8 +13946,8 @@ function requireClean() {
   if (hasRequiredClean) return clean_1;
   hasRequiredClean = 1;
   const parse = requireParse();
-  const clean = (version, options) => {
-    const s = parse(version.trim().replace(/^[=v]+/, ""), options);
+  const clean = (version2, options) => {
+    const s = parse(version2.trim().replace(/^[=v]+/, ""), options);
     return s ? s.version : null;
   };
   clean_1 = clean;
@@ -13955,7 +13959,7 @@ function requireInc() {
   if (hasRequiredInc) return inc_1;
   hasRequiredInc = 1;
   const SemVer = requireSemver$1();
-  const inc = (version, release, options, identifier, identifierBase) => {
+  const inc = (version2, release, options, identifier, identifierBase) => {
     if (typeof options === "string") {
       identifierBase = identifier;
       identifier = options;
@@ -13963,7 +13967,7 @@ function requireInc() {
     }
     try {
       return new SemVer(
-        version instanceof SemVer ? version.version : version,
+        version2 instanceof SemVer ? version2.version : version2,
         options
       ).inc(release, identifier, identifierBase).version;
     } catch (er) {
@@ -14053,8 +14057,8 @@ function requirePrerelease() {
   if (hasRequiredPrerelease) return prerelease_1;
   hasRequiredPrerelease = 1;
   const parse = requireParse();
-  const prerelease = (version, options) => {
-    const parsed = parse(version, options);
+  const prerelease = (version2, options) => {
+    const parsed = parse(version2, options);
     return parsed && parsed.prerelease.length ? parsed.prerelease : null;
   };
   prerelease_1 = prerelease;
@@ -14242,24 +14246,24 @@ function requireCoerce() {
   const SemVer = requireSemver$1();
   const parse = requireParse();
   const { safeRe: re2, t } = requireRe();
-  const coerce = (version, options) => {
-    if (version instanceof SemVer) {
-      return version;
+  const coerce = (version2, options) => {
+    if (version2 instanceof SemVer) {
+      return version2;
     }
-    if (typeof version === "number") {
-      version = String(version);
+    if (typeof version2 === "number") {
+      version2 = String(version2);
     }
-    if (typeof version !== "string") {
+    if (typeof version2 !== "string") {
       return null;
     }
     options = options || {};
     let match = null;
     if (!options.rtl) {
-      match = version.match(options.includePrerelease ? re2[t.COERCEFULL] : re2[t.COERCE]);
+      match = version2.match(options.includePrerelease ? re2[t.COERCEFULL] : re2[t.COERCE]);
     } else {
       const coerceRtlRegex = options.includePrerelease ? re2[t.COERCERTLFULL] : re2[t.COERCERTL];
       let next2;
-      while ((next2 = coerceRtlRegex.exec(version)) && (!match || match.index + match[0].length !== version.length)) {
+      while ((next2 = coerceRtlRegex.exec(version2)) && (!match || match.index + match[0].length !== version2.length)) {
         if (!match || next2.index + next2[0].length !== match.index + match[0].length) {
           match = next2;
         }
@@ -14443,19 +14447,19 @@ function requireRange() {
       });
     }
     // if ANY of the sets match ALL of its comparators, then pass
-    test(version) {
-      if (!version) {
+    test(version2) {
+      if (!version2) {
         return false;
       }
-      if (typeof version === "string") {
+      if (typeof version2 === "string") {
         try {
-          version = new SemVer(version, this.options);
+          version2 = new SemVer(version2, this.options);
         } catch (er) {
           return false;
         }
       }
       for (let i = 0; i < this.set.length; i++) {
-        if (testSet(this.set[i], version, this.options)) {
+        if (testSet(this.set[i], version2, this.options)) {
           return true;
         }
       }
@@ -14670,13 +14674,13 @@ function requireRange() {
     }
     return `${from} ${to}`.trim();
   };
-  const testSet = (set, version, options) => {
+  const testSet = (set, version2, options) => {
     for (let i = 0; i < set.length; i++) {
-      if (!set[i].test(version)) {
+      if (!set[i].test(version2)) {
         return false;
       }
     }
-    if (version.prerelease.length && !options.includePrerelease) {
+    if (version2.prerelease.length && !options.includePrerelease) {
       for (let i = 0; i < set.length; i++) {
         debug(set[i].semver);
         if (set[i].semver === Comparator.ANY) {
@@ -14684,7 +14688,7 @@ function requireRange() {
         }
         if (set[i].semver.prerelease.length > 0) {
           const allowed = set[i].semver;
-          if (allowed.major === version.major && allowed.minor === version.minor && allowed.patch === version.patch) {
+          if (allowed.major === version2.major && allowed.minor === version2.minor && allowed.patch === version2.patch) {
             return true;
           }
         }
@@ -14745,19 +14749,19 @@ function requireComparator() {
     toString() {
       return this.value;
     }
-    test(version) {
-      debug("Comparator.test", version, this.options.loose);
-      if (this.semver === ANY || version === ANY) {
+    test(version2) {
+      debug("Comparator.test", version2, this.options.loose);
+      if (this.semver === ANY || version2 === ANY) {
         return true;
       }
-      if (typeof version === "string") {
+      if (typeof version2 === "string") {
         try {
-          version = new SemVer(version, this.options);
+          version2 = new SemVer(version2, this.options);
         } catch (er) {
           return false;
         }
       }
-      return cmp(version, this.operator, this.semver, this.options);
+      return cmp(version2, this.operator, this.semver, this.options);
     }
     intersects(comp, options) {
       if (!(comp instanceof Comparator)) {
@@ -14814,13 +14818,13 @@ function requireSatisfies() {
   if (hasRequiredSatisfies) return satisfies_1;
   hasRequiredSatisfies = 1;
   const Range = requireRange();
-  const satisfies = (version, range2, options) => {
+  const satisfies = (version2, range2, options) => {
     try {
       range2 = new Range(range2, options);
     } catch (er) {
       return false;
     }
-    return range2.test(version);
+    return range2.test(version2);
   };
   satisfies_1 = satisfies;
   return satisfies_1;
@@ -14982,8 +14986,8 @@ function requireOutside() {
   const lt = requireLt();
   const lte = requireLte();
   const gte = requireGte();
-  const outside = (version, range2, hilo, options) => {
-    version = new SemVer(version, options);
+  const outside = (version2, range2, hilo, options) => {
+    version2 = new SemVer(version2, options);
     range2 = new Range(range2, options);
     let gtfn, ltefn, ltfn, comp, ecomp;
     switch (hilo) {
@@ -15004,7 +15008,7 @@ function requireOutside() {
       default:
         throw new TypeError('Must provide a hilo val of "<" or ">"');
     }
-    if (satisfies(version, range2, options)) {
+    if (satisfies(version2, range2, options)) {
       return false;
     }
     for (let i = 0; i < range2.set.length; ++i) {
@@ -15026,9 +15030,9 @@ function requireOutside() {
       if (high.operator === comp || high.operator === ecomp) {
         return false;
       }
-      if ((!low.operator || low.operator === comp) && ltefn(version, low.semver)) {
+      if ((!low.operator || low.operator === comp) && ltefn(version2, low.semver)) {
         return false;
-      } else if (low.operator === ecomp && ltfn(version, low.semver)) {
+      } else if (low.operator === ecomp && ltfn(version2, low.semver)) {
         return false;
       }
     }
@@ -15043,7 +15047,7 @@ function requireGtr() {
   if (hasRequiredGtr) return gtr_1;
   hasRequiredGtr = 1;
   const outside = requireOutside();
-  const gtr = (version, range2, options) => outside(version, range2, ">", options);
+  const gtr = (version2, range2, options) => outside(version2, range2, ">", options);
   gtr_1 = gtr;
   return gtr_1;
 }
@@ -15053,7 +15057,7 @@ function requireLtr() {
   if (hasRequiredLtr) return ltr_1;
   hasRequiredLtr = 1;
   const outside = requireOutside();
-  const ltr = (version, range2, options) => outside(version, range2, "<", options);
+  const ltr = (version2, range2, options) => outside(version2, range2, "<", options);
   ltr_1 = ltr;
   return ltr_1;
 }
@@ -15083,12 +15087,12 @@ function requireSimplify() {
     let first = null;
     let prev = null;
     const v = versions.sort((a, b) => compare(a, b, options));
-    for (const version of v) {
-      const included = satisfies(version, range2, options);
+    for (const version2 of v) {
+      const included = satisfies(version2, range2, options);
       if (included) {
-        prev = version;
+        prev = version2;
         if (!first) {
-          first = version;
+          first = version2;
         }
       } else {
         if (prev) {
@@ -15816,20 +15820,20 @@ class Conf {
     let previousMigratedVersion = this._get(MIGRATION_KEY, "0.0.0");
     const newerVersions = Object.keys(migrations).filter((candidateVersion) => this._shouldPerformMigration(candidateVersion, previousMigratedVersion, versionToMigrate));
     let storeBackup = structuredClone(this.store);
-    for (const version of newerVersions) {
+    for (const version2 of newerVersions) {
       try {
         if (beforeEachMigration) {
           beforeEachMigration(this, {
             fromVersion: previousMigratedVersion,
-            toVersion: version,
+            toVersion: version2,
             finalVersion: versionToMigrate,
             versions: newerVersions
           });
         }
-        const migration = migrations[version];
+        const migration = migrations[version2];
         migration?.(this);
-        this._set(MIGRATION_KEY, version);
-        previousMigratedVersion = version;
+        this._set(MIGRATION_KEY, version2);
+        previousMigratedVersion = version2;
         storeBackup = structuredClone(this.store);
       } catch (error) {
         this.store = storeBackup;
@@ -15871,8 +15875,8 @@ class Conf {
   _isReservedKeyPath(candidate) {
     return candidate === INTERNAL_KEY || candidate.startsWith(`${INTERNAL_KEY}.`);
   }
-  _isVersionInRangeFormat(version) {
-    return semver.clean(version) === null;
+  _isVersionInRangeFormat(version2) {
+    return semver.clean(version2) === null;
   }
   _shouldPerformMigration(candidateVersion, previousMigratedVersion, versionToMigrate) {
     if (this._isVersionInRangeFormat(candidateVersion)) {
@@ -16073,10 +16077,348 @@ function baseAPIUrl() {
     return "http://localhost:6767";
   }
 }
+var main = { exports: {} };
+const version = "17.2.3";
+const require$$4 = {
+  version
+};
+var hasRequiredMain;
+function requireMain() {
+  if (hasRequiredMain) return main.exports;
+  hasRequiredMain = 1;
+  const fs2 = require$$0$1;
+  const path2 = require$$1$1;
+  const os2 = require$$2$1;
+  const crypto2 = require$$3$2;
+  const packageJson = require$$4;
+  const version2 = packageJson.version;
+  const TIPS = [
+    "🔐 encrypt with Dotenvx: https://dotenvx.com",
+    "🔐 prevent committing .env to code: https://dotenvx.com/precommit",
+    "🔐 prevent building .env in docker: https://dotenvx.com/prebuild",
+    "📡 add observability to secrets: https://dotenvx.com/ops",
+    "👥 sync secrets across teammates & machines: https://dotenvx.com/ops",
+    "🗂️ backup and recover secrets: https://dotenvx.com/ops",
+    "✅ audit secrets and track compliance: https://dotenvx.com/ops",
+    "🔄 add secrets lifecycle management: https://dotenvx.com/ops",
+    "🔑 add access controls to secrets: https://dotenvx.com/ops",
+    "🛠️  run anywhere with `dotenvx run -- yourcommand`",
+    "⚙️  specify custom .env file path with { path: '/custom/path/.env' }",
+    "⚙️  enable debug logging with { debug: true }",
+    "⚙️  override existing env vars with { override: true }",
+    "⚙️  suppress all logs with { quiet: true }",
+    "⚙️  write to custom object with { processEnv: myObject }",
+    "⚙️  load multiple .env files with { path: ['.env.local', '.env'] }"
+  ];
+  function _getRandomTip() {
+    return TIPS[Math.floor(Math.random() * TIPS.length)];
+  }
+  function parseBoolean(value) {
+    if (typeof value === "string") {
+      return !["false", "0", "no", "off", ""].includes(value.toLowerCase());
+    }
+    return Boolean(value);
+  }
+  function supportsAnsi() {
+    return process.stdout.isTTY;
+  }
+  function dim(text) {
+    return supportsAnsi() ? `\x1B[2m${text}\x1B[0m` : text;
+  }
+  const LINE = /(?:^|^)\s*(?:export\s+)?([\w.-]+)(?:\s*=\s*?|:\s+?)(\s*'(?:\\'|[^'])*'|\s*"(?:\\"|[^"])*"|\s*`(?:\\`|[^`])*`|[^#\r\n]+)?\s*(?:#.*)?(?:$|$)/mg;
+  function parse(src) {
+    const obj = {};
+    let lines = src.toString();
+    lines = lines.replace(/\r\n?/mg, "\n");
+    let match;
+    while ((match = LINE.exec(lines)) != null) {
+      const key = match[1];
+      let value = match[2] || "";
+      value = value.trim();
+      const maybeQuote = value[0];
+      value = value.replace(/^(['"`])([\s\S]*)\1$/mg, "$2");
+      if (maybeQuote === '"') {
+        value = value.replace(/\\n/g, "\n");
+        value = value.replace(/\\r/g, "\r");
+      }
+      obj[key] = value;
+    }
+    return obj;
+  }
+  function _parseVault(options) {
+    options = options || {};
+    const vaultPath = _vaultPath(options);
+    options.path = vaultPath;
+    const result = DotenvModule.configDotenv(options);
+    if (!result.parsed) {
+      const err = new Error(`MISSING_DATA: Cannot parse ${vaultPath} for an unknown reason`);
+      err.code = "MISSING_DATA";
+      throw err;
+    }
+    const keys = _dotenvKey(options).split(",");
+    const length = keys.length;
+    let decrypted;
+    for (let i = 0; i < length; i++) {
+      try {
+        const key = keys[i].trim();
+        const attrs = _instructions(result, key);
+        decrypted = DotenvModule.decrypt(attrs.ciphertext, attrs.key);
+        break;
+      } catch (error) {
+        if (i + 1 >= length) {
+          throw error;
+        }
+      }
+    }
+    return DotenvModule.parse(decrypted);
+  }
+  function _warn(message) {
+    console.error(`[dotenv@${version2}][WARN] ${message}`);
+  }
+  function _debug(message) {
+    console.log(`[dotenv@${version2}][DEBUG] ${message}`);
+  }
+  function _log(message) {
+    console.log(`[dotenv@${version2}] ${message}`);
+  }
+  function _dotenvKey(options) {
+    if (options && options.DOTENV_KEY && options.DOTENV_KEY.length > 0) {
+      return options.DOTENV_KEY;
+    }
+    if (process.env.DOTENV_KEY && process.env.DOTENV_KEY.length > 0) {
+      return process.env.DOTENV_KEY;
+    }
+    return "";
+  }
+  function _instructions(result, dotenvKey) {
+    let uri2;
+    try {
+      uri2 = new URL(dotenvKey);
+    } catch (error) {
+      if (error.code === "ERR_INVALID_URL") {
+        const err = new Error("INVALID_DOTENV_KEY: Wrong format. Must be in valid uri format like dotenv://:key_1234@dotenvx.com/vault/.env.vault?environment=development");
+        err.code = "INVALID_DOTENV_KEY";
+        throw err;
+      }
+      throw error;
+    }
+    const key = uri2.password;
+    if (!key) {
+      const err = new Error("INVALID_DOTENV_KEY: Missing key part");
+      err.code = "INVALID_DOTENV_KEY";
+      throw err;
+    }
+    const environment = uri2.searchParams.get("environment");
+    if (!environment) {
+      const err = new Error("INVALID_DOTENV_KEY: Missing environment part");
+      err.code = "INVALID_DOTENV_KEY";
+      throw err;
+    }
+    const environmentKey = `DOTENV_VAULT_${environment.toUpperCase()}`;
+    const ciphertext = result.parsed[environmentKey];
+    if (!ciphertext) {
+      const err = new Error(`NOT_FOUND_DOTENV_ENVIRONMENT: Cannot locate environment ${environmentKey} in your .env.vault file.`);
+      err.code = "NOT_FOUND_DOTENV_ENVIRONMENT";
+      throw err;
+    }
+    return { ciphertext, key };
+  }
+  function _vaultPath(options) {
+    let possibleVaultPath = null;
+    if (options && options.path && options.path.length > 0) {
+      if (Array.isArray(options.path)) {
+        for (const filepath of options.path) {
+          if (fs2.existsSync(filepath)) {
+            possibleVaultPath = filepath.endsWith(".vault") ? filepath : `${filepath}.vault`;
+          }
+        }
+      } else {
+        possibleVaultPath = options.path.endsWith(".vault") ? options.path : `${options.path}.vault`;
+      }
+    } else {
+      possibleVaultPath = path2.resolve(process.cwd(), ".env.vault");
+    }
+    if (fs2.existsSync(possibleVaultPath)) {
+      return possibleVaultPath;
+    }
+    return null;
+  }
+  function _resolveHome(envPath) {
+    return envPath[0] === "~" ? path2.join(os2.homedir(), envPath.slice(1)) : envPath;
+  }
+  function _configVault(options) {
+    const debug = parseBoolean(process.env.DOTENV_CONFIG_DEBUG || options && options.debug);
+    const quiet = parseBoolean(process.env.DOTENV_CONFIG_QUIET || options && options.quiet);
+    if (debug || !quiet) {
+      _log("Loading env from encrypted .env.vault");
+    }
+    const parsed = DotenvModule._parseVault(options);
+    let processEnv = process.env;
+    if (options && options.processEnv != null) {
+      processEnv = options.processEnv;
+    }
+    DotenvModule.populate(processEnv, parsed, options);
+    return { parsed };
+  }
+  function configDotenv(options) {
+    const dotenvPath = path2.resolve(process.cwd(), ".env");
+    let encoding = "utf8";
+    let processEnv = process.env;
+    if (options && options.processEnv != null) {
+      processEnv = options.processEnv;
+    }
+    let debug = parseBoolean(processEnv.DOTENV_CONFIG_DEBUG || options && options.debug);
+    let quiet = parseBoolean(processEnv.DOTENV_CONFIG_QUIET || options && options.quiet);
+    if (options && options.encoding) {
+      encoding = options.encoding;
+    } else {
+      if (debug) {
+        _debug("No encoding is specified. UTF-8 is used by default");
+      }
+    }
+    let optionPaths = [dotenvPath];
+    if (options && options.path) {
+      if (!Array.isArray(options.path)) {
+        optionPaths = [_resolveHome(options.path)];
+      } else {
+        optionPaths = [];
+        for (const filepath of options.path) {
+          optionPaths.push(_resolveHome(filepath));
+        }
+      }
+    }
+    let lastError;
+    const parsedAll = {};
+    for (const path22 of optionPaths) {
+      try {
+        const parsed = DotenvModule.parse(fs2.readFileSync(path22, { encoding }));
+        DotenvModule.populate(parsedAll, parsed, options);
+      } catch (e) {
+        if (debug) {
+          _debug(`Failed to load ${path22} ${e.message}`);
+        }
+        lastError = e;
+      }
+    }
+    const populated = DotenvModule.populate(processEnv, parsedAll, options);
+    debug = parseBoolean(processEnv.DOTENV_CONFIG_DEBUG || debug);
+    quiet = parseBoolean(processEnv.DOTENV_CONFIG_QUIET || quiet);
+    if (debug || !quiet) {
+      const keysCount = Object.keys(populated).length;
+      const shortPaths = [];
+      for (const filePath of optionPaths) {
+        try {
+          const relative = path2.relative(process.cwd(), filePath);
+          shortPaths.push(relative);
+        } catch (e) {
+          if (debug) {
+            _debug(`Failed to load ${filePath} ${e.message}`);
+          }
+          lastError = e;
+        }
+      }
+      _log(`injecting env (${keysCount}) from ${shortPaths.join(",")} ${dim(`-- tip: ${_getRandomTip()}`)}`);
+    }
+    if (lastError) {
+      return { parsed: parsedAll, error: lastError };
+    } else {
+      return { parsed: parsedAll };
+    }
+  }
+  function config(options) {
+    if (_dotenvKey(options).length === 0) {
+      return DotenvModule.configDotenv(options);
+    }
+    const vaultPath = _vaultPath(options);
+    if (!vaultPath) {
+      _warn(`You set DOTENV_KEY but you are missing a .env.vault file at ${vaultPath}. Did you forget to build it?`);
+      return DotenvModule.configDotenv(options);
+    }
+    return DotenvModule._configVault(options);
+  }
+  function decrypt(encrypted, keyStr) {
+    const key = Buffer.from(keyStr.slice(-64), "hex");
+    let ciphertext = Buffer.from(encrypted, "base64");
+    const nonce = ciphertext.subarray(0, 12);
+    const authTag = ciphertext.subarray(-16);
+    ciphertext = ciphertext.subarray(12, -16);
+    try {
+      const aesgcm = crypto2.createDecipheriv("aes-256-gcm", key, nonce);
+      aesgcm.setAuthTag(authTag);
+      return `${aesgcm.update(ciphertext)}${aesgcm.final()}`;
+    } catch (error) {
+      const isRange = error instanceof RangeError;
+      const invalidKeyLength = error.message === "Invalid key length";
+      const decryptionFailed = error.message === "Unsupported state or unable to authenticate data";
+      if (isRange || invalidKeyLength) {
+        const err = new Error("INVALID_DOTENV_KEY: It must be 64 characters long (or more)");
+        err.code = "INVALID_DOTENV_KEY";
+        throw err;
+      } else if (decryptionFailed) {
+        const err = new Error("DECRYPTION_FAILED: Please check your DOTENV_KEY");
+        err.code = "DECRYPTION_FAILED";
+        throw err;
+      } else {
+        throw error;
+      }
+    }
+  }
+  function populate(processEnv, parsed, options = {}) {
+    const debug = Boolean(options && options.debug);
+    const override = Boolean(options && options.override);
+    const populated = {};
+    if (typeof parsed !== "object") {
+      const err = new Error("OBJECT_REQUIRED: Please check the processEnv argument being passed to populate");
+      err.code = "OBJECT_REQUIRED";
+      throw err;
+    }
+    for (const key of Object.keys(parsed)) {
+      if (Object.prototype.hasOwnProperty.call(processEnv, key)) {
+        if (override === true) {
+          processEnv[key] = parsed[key];
+          populated[key] = parsed[key];
+        }
+        if (debug) {
+          if (override === true) {
+            _debug(`"${key}" is already defined and WAS overwritten`);
+          } else {
+            _debug(`"${key}" is already defined and was NOT overwritten`);
+          }
+        }
+      } else {
+        processEnv[key] = parsed[key];
+        populated[key] = parsed[key];
+      }
+    }
+    return populated;
+  }
+  const DotenvModule = {
+    configDotenv,
+    _configVault,
+    _parseVault,
+    config,
+    decrypt,
+    parse,
+    populate
+  };
+  main.exports.configDotenv = DotenvModule.configDotenv;
+  main.exports._configVault = DotenvModule._configVault;
+  main.exports._parseVault = DotenvModule._parseVault;
+  main.exports.config = DotenvModule.config;
+  main.exports.decrypt = DotenvModule.decrypt;
+  main.exports.parse = DotenvModule.parse;
+  main.exports.populate = DotenvModule.populate;
+  main.exports = DotenvModule;
+  return main.exports;
+}
+var mainExports = requireMain();
+const dotenv = /* @__PURE__ */ getDefaultExportFromCjs(mainExports);
 const userStorage = new ElectronStore();
 const __dirname$1 = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.join(__dirname$1, "../.env") });
 process.env.APP_ROOT = path.join(__dirname$1, "..");
 const VITE_DEV_SERVER_URL = process.env["VITE_DEV_SERVER_URL"];
+const Environment = process.env["VITE_ENVIRONMENT"];
 const MAIN_DIST = path.join(process.env.APP_ROOT, "dist-electron");
 const RENDERER_DIST = path.join(process.env.APP_ROOT, "dist");
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, "public") : RENDERER_DIST;
@@ -16142,10 +16484,12 @@ ipcMain$1.handle("open-authentication-window", async () => {
       preload: path.join(__dirname$1, "preload.mjs")
     }
   });
-  if (process.env.NODE_ENV == "development") {
+  if (Environment == "dev") {
     authWin.loadURL("http://localhost:3067/auth");
-  } else {
+  } else if (Environment == "main") {
     authWin.loadURL("https://locora.org/auth");
+  } else {
+    authWin.loadURL(`https://${Environment}.locora.pages.dev/auth`);
   }
   if (process.platform === "darwin") {
     authWin?.show();
@@ -16184,7 +16528,7 @@ ipcMain$1.on("window-action", (_, action) => {
       break;
   }
 });
-let data = {
+const data = {
   idToken: null,
   uid: null,
   refreshToken: null,
@@ -16274,7 +16618,7 @@ app$1.whenReady().then(CreateMainApplication).then(() => {
     authWin?.webContents.toggleDevTools();
     win?.webContents.toggleDevTools();
   });
-  protocol.registerStringProtocol("locora", async (request, _) => {
+  protocol.registerStringProtocol("locora", async (request) => {
     const url = new URL(request.url);
     const idToken = url.searchParams.get("idToken");
     const uid = url.searchParams.get("uid");
@@ -16306,6 +16650,7 @@ app$1.whenReady().then(CreateMainApplication).then(() => {
   });
 });
 export {
+  Environment,
   MAIN_DIST,
   RENDERER_DIST,
   VITE_DEV_SERVER_URL
