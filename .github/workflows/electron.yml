@@ -98,11 +98,11 @@ jobs:
           prerelease: true
           body: "Automated build for branch ${{ github.ref_name }}"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Upload All Binaries to Release
         uses: softprops/action-gh-release@v1
         with:
           files: release_artifacts/**/* 
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
