@@ -78,6 +78,11 @@ function App() {
               <Favorites />
             )
           }
+          {
+            SelectionEnum[curSelection] === "Business" && (
+              <Favorites />
+            )
+          }
         </div>
 
       </div>
