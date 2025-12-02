@@ -5,6 +5,7 @@ export interface Env {
     GOOGLE_SERVICE_ACCOUNT_JSON : string,
     FIREBASE_API_KEY : string,
     FIREBASE_PROJECT_ID : string
+    GEO_API_KEY : string,
     WaitlistRatelimiter : any
 }
 
