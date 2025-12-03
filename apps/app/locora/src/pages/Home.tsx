@@ -7,6 +7,7 @@
 import MapView from "../components/Mapview/MapView";
 import PlaceView from "../components/PlaceView/Main";
 import PlaceSearchBar from "../components/PlaceView/Searchbar";
+import SearchResults from "../components/PlaceView/SearchResults";
 
 export default function Home() {
 
@@ -26,9 +27,9 @@ export default function Home() {
                 </div>
 
                 <div
-                    className="fixed flex left-[2.25vw] top-[20vh]"
-                >
-                    <PlaceView />
+                    className="fixed flex left-[2.25vw] top-[17vh]"
+                >   
+                    <SearchResults />
                 </div>
             </div>
         </>

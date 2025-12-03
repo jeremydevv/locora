@@ -1,4 +1,47 @@
+import { LngLat, Map, MapTouchEvent } from "maplibre-gl"
+import { useEffect } from "react"
+import * as maplibregl from "maplibre-gl"
+import { onNewMap } from "../Mapview/MapStore"
+
 export default function PlaceSearchBar() {
+
+    function placeMapMarker(map: Map, location: LngLat) {
+        const placedMarker = new maplibregl.Marker({
+            color : "#ff0000",
+            scale : 1.2,
+            anchor: "bottom",
+            offset: [0, 15],
+        })
+            .setLngLat(location)
+            .addTo(map)
+        console.log("Placed a marker at " + location)
+    }
+
+    function OnMapClick(map: Map, lng: number, lat: number, lngLat: LngLat) {
+        placeMapMarker(map, lngLat)
+    }
+
+    useEffect(() => {
+        const Unsubscribe = onNewMap((map: Map) => {
+
+            function clickHandler(event: MapTouchEvent) {
+                const location = event.lngLat
+                console.log(event.lngLat)
+                OnMapClick(map, location.lng, location.lat, location)
+            }
+
+            map.on("click", clickHandler)
+
+            return () => {
+                map.off("click", clickHandler)
+            }
+        })
+
+        return () => {
+            console.log("disconnected")
+            Unsubscribe?.()
+        }
+    }, [])
 
     return (
         <>
@@ -6,23 +49,23 @@ export default function PlaceSearchBar() {
                 className="flex flex-row gap-2"
             >
 
-                {/* search button image */}
-                <div
-                    className="bg-gradient-to-b p-2.5 aspect-square from-bay-of-many-600 to-bay-of-many-800 rounded-full hover:scale-105 active:scale-95 transform transition-all duration-100"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth={1} className="size-10 p-1.5">
-                        <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
-                    </svg>
-                </div>
-
                 {/* search bar text input */}
                 <div
-                    className="bg-gradient-to-b p-1.5 from-bay-of-many-600 to-bay-of-many-800/80 rounded-full w-[20vw]"
+                    className="bg-gradient-to-b p-1.5 from-bay-of-many-600 to-bay-of-many-800/80 rounded-full w-[20vw] shadow-white/30 shadow-2xl"
                 >
-                    <input 
-                        className="p-2 pl-4 bg-bay-of-many-950 w-full h-full rounded-full text-white" 
-                        placeholder="wheres the nearest mcdonalds?"
+                    <input
+                        className="p-2 pl-4 bg-bay-of-many-950 w-full h-full rounded-full text-white min-w-0"
+                        placeholder="wheres the nearest cafe?"
                     />
+                </div>
+
+                {/* search button image */}
+                <div
+                    className="bg-gradient-to-b p-2.5 aspect-square from-bay-of-many-600 to-bay-of-many-800 rounded-full hover:scale-105 active:scale-95 transform transition-all duration-100 shadow-white/30 shadow-2xl"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth={1} className="size-10 p-1.5">
+                        <path fillRule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clipRule="evenodd" />
+                    </svg>
                 </div>
 
             </div>

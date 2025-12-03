@@ -15,7 +15,7 @@ export default function RatingBar({rating , style} : props) {
             >
                 {
                     [1,2,3,4,5].map((starNum) => {
-                        return (starNum <= Math.floor(rating)) ? <FilledStar color={style} /> : <EmptyStar color={style} /> 
+                        return (starNum <= Math.floor(rating)) ? <FilledStar key={starNum} color={style} /> : <EmptyStar key={starNum} color={style} /> 
                     })
                 }
             </div>

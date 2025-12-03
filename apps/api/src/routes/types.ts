@@ -6,7 +6,8 @@ export interface Env {
     FIREBASE_API_KEY : string,
     FIREBASE_PROJECT_ID : string
     GEO_API_KEY : string,
-    WaitlistRatelimiter : any
+    WaitlistRatelimiter : RateLimit
+    MapKV : KVNamespace
 }
 
 export interface RequestWaitlistAdd {

@@ -3,48 +3,13 @@ import EmptyStar from "../../assets/EmptyStar"
 import FilledStar from "../../assets/FilledStar"
 import placeholder from "../../assets/placeholder.png"
 import BaseButton from "../button"
-import maplibregl, { LngLat, MapEventType, MapTouchEvent } from "maplibre-gl"
+import maplibregl, { LngLat, MapTouchEvent } from "maplibre-gl"
 import Imagebutton from "../imagebutton"
 import { onNewMap } from "../Mapview/MapStore"
 import RatingBar from "../ratingbar"
 import { Map } from "maplibre-gl"
 
-interface props {
-
-}
-
 export default function PlaceView() {
-
-    function placeMapMarker(map: Map, location: LngLat) {
-        const placedMarker = new maplibregl.Marker()
-            .setLngLat(location)
-            .addTo(map)
-    }
-
-    function OnMapClick(map: Map, lng: number, lat: number, lngLat: LngLat) {
-        console.log(lng, lat)
-        placeMapMarker(map, lngLat)
-    }
-
-    useEffect(() => {
-        const Unsubscribe = onNewMap((map: Map) => {
-
-            function clickHandler(event : MapTouchEvent) {
-                const location = event.lngLat
-                OnMapClick(map, location.lng, location.lat, location)
-            }
-
-            map.on("click",clickHandler)
-
-            return () => {
-                map.off("click",clickHandler)
-            }
-        })
-
-        return () => {
-            Unsubscribe?.()
-        }
-    },[])
 
     return (
         <>
@@ -57,7 +22,7 @@ export default function PlaceView() {
                 >
                     <BaseButton otherProps="flex p-3 aspect-square justify-end" preChildren={
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
-                            <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                            <path fillRule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
                         </svg>
                     } />
                 </div>
@@ -94,7 +59,7 @@ export default function PlaceView() {
                 >
                     <BaseButton otherProps="flex p-1 aspect-square" preChildren={
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
-                            <path fill-rule="evenodd" d="M6.32 2.577a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 0 1-1.085.67L12 18.089l-7.165 3.583A.75.75 0 0 1 3.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93Z" clip-rule="evenodd" />
+                            <path fillRule="evenodd" d="M6.32 2.577a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 0 1-1.085.67L12 18.089l-7.165 3.583A.75.75 0 0 1 3.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93Z" clipRule="evenodd" />
                         </svg>
                     } />
 

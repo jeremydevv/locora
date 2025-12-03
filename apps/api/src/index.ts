@@ -8,6 +8,7 @@ import Corsify from "./routes/utils/Corsify";
 import OriginValidate from "./routes/utils/OriginValidate";
 import { handleUser } from "./routes/v1/user";
 import JSONResponse from "./routes/utils/JSONResponse";
+import { NotFound } from "./routes/utils/NotFound";
 
 const router = Router();
 
@@ -20,7 +21,9 @@ router.all("/v1/auth/*", handleAuth)
 router.all("/v1/waitlist/*", handleWaitlist);
 router.all("/v1/users/*", handleUser);
 
-router.all("*", (req : Request) => Corsify(req,new Response("Not Found", { status: 404 })));
+router.all("*", (req : Request) => {
+    return NotFound(req)
+})
 
 // middle man for api routes
 export default {

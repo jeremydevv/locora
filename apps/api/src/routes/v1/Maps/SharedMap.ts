@@ -1,6 +1,14 @@
 import { Env } from "../../types"
 
-async function ReverseGeoCode(lat: number, lon: number, env: Env) {
+interface location {
+    lat : string,
+    lon : string
+}
+
+async function ReverseGeoCode(locationData : location, env: Env) {
+
+    const lat = locationData.lat
+    const lon = locationData.lon
 
     try {
         const Result = await fetch(`https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lon}&apiKey=${env.GEO_API_KEY}`, {
@@ -30,4 +38,14 @@ async function PlaceDetails(placeId: string, env: Env) {
 
 }
 
-export { ReverseGeoCode , PlaceDetails}
+async function SearchForPlace(query : string, env : Env) {
+
+    try {
+        
+    } catch (err) {
+        console.error(err)
+    }
+
+}
+
+export { ReverseGeoCode , PlaceDetails , SearchForPlace}
