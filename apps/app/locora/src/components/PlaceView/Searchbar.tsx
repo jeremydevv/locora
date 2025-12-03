@@ -1,9 +1,11 @@
 import { LngLat, Map, MapTouchEvent } from "maplibre-gl"
 import { useEffect } from "react"
 import * as maplibregl from "maplibre-gl"
-import { onNewMap } from "../Mapview/MapStore"
+import { onNewMap, setCurrentSearchQuery } from "../Mapview/MapStore"
 
 export default function PlaceSearchBar() {
+
+    let QuerySubmitTimeout : NodeJS.Timeout | null = null;
 
     function placeMapMarker(map: Map, location: LngLat) {
         const placedMarker = new maplibregl.Marker({
@@ -19,6 +21,14 @@ export default function PlaceSearchBar() {
 
     function OnMapClick(map: Map, lng: number, lat: number, lngLat: LngLat) {
         placeMapMarker(map, lngLat)
+    }
+
+    function QueryChange(newQuery : string) {
+        if (QuerySubmitTimeout) clearTimeout(QuerySubmitTimeout)
+
+        QuerySubmitTimeout = setTimeout(() => {
+            setCurrentSearchQuery(newQuery)
+        }, 500);
     }
 
     useEffect(() => {
@@ -54,6 +64,9 @@ export default function PlaceSearchBar() {
                     className="bg-gradient-to-b p-1.5 from-bay-of-many-600 to-bay-of-many-800/80 rounded-full w-[20vw] shadow-white/30 shadow-2xl"
                 >
                     <input
+                        onChange={(e) => {
+                            QueryChange(e.target.value)
+                        }}
                         className="p-2 pl-4 bg-bay-of-many-950 w-full h-full rounded-full text-white min-w-0"
                         placeholder="wheres the nearest cafe?"
                     />
