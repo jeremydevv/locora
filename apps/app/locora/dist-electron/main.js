@@ -496,7 +496,7 @@ if (!IS_WINDOWS) {
 if (IS_LINUX) {
   Signals.push("SIGIO", "SIGPOLL", "SIGPWR", "SIGSTKFLT");
 }
-let Interceptor$1 = class Interceptor {
+class Interceptor {
   /* CONSTRUCTOR */
   constructor() {
     this.callbacks = /* @__PURE__ */ new Set();
@@ -533,9 +533,9 @@ let Interceptor$1 = class Interceptor {
     };
     this.hook();
   }
-};
-const Interceptor2 = new Interceptor$1();
-const whenExit = Interceptor2.register;
+}
+const Interceptor$1 = new Interceptor();
+const whenExit = Interceptor$1.register;
 const Temp = {
   /* VARIABLES */
   store: {},
@@ -16594,15 +16594,16 @@ ipcMain$1.handle("refresh-session-data", async () => {
     });
     const Results = await Data.json();
     if (!Data.ok) {
+      console.log("the refresh failed to occur");
       console.log(Results);
       return;
     }
+    console.log(Results);
     userStorage.set("uid", Results.uid || "");
     if (!Results.expiresIn) {
       userStorage.set("expiresIn", +Date.now() + 0 || "");
     } else {
-      userStorage.set("expiresIn", +Date.now() + +Results.expiresIn || "");
-      console.log(userStorage.get("expiresIn"));
+      userStorage.set("expiresIn", +Date.now() + +Results.expiresIn * 1e3 || "");
     }
     await Promise.all([
       Keytar.setPassword("org.locora.app", `${Results.uid}-idToken` || "", Results.idToken || ""),
@@ -16631,9 +16632,7 @@ app$1.whenReady().then(CreateMainApplication).then(() => {
     if (!expiresIn) {
       userStorage.set("expiresIn", +Date.now() + 0 || "");
     } else {
-      console.log("the data", Date.now(), expiresIn);
-      userStorage.set("expiresIn", +Date.now() + +expiresIn || "");
-      console.log(userStorage.get("expiresIn"));
+      userStorage.set("expiresIn", +Date.now() + +expiresIn * 1e3 || "");
     }
     await Promise.all([
       Keytar.setPassword("org.locora.app", `${uid}-idToken` || "", idToken || ""),

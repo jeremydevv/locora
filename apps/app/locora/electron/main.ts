@@ -258,9 +258,12 @@ ipcMain.handle("refresh-session-data", async () => {
     const Results : DataPayload = await Data.json()
 
     if (!Data.ok) {
+      console.log("the refresh failed to occur")
       console.log(Results)
       return
     }
+
+    console.log(Results)
 
     userStorage.set("uid", Results.uid || "")
 

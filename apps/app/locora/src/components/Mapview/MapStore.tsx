@@ -41,3 +41,4 @@ export function onNewMap(fn : (map : Map) => void) {
         listeners = listeners.filter((x) => x !== fn)
     }
 }
+
