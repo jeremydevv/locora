@@ -496,7 +496,7 @@ if (!IS_WINDOWS) {
 if (IS_LINUX) {
   Signals.push("SIGIO", "SIGPOLL", "SIGPWR", "SIGSTKFLT");
 }
-class Interceptor {
+let Interceptor$1 = class Interceptor {
   /* CONSTRUCTOR */
   constructor() {
     this.callbacks = /* @__PURE__ */ new Set();
@@ -533,9 +533,9 @@ class Interceptor {
     };
     this.hook();
   }
-}
-const Interceptor$1 = new Interceptor();
-const whenExit = Interceptor$1.register;
+};
+const Interceptor2 = new Interceptor$1();
+const whenExit = Interceptor2.register;
 const Temp = {
   /* VARIABLES */
   store: {},
@@ -16581,25 +16581,28 @@ ipcMain$1.handle("save-session-information", async (_, newData) => {
 });
 ipcMain$1.handle("refresh-session-data", async () => {
   try {
+    const RefreshToken = await Keytar.getPassword(`org.locora.app`, `${userStorage.get("uid")}-refreshToken`);
+    const idToken = await Keytar.getPassword(`org.locora.app`, `${userStorage.get("uid")}-idToken`);
     const Data = await fetch(baseAPIUrl() + "/v1/auth/refresh", {
       body: JSON.stringify({
-        RefreshToken: await Keytar.getPassword(`org.locora.app`, `${userStorage.get("uid")}-refreshToken`)
+        RefreshToken
       }),
       headers: {
-        "Authorization": `Bearer ${await Keytar.getPassword(`org.locora.app`, `${userStorage.get("uid")}-idToken`)}`
+        "Authorization": `Bearer ${idToken}`
       },
       method: "POST"
     });
     const Results = await Data.json();
     if (!Data.ok) {
+      console.log(Results);
       return;
     }
     userStorage.set("uid", Results.uid || "");
     if (!Results.expiresIn) {
-      userStorage.set("expiresIn", Date.now() + 0 || "");
-      data.expiresIn = String(Date.now() + 0);
+      userStorage.set("expiresIn", +Date.now() + 0 || "");
     } else {
-      userStorage.set("expiresIn", String(+Date.now() + +Results.expiresIn) || "");
+      userStorage.set("expiresIn", +Date.now() + +Results.expiresIn || "");
+      console.log(userStorage.get("expiresIn"));
     }
     await Promise.all([
       Keytar.setPassword("org.locora.app", `${Results.uid}-idToken` || "", Results.idToken || ""),
@@ -16628,7 +16631,9 @@ app$1.whenReady().then(CreateMainApplication).then(() => {
     if (!expiresIn) {
       userStorage.set("expiresIn", +Date.now() + 0 || "");
     } else {
+      console.log("the data", Date.now(), expiresIn);
       userStorage.set("expiresIn", +Date.now() + +expiresIn || "");
+      console.log(userStorage.get("expiresIn"));
     }
     await Promise.all([
       Keytar.setPassword("org.locora.app", `${uid}-idToken` || "", idToken || ""),

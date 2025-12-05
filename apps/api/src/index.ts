@@ -9,6 +9,7 @@ import OriginValidate from "./routes/utils/OriginValidate";
 import { handleUser } from "./routes/v1/user";
 import JSONResponse from "./routes/utils/JSONResponse";
 import { NotFound } from "./routes/utils/NotFound";
+import { handleMaps } from "./routes/v1/maps";
 
 const router = Router();
 
@@ -20,6 +21,7 @@ router.get("/", () => {
 router.all("/v1/auth/*", handleAuth)
 router.all("/v1/waitlist/*", handleWaitlist);
 router.all("/v1/users/*", handleUser);
+router.all("/v1/maps/*", handleMaps)
 
 router.all("*", (req : Request) => {
     return NotFound(req)

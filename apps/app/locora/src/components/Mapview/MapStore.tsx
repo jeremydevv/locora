@@ -16,16 +16,18 @@ export function setMap(newMap : Map) {
 }
 
 export function setCurrentSearchQuery(query : string) {
+
     searchQuery = query
     queryListeners.forEach((fn : (query : string) => void) => {
         fn?.(query)
     })
+    
 }
 
 export function onQueryChange(fn : (query : string) => void) {
     queryListeners.push(fn)
     return () => {
-        queryListeners.filter((x) => x !== fn)
+        queryListeners = queryListeners.filter((x) => x !== fn)
     }
 }
 
