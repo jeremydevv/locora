@@ -9,6 +9,8 @@ build/
 .cache/
 .next/
 tmp/
+.exe
+.dmg
 
 node_modules/
 .pnpm-store/

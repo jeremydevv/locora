@@ -36,20 +36,20 @@ export default function BaseButton({
     hasBackground = true,
     onClick = () => {},
 }: buttonProps) {
-    var BaseStyle = "text-white py-2 cursor-pointer px-4 rounded-lg drop-shadow-lg font-semibold flex items-center justify-center ";
+    let BaseStyle = "py-2 cursor-pointer px-4 rounded-lg drop-shadow-lg font-semibold flex items-center justify-center ";
 
-    var SizeAnimations =
+    let SizeAnimations =
         "hover:scale-105 active:scale-97 transition-transform duration-10 ease-in-out style-smooth ";
 
     BaseStyle += SizeAnimations;
 
     if (hasBackground) {
         if (type === "default") {
-            BaseStyle += "bg-gradient-to-b from-blue-700 to-bay-of-many-500 transition-colors ";
+            BaseStyle += "bg-gradient-to-b from-blue-700 text-white to-bay-of-many-500 transition-colors ";
         } else if (type === "black") {
-            BaseStyle += "bg-gradient-to-b from-gray-900 to-gray-600 transition-colors ";
+            BaseStyle += "bg-gradient-to-b from-gray-900 to-gray-600 text-white transition-colors ";
         } else if (type === "white") {
-            BaseStyle += "bg-gradient-to-b from-gray-200 to-gray-200/85 text-gray-800 transition-colors ";
+            BaseStyle += "bg-gradient-to-b from-gray-200 to-gray-200 text-black transition-colors ";
         }
         BaseStyle += Embossed();
     }
