@@ -6,7 +6,6 @@ import BaseButton from "../components/button";
 
 import AppleIcon from "../assets/appleicon.svg"
 import MicrosoftIcon from "../assets/Microsoft.png"
-import baseAPIUrl from "../utilities/BaseURL";
 import { useState } from "react";
 
 export default function DownloadPage() {
