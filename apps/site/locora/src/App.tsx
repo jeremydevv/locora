@@ -7,6 +7,7 @@ import AuthenticationPage from './pages/auth';
 
 import { Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
+import DownloadPage from './pages/download';
 
 function App() {
 
@@ -22,6 +23,9 @@ function App() {
             } />
             <Route path="/auth" element={
               <AuthenticationPage />
+            } />
+            <Route path="/download" element={
+              <DownloadPage />
             } />
             <Route path="*" element={
               <NotFound />

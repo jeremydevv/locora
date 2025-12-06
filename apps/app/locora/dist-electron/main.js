@@ -16077,6 +16077,7 @@ const userStorage = new ElectronStore();
 const __dirname$1 = path.dirname(fileURLToPath(import.meta.url));
 process.env.APP_ROOT = path.join(__dirname$1, "..");
 const VITE_DEV_SERVER_URL = process.env["VITE_DEV_SERVER_URL"];
+const Environment = process.env["Environment"];
 const MAIN_DIST = path.join(process.env.APP_ROOT, "dist-electron");
 const RENDERER_DIST = path.join(process.env.APP_ROOT, "dist");
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, "public") : RENDERER_DIST;
@@ -16142,10 +16143,12 @@ ipcMain$1.handle("open-authentication-window", async () => {
       preload: path.join(__dirname$1, "preload.mjs")
     }
   });
-  if (process.env.NODE_ENV == "development") {
+  if (Environment == "dev") {
     authWin.loadURL("http://localhost:3067/auth");
-  } else {
+  } else if (Environment == "main") {
     authWin.loadURL("https://locora.org/auth");
+  } else {
+    authWin.loadURL(`https://${Environment}.locora.pages.dev`);
   }
   if (process.platform === "darwin") {
     authWin?.show();
@@ -16184,7 +16187,7 @@ ipcMain$1.on("window-action", (_, action) => {
       break;
   }
 });
-let data = {
+const data = {
   idToken: null,
   uid: null,
   refreshToken: null,
@@ -16274,7 +16277,7 @@ app$1.whenReady().then(CreateMainApplication).then(() => {
     authWin?.webContents.toggleDevTools();
     win?.webContents.toggleDevTools();
   });
-  protocol.registerStringProtocol("locora", async (request, _) => {
+  protocol.registerStringProtocol("locora", async (request) => {
     const url = new URL(request.url);
     const idToken = url.searchParams.get("idToken");
     const uid = url.searchParams.get("uid");
@@ -16306,6 +16309,7 @@ app$1.whenReady().then(CreateMainApplication).then(() => {
   });
 });
 export {
+  Environment,
   MAIN_DIST,
   RENDERER_DIST,
   VITE_DEV_SERVER_URL

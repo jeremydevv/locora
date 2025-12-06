@@ -8,6 +8,7 @@ import Corsify from "./routes/utils/Corsify";
 import OriginValidate from "./routes/utils/OriginValidate";
 import { handleUser } from "./routes/v1/user";
 import JSONResponse from "./routes/utils/JSONResponse";
+import { handleDownload } from "./routes/v1/download";
 
 const router = Router();
 
@@ -19,8 +20,12 @@ router.get("/", () => {
 router.all("/v1/auth/*", handleAuth)
 router.all("/v1/waitlist/*", handleWaitlist);
 router.all("/v1/users/*", handleUser);
+router.all("/v1/download/*", handleDownload)
 
-router.all("*", (req : Request) => Corsify(req,new Response("Not Found", { status: 404 })));
+router.all("*", (req : Request) => {
+    console.log("couldnt be found in index.ts")
+    return Corsify(req,new Response("Not Found", { status: 404 }))}
+);
 
 // middle man for api routes
 export default {
