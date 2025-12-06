@@ -11,9 +11,9 @@ import { useState } from "react";
 
 export default function DownloadPage() {
 
-    const [isDownloading , setDownloading] = useState<boolean>(false)
+    const [isDownloading, setDownloading] = useState<boolean>(false)
 
-    async function onDownload(os : string) {
+    async function onDownload(os: string) {
 
         try {
 
@@ -23,33 +23,22 @@ export default function DownloadPage() {
 
             setDownloading(true)
 
-            const DownloadResult = await fetch(`${baseAPIUrl()}/v1/download?os=${os}`, {
-                method : "GET"
-            })
-            
-            if(!DownloadResult.ok) {
-                console.log(DownloadResult)
-                return
-            }
+            const url =
+                os === "win"
+                    ? "https://cdn.locora.org/windows/Locora.Setup.1.0.0.exe"
+                    : "https://cdn.locora.org/mac/Locora-1.0.0.dmg";
 
-            const blob = await DownloadResult.blob()
-            const blobURL = URL.createObjectURL(blob)
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = ""; 
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
 
             setDownloading(false)
 
-            const x = document.createElement("a")
-            x.href = blobURL
 
-            x.download = os === "win" ? "locora-setup.exe" : "locora-mac.dmg"
-
-            document.body.appendChild(x)
-
-            x.click()
-            x.remove()
-
-            URL.revokeObjectURL(blobURL)
-
-        } catch(err) {
+        } catch (err) {
             console.log(err)
         }
 
@@ -97,7 +86,7 @@ export default function DownloadPage() {
                                 text="Download for Mac"
                                 type="black"
                                 CurrentlyYielding={isDownloading}
-                                onClick={() => {onDownload("mac")}}
+                                onClick={() => { onDownload("mac") }}
                                 preChildren={
                                     <img src={AppleIcon} className="w-5.5 h-6 aspect-square invert p-1" />
                                 }
@@ -108,13 +97,21 @@ export default function DownloadPage() {
                                 CurrentlyYielding={isDownloading}
                                 text="Download for Microsoft"
                                 type="white"
-                                onClick={() => {onDownload("win")}}
+                                onClick={() => { onDownload("win") }}
                                 preChildren={
                                     <img src={MicrosoftIcon} className="w-6 h-6 aspect-square p-0.5" />
                                 }
                             />
 
                         </div>
+
+                        {isDownloading && (
+                            <>
+                                <p
+                                    className="text-bay-of-many-950/50"
+                                >this may take a minute</p>
+                            </>
+                        )}
 
                     </div>
 
