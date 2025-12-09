@@ -31,13 +31,13 @@ function getBusinessData(): BusinessPayload | null {
     return CurrentPayload
 }
 
-let connected = false; 
-let onMapMoveConnection : Subscription | null = null;
+let connected = false;
+let onMapMoveConnection: Subscription | null = null;
 
 
 onQueryChange(async (query: string) => {
 
-    if(connected) return
+    if (connected) return
     connected = true;
 
     const idToken = await GetIdToken()
@@ -47,9 +47,9 @@ onQueryChange(async (query: string) => {
         return
     }
 
-    let CurrentMap : Map | null = null;
+    let CurrentMap: Map | null = null;
 
-    onNewMap((map : Map) => {
+    onNewMap((map: Map) => {
         CurrentMap = map
     })
 
@@ -58,29 +58,36 @@ onQueryChange(async (query: string) => {
         return
     }
 
-    const businessListData = await GetBusinessesList(idToken,query, {
-        lat : (CurrentMap as Map).getCenter().lat,
-        lon : (CurrentMap as Map).getCenter().lng,
-        zoom : (CurrentMap as Map).getZoom()
+    const businessListData = await GetBusinessesList(idToken, query, {
+        lat: (CurrentMap as Map).getCenter().lat,
+        lon: (CurrentMap as Map).getCenter().lng,
+        zoom: (CurrentMap as Map).getZoom()
     })
 
     if (onMapMoveConnection) {
         onMapMoveConnection.unsubscribe()
     }
 
-    let panningTimeout : NodeJS.Timeout | null = null;
+    let panningTimeout: NodeJS.Timeout | null = null;
 
-    onMapMoveConnection = (CurrentMap as Map).on("move", (ev) => {
+    onMapMoveConnection = (CurrentMap as Map).on("move", () => {
 
         if (panningTimeout) {
             clearTimeout(panningTimeout)
         }
 
         panningTimeout = setTimeout(async () => {
-            const businessListData = await GetBusinessesList(idToken,query, {
-                lat : (CurrentMap as Map).getCenter().lat,
-                lon : (CurrentMap as Map).getCenter().lng,
-                zoom : (CurrentMap as Map).getZoom()
+            const currentZoom = (CurrentMap as Map).getZoom()
+
+            if (currentZoom == undefined || Math.floor(currentZoom) <= 8 ) {
+                console.log("zoomed out too much")
+                return
+            }
+
+            const businessListData = await GetBusinessesList(idToken, query, {
+                lat: (CurrentMap as Map).getCenter().lat,
+                lon: (CurrentMap as Map).getCenter().lng,
+                zoom: (CurrentMap as Map).getZoom()
             })
 
             console.log(businessListData)
@@ -93,7 +100,7 @@ onQueryChange(async (query: string) => {
         return
     }
 
-    console.log(businessListData)
+    
 
     connected = false
 })

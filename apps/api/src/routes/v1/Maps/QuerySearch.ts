@@ -1,4 +1,4 @@
-import { Env } from "../../types";
+import { Env, GeoAPI_QueryResponse } from "../../types";
 import InternalError from "../../utils/InternalError";
 import JSONResponse from "../../utils/JSONResponse";
 import MalformedData from "../../utils/MalformedRequest";
@@ -34,21 +34,28 @@ export default async function QuerySearchEndpoint(req: Request, env: Env) {
 
     try {
 
-        const radius = 5000
+        if (Math.floor(Number(zoom)) < 9 || Math.floor(Number(zoom)) > 20) {
+            return JSONResponse(req,{
+                success : false,
+                message: "zoomed out too much or too close"
+            },400)
+        }
+
+        const radius = ZoomScaling[Math.floor(Number(zoom))]
 
         const Data = await fetch(
             `https://api.geoapify.com/v1/geocode/autocomplete?`
             + `text=${encodeURIComponent(cleanedQuery)}`
-            + `&limit=20`
+            + `&limit=${(Math.floor(Number(zoom))*2)}`
             + `&lang=en`
-            + `&filter=circle:${lon},${lat},${ZoomScaling[Number(zoom)]}` 
+            + `&filter=circle:${lon},${lat},${radius}` 
             + `&bias=proximity:${lon},${lat}`
             + `&format=json`
             + `&apiKey=${env.GEO_API_KEY}`
         )
 
         const Result : {
-            results : Array<unknown>,
+            results : Array<GeoAPI_QueryResponse>,
             query : object
         } = await Data.json()
 
@@ -56,6 +63,8 @@ export default async function QuerySearchEndpoint(req: Request, env: Env) {
             console.log(Result)
             return InternalError(req)
         }
+
+        // parse into our business format
 
         return JSONResponse(req, {
             success : true,
@@ -68,7 +77,7 @@ export default async function QuerySearchEndpoint(req: Request, env: Env) {
 
     return JSONResponse(req, {
         success: true,
-        message: "Hit the endpoint correctly"
-    })
+        message: "Something went wrong with the query."
+    },500)
 
 }
