@@ -175,7 +175,7 @@ async function RefreshIdToken(req : Request, env : Env) {
     } = await req.json()
 
     if (!Body || !Body.RefreshToken) {
-        return MalformedData(req)
+        return MalformedData(req,"No refresh token was provided")
     }
 
     const RefreshToken = Body.RefreshToken
@@ -195,7 +195,7 @@ async function RefreshIdToken(req : Request, env : Env) {
             id_token : string,
             refresh_token : string,
             expires_in : string
-            local_id : string
+            user_id : string
         } = await Data.json()
 
         if (!Data.ok) {
@@ -207,7 +207,7 @@ async function RefreshIdToken(req : Request, env : Env) {
             success : true,
             message : "Token was updated correctly.",
             idToken : Results.id_token,
-            uid : Results.local_id,
+            uid : Results.user_id,
             expiresIn : Results.expires_in,
             refreshToken : Results.refresh_token
         },200)

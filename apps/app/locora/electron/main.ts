@@ -8,13 +8,16 @@ import path from 'node:path'
 import { DataPayload, WindowAction } from '../types'
 import Keytar from 'keytar'
 import baseAPIUrl from '../src/utilities/BaseAPIUrl'
+import dotenv from 'dotenv'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+dotenv.config({ path: path.join(__dirname, '../.env') })
 
 process.env.APP_ROOT = path.join(__dirname, '..')
 
 export const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
-export const Environment = process.env['Environment']
+export const Environment = process.env['VITE_ENVIRONMENT']
 export const MAIN_DIST = path.join(process.env.APP_ROOT, 'dist-electron')
 export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist')
 
@@ -116,7 +119,7 @@ ipcMain.handle("open-authentication-window", async () => {
   } else if(Environment == "main") {
     authWin.loadURL("https://locora.org/auth")
   } else {
-    authWin.loadURL(`https://${Environment}.locora.pages.dev`)
+    authWin.loadURL(`https://${Environment}.locora.pages.dev/auth`)
   }
 
   if (process.platform === "darwin") {
@@ -239,12 +242,15 @@ ipcMain.handle("refresh-session-data", async () => {
 
   try {
     
+    const RefreshToken = await Keytar.getPassword(`org.locora.app`,`${userStorage.get("uid")}-refreshToken`)
+    const idToken = await Keytar.getPassword(`org.locora.app`,`${userStorage.get("uid")}-idToken`)
+
     const Data = await fetch(baseAPIUrl() + "/v1/auth/refresh", {
       body : JSON.stringify({
-        RefreshToken : await Keytar.getPassword(`org.locora.app`,`${userStorage.get("uid")}-refreshToken`)
+        RefreshToken : RefreshToken
       }),
       headers : {
-        "Authorization" : `Bearer ${await Keytar.getPassword(`org.locora.app`,`${userStorage.get("uid")}-idToken`)}`
+        "Authorization" : `Bearer ${idToken}`
       },
       method : "POST"
     })
@@ -252,16 +258,20 @@ ipcMain.handle("refresh-session-data", async () => {
     const Results : DataPayload = await Data.json()
 
     if (!Data.ok) {
+      console.log("the refresh failed to occur")
+      console.log(Results)
       return
     }
+
+    console.log(Results)
 
     userStorage.set("uid", Results.uid || "")
 
     if (!Results.expiresIn) {
-      userStorage.set("expiresIn", (Date.now() + 0) || "")
-      data.expiresIn = String(Date.now() + 0)
+      userStorage.set("expiresIn", (+Date.now() + 0) || "")
     } else {
-      userStorage.set("expiresIn", String(+Date.now() + +Results.expiresIn) || "")
+      userStorage.set("expiresIn", (+Date.now() + (+Results.expiresIn)*1000) || "")
+
     }
 
     await Promise.all([
@@ -301,7 +311,7 @@ app.whenReady().then(CreateMainApplication).then(() => {
     if (!expiresIn) {
       userStorage.set("expiresIn", (+Date.now() + 0) || "")
     } else {
-      userStorage.set("expiresIn", (+Date.now() + +expiresIn) || "")
+      userStorage.set("expiresIn", (+Date.now() + ((+expiresIn)*1000)) || "")
     }
 
     await Promise.all([

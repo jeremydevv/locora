@@ -9,6 +9,7 @@ import Explore from './pages/Explore'
 import Profile from './pages/Profile'
 import BottomBar from './components/bottombar'
 import Favorites from './pages/Favorites'
+import "./pages/BusinessPage/BusinessStore"
 
 const SelectionEnum: Record<number, string> = {
   1: "Home",
@@ -75,6 +76,11 @@ function App() {
           }
           {
             SelectionEnum[curSelection] === "Favorites" && (
+              <Favorites />
+            )
+          }
+          {
+            SelectionEnum[curSelection] === "Business" && (
               <Favorites />
             )
           }

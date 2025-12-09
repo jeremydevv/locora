@@ -1,5 +1,6 @@
 import { Env } from "../../types";
 import JSONResponse from "../../utils/JSONResponse";
+import { NotFound } from "../../utils/NotFound";
 import { InformationEndpoint } from "./information/information";
 
 function UserPostEntry(req : Request, env : Env) {
@@ -19,10 +20,7 @@ async function UserGetEntry(req : Request, env : Env) {
     if (segments[0] === "information") {
         return await InformationEndpoint(req, env);
     } else {
-        return JSONResponse(req,{
-            success : false,
-            message : "Unknown endpoint"
-        },404)
+        return NotFound(req)
     }
 
 }
