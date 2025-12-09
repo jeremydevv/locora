@@ -15,7 +15,7 @@ export default async function idSearch(request : Request, env : Env) {
 
     try {
         const geoApiInfo = await PlaceDetails(Body.placeId,env)
-        console.log(geoApiInfo)
+        return JSONResponse(request,geoApiInfo,200)
     } catch(err) {
         console.log(err)
     }

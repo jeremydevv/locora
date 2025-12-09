@@ -1,7 +1,9 @@
-import { Env, GeoAPI_QueryResponse } from "../../types";
+import { Env, GeoAPI_QueryResponse, Locora_Business } from "../../types";
 import InternalError from "../../utils/InternalError";
 import JSONResponse from "../../utils/JSONResponse";
 import MalformedData from "../../utils/MalformedRequest";
+import getBusinessData from "../Business/KVInteractions/Whole/GetBusinessData";
+import idSearch from "./IdSearch";
 
 export default async function QuerySearchEndpoint(req: Request, env: Env) {
 
@@ -58,6 +60,22 @@ export default async function QuerySearchEndpoint(req: Request, env: Env) {
             results : Array<GeoAPI_QueryResponse>,
             query : object
         } = await Data.json()
+
+        const businessesWithData : Array<Locora_Business> = []
+
+        Result.results.forEach(async element => {
+
+            const BusinessData = await getBusinessData(element.place_id, env)
+
+            if (BusinessData) {
+                businessesWithData.push(BusinessData)
+            } else {
+
+                const BusinessPlaceInformation = await idSearch(req, env)
+
+            }
+
+        });
 
         if(!Data) {
             console.log(Result)
