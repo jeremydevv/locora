@@ -24,6 +24,7 @@ router.all("/v1/users/*", handleUser);
 router.all("/v1/maps/*", handleMaps)
 
 router.all("*", (req : Request) => {
+    console.log("couldnt be found in index.ts")
     return NotFound(req)
 })
 

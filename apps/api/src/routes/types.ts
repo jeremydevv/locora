@@ -4,10 +4,11 @@ export interface Env {
     LOGIN_SITE_TURNSTILE : string
     GOOGLE_SERVICE_ACCOUNT_JSON : string,
     FIREBASE_API_KEY : string,
-    FIREBASE_PROJECT_ID : string
+    FIREBASE_PROJECT_ID : string,
+    GITHUB_TOKEN : string,
     GEO_API_KEY : string,
-    WaitlistRatelimiter : RateLimit
-    MapKV : KVNamespace
+    WaitlistRatelimiter : RateLimit,
+    MapKV : KVNamespace,
 }
 
 export interface RequestWaitlistAdd {

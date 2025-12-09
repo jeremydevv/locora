@@ -14,7 +14,7 @@ import { useState } from "react";
 import { clamp } from "framer-motion";
 
 interface dropdownProps {
-    PageType: "landing" | "waitlist"
+    PageType: "landing" | "waitlist" | "download"
 }
 
 export default function TopBar({ PageType }: dropdownProps) {
