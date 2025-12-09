@@ -6,17 +6,11 @@ export interface Env {
     FIREBASE_API_KEY : string,
     FIREBASE_PROJECT_ID : string,
     GITHUB_TOKEN : string,
-    GEO_API_KEY : string,
-<<<<<<< Updated upstream
-    WaitlistRatelimiter : RateLimit,
-    MapKV : KVNamespace,
-=======
-
+    GEO_API_KEY : string, 
     // cf bindings
     WaitlistRatelimiter : RateLimit
     MapKV : KVNamespace
     CDN : R2Bucket
->>>>>>> Stashed changes
 }
 
 export interface CDN_Directory {
