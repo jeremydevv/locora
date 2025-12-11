@@ -3,18 +3,25 @@ import { onQueryChange } from "../Mapview/MapStore"
 import SearchResultBox from "./ResultBox"
 
 import loadingSymbol from "../../assets/loading.png"
+import { BusinessPayload, OnBusinessDataChange } from "../../pages/BusinessPage/BusinessStore"
 
 export default function SearchResults() {
 
     const [query , setNewQuery] = useState<string>()
     const [loading, setLoading] = useState<boolean>(false)
 
+    const [businessDataList , setBusinessDataList] = useState<BusinessPayload[]>([])
+
     useEffect(() => {
         onQueryChange((newQuery : string) => {
-
             setNewQuery(newQuery)
-
         })
+
+        OnBusinessDataChange((businessdata) => {
+            setLoading(true)
+            setBusinessDataList(businessdata)
+        })
+
     },[])
 
     return (
@@ -24,9 +31,13 @@ export default function SearchResults() {
             >
                 {
                     (!loading) 
-                    ? ([1,2,3,4,5,6,7].map((id) => {
-                            return <SearchResultBox key={id} />
-                    })) 
+                    ? (
+                        businessDataList.map((businessData: BusinessPayload, index: number) => (
+                            <SearchResultBox 
+                                key={index}
+                            />
+                        ))
+                    )
                     : (
                         <div
                             className="flex flex-col items-center gap-3"

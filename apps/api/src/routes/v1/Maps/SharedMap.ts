@@ -1,4 +1,4 @@
-import { Env } from "../../types"
+import { Env, GeoAPI_PlaceDetailsResponse } from "../../types"
 
 interface location {
     lat : string,
@@ -23,29 +23,21 @@ async function ReverseGeoCode(locationData : location, env: Env) {
     }
 }
 
-async function PlaceDetails(placeId: string, env: Env) {
+async function PlaceDetails(placeId: string, env: Env) : Promise<GeoAPI_PlaceDetailsResponse | null> {
 
     try {
         const Result = await fetch(`https://api.geoapify.com/v2/place-details?id=${placeId}&apiKey=${env.GEO_API_KEY}`, {
             method: "GET"
         })
-        const Data = await Result.json()
+        const Data : GeoAPI_PlaceDetailsResponse = await Result.json()
 
-        return Data
+        return Data 
     } catch (err) {
         console.error(err)
     }
 
-}
-
-async function SearchForPlace(query : string, env : Env) {
-
-    try {
-        
-    } catch (err) {
-        console.error(err)
-    }
+    return null
 
 }
 
-export { ReverseGeoCode , PlaceDetails , SearchForPlace}
+export { ReverseGeoCode , PlaceDetails}

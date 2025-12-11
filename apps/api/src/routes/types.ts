@@ -7,10 +7,12 @@ export interface Env {
     FIREBASE_PROJECT_ID : string,
     GITHUB_TOKEN : string,
     GEO_API_KEY : string, 
+    GOOGLE_MAPS_API_KEY : string,
     // cf bindings
     WaitlistRatelimiter : RateLimit
     MapKV : KVNamespace
     CDN : R2Bucket
+    MapDB : D1Database
 }
 
 export interface CDN_Directory {
@@ -24,13 +26,63 @@ export interface RequestWaitlistAdd {
 
 // BUSINESS API STRUCTS
 
+export interface GeoAPI_PlaceDetailsFeatures {
+    place_id: string;
+    name: string;
+    formatted_address?: string;
+    types?: string[];
+    formatted_phone_number?: string;
+    website?: string;
+    opening_hours?: {
+        weekday_text?: string[];
+    };
+    geometry: {
+        location: {
+            lat: number;
+            lng: number;
+        };
+    };
+    photos?: {
+        photo_reference: string;
+    }[];
+}
+
+export interface GeoAPI_PlaceDetailsResponse {
+    result : GeoAPI_PlaceDetailsFeatures
+    type : string | "FeatureCollection"
+}
+
+export interface GeoAPI_StoreFrontPhotoResponse {
+    html_attributions: string[];
+    result : {
+        name : string,
+        formatted_address : string,
+        photos : Array<{
+            height : number,
+            width : number,
+            photo_reference : string,
+            html_attributions : string[]
+        }>
+    },
+    status : string;
+}
+
+export interface GeoAPI_QueryResults {
+    place_id: string;
+    name: string;
+    formatted_address?: string;
+    geometry: {
+        location: {
+            lat: number;
+            lng: number;
+        };
+    };
+    types?: string[];
+}
+
 export interface GeoAPI_QueryResponse {
-    name : string,
-    place_id : string,
-    latitude : number,
-    longitude : number,
-    address_line2 : string,
-    category : string,
+    results : Array<GeoAPI_QueryResults>;
+    status : string;
 }
 
 // USER DATA STRUCTS
@@ -61,7 +113,11 @@ export interface Locora_Business {
     longitude : number;
     address : string;
 
-    phoneNumber? : string;
+    contact : {
+        phone : string;
+        email : string;
+    };
+
     website? : string;
 
     openingHours? : string;
@@ -78,6 +134,11 @@ export interface Locora_Business {
     };
 
     ratings? : Record<string, User_Review>
+
+    thumbnail? : string;
+
+    timestamp : string;
+    ttl : number;
 }
 
 export default {};

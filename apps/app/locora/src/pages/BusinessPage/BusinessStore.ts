@@ -3,18 +3,52 @@ import { onNewMap, onQueryChange } from "../../components/Mapview/MapStore";
 import { GetIdToken } from "../../data/AuthStore";
 import GetBusinessesList from "../../data/maps/search/QuerySearch";
 
-let CurrentPayload: BusinessPayload | null = null;
+let CurrentPayload: BusinessPayload | BusinessPayload[] | null = null;
 
-interface BusinessPayload {
-    placeId: string,
-    rating: number
+export interface BusinessPayload {
+    address : string,
+    category : string,
+    contact : {
+        email : string,
+        phone : string
+    }
+
+    id: string,
+    latitude : number,
+    longitude : number,
+
+    name : string,
+    website? : string,
+
+    rating : Business_Ratings
+    ratings : Record<string, User_Review>
+
+    thumbnail? : string;
+    description? : string,
+
 }
 
-export type onBusinessDataChange = (businessData: BusinessPayload) => void
+export interface Business_Ratings {
+    1 : number,
+    2 : number,
+    3 : number,
+    4 : number,
+    5 : number,
+    
+    average : number;
+}
+
+export interface User_Review {
+    uid : string,
+    rating : number,
+    reviewText : string,
+}
+
+export type onBusinessDataChange = (businessData: BusinessPayload[]) => void
 
 let OnChangeListeners: (onBusinessDataChange[]) = []
 
-function ChangeBusinessData(businessData: BusinessPayload) {
+function ChangeBusinessData(businessData: BusinessPayload[]) {
     CurrentPayload = businessData
     OnChangeListeners.forEach((fn: onBusinessDataChange) => fn?.(businessData))
 }
@@ -28,7 +62,7 @@ function OnBusinessDataChange(fn: onBusinessDataChange) {
 }
 
 function getBusinessData(): BusinessPayload | null {
-    return CurrentPayload
+    return CurrentPayload as BusinessPayload
 }
 
 let connected = false;
@@ -64,6 +98,8 @@ onQueryChange(async (query: string) => {
         zoom: (CurrentMap as Map).getZoom()
     })
 
+    ChangeBusinessData(businessListData as BusinessPayload[]);
+
     if (onMapMoveConnection) {
         onMapMoveConnection.unsubscribe()
     }
@@ -90,7 +126,8 @@ onQueryChange(async (query: string) => {
                 zoom: (CurrentMap as Map).getZoom()
             })
 
-            console.log(businessListData)
+            ChangeBusinessData(businessListData as BusinessPayload[]);
+
         }, 1000);
 
     })
@@ -99,8 +136,6 @@ onQueryChange(async (query: string) => {
         console.log("Invalid business data was provided")
         return
     }
-
-    
 
     connected = false
 })
