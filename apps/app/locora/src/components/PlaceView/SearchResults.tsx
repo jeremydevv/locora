@@ -7,22 +7,24 @@ import { BusinessPayload, OnBusinessDataChange } from "../../pages/BusinessPage/
 
 export default function SearchResults() {
 
-    const [query , setNewQuery] = useState<string>()
+    const [query, setNewQuery] = useState<string>()
     const [loading, setLoading] = useState<boolean>(false)
 
-    const [businessDataList , setBusinessDataList] = useState<BusinessPayload[]>([])
+    const [businessDataList, setBusinessDataList] = useState<BusinessPayload[]>([])
 
     useEffect(() => {
-        onQueryChange((newQuery : string) => {
+        onQueryChange((newQuery: string) => {
             setNewQuery(newQuery)
         })
 
-        OnBusinessDataChange((businessdata) => {
+        OnBusinessDataChange((businessdata : BusinessPayload[]) => {
             setLoading(true)
+            console.log(businessdata)
             setBusinessDataList(businessdata)
+            setLoading(false)
         })
 
-    },[])
+    }, [])
 
     return (
         <>
@@ -30,26 +32,24 @@ export default function SearchResults() {
                 className="flex flex-col rounded-2xl bg-gradient-to-b from-bay-of-many-500 via-bay-of-many-600 to-bay-of-many-600 drop-shadow-9xl shadow-2xl z-2 p-3 gap-5 overflow-y-scroll max-h-[80vh]"
             >
                 {
-                    (!loading) 
-                    ? (
-                        businessDataList.map((businessData: BusinessPayload, index: number) => (
-                            <SearchResultBox 
-                                key={index}
-                            />
-                        ))
-                    )
-                    : (
-                        <div
-                            className="flex flex-col items-center gap-3"
-                        >
-                            <h1
-                                className="font-bold text-white text-center text-xl"
+                    (!loading)
+                        ?
+                        (
+                            businessDataList.map((businessData: BusinessPayload, index: number) => (
+                                <SearchResultBox key={index} data={JSON.stringify(businessData)} />
+                            ))
+                        ) : (
+                            <div
+                                className="flex flex-col items-center gap-3"
                             >
-                                Results are loading...
-                            </h1>
-                            <img src={loadingSymbol} className="w-6 h-6 aspect-square animate-spin" />
-                        </div>
-                    )
+                                <h1
+                                    className="font-bold text-white text-center text-xl"
+                                >
+                                    Results are loading...
+                                </h1>
+                                <img src={loadingSymbol} className="w-6 h-6 aspect-square animate-spin" />
+                            </div>
+                        )
                 }
             </div>
         </>

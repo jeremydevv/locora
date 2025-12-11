@@ -44,13 +44,18 @@ export interface User_Review {
     reviewText : string,
 }
 
+export interface BusinessDataResponse {
+    success : boolean,
+    businesses : BusinessPayload[] | null
+}
+
 export type onBusinessDataChange = (businessData: BusinessPayload[]) => void
 
 let OnChangeListeners: (onBusinessDataChange[]) = []
 
-function ChangeBusinessData(businessData: BusinessPayload[]) {
-    CurrentPayload = businessData
-    OnChangeListeners.forEach((fn: onBusinessDataChange) => fn?.(businessData))
+function ChangeBusinessData(businessData: BusinessDataResponse) {
+    CurrentPayload = businessData.businesses
+    OnChangeListeners.forEach((fn: onBusinessDataChange) => fn?.(CurrentPayload as BusinessPayload[]))
 }
 
 function OnBusinessDataChange(fn: onBusinessDataChange) {
@@ -98,7 +103,7 @@ onQueryChange(async (query: string) => {
         zoom: (CurrentMap as Map).getZoom()
     })
 
-    ChangeBusinessData(businessListData as BusinessPayload[]);
+    ChangeBusinessData(businessListData as BusinessDataResponse);
 
     if (onMapMoveConnection) {
         onMapMoveConnection.unsubscribe()
@@ -126,7 +131,7 @@ onQueryChange(async (query: string) => {
                 zoom: (CurrentMap as Map).getZoom()
             })
 
-            ChangeBusinessData(businessListData as BusinessPayload[]);
+            ChangeBusinessData(businessListData as BusinessDataResponse);
 
         }, 1000);
 
