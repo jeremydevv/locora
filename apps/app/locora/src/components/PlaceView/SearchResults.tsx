@@ -3,9 +3,9 @@ import { onQueryChange } from "../Mapview/MapStore"
 import SearchResultBox from "./ResultBox"
 
 import loadingSymbol from "../../assets/loading.png"
-import { BusinessPayload, OnBusinessDataChange } from "../../pages/BusinessPage/BusinessStore"
+import { BusinessPayload, OnBusinessDataChange, OnSelectedBusinessChange } from "../../pages/BusinessPage/BusinessStore"
 
-export default function SearchResults() {
+export default function SearchResults({}) {
 
     const [query, setNewQuery] = useState<string>()
     const [loading, setLoading] = useState<boolean>(false)
@@ -19,7 +19,6 @@ export default function SearchResults() {
 
         OnBusinessDataChange((businessdata : BusinessPayload[]) => {
             setLoading(true)
-            console.log(businessdata)
             setBusinessDataList(businessdata)
             setLoading(false)
         })

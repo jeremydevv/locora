@@ -1,7 +1,7 @@
 import RatingBar from "../ratingbar";
 import TemplateThumbnail from "../../assets/placeholder.png"
 import { useState } from "react";
-import { BusinessPayload } from "../../pages/BusinessPage/BusinessStore";
+import { BusinessPayload, ChangeSelectedBusinessData } from "../../pages/BusinessPage/BusinessStore";
 import BaseCDNUrl from "../../utilities/BaseCDNUrl";
 
 interface props {
@@ -19,11 +19,15 @@ export default function SearchResultBox({ data }: props) {
         <>
             <div
                 className="flex flex-row shadow-amber-50/5 shadow-lg bg-bay-of-many-700 gap-3 w-full p-2 rounded-xl active:scale-97 hover:scale-103 transform transition-all"
+                onClick={() => {
+                    console.log("clicked")
+                    ChangeSelectedBusinessData(businessData)
+                }}
             >
                 <div className="flex flex-col flex-1 min-w-0">
 
                     <div
-                        className="max-w-[20vw]"
+                        className="max-w-[15vw]"
                     >
                         <div
                             className="flex flex-col gap-1"

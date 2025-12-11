@@ -3,7 +3,8 @@ import { onNewMap, onQueryChange } from "../../components/Mapview/MapStore";
 import { GetIdToken } from "../../data/AuthStore";
 import GetBusinessesList from "../../data/maps/search/QuerySearch";
 
-let CurrentPayload: BusinessPayload | BusinessPayload[] | null = null;
+let CurrentPayload: BusinessPayload[] | null = null;
+let SelectedPayload : BusinessPayload | null = null;
 
 export interface BusinessPayload {
     address : string,
@@ -50,12 +51,28 @@ export interface BusinessDataResponse {
 }
 
 export type onBusinessDataChange = (businessData: BusinessPayload[]) => void
+export type onSelectedBusinessChange = (businessData: BusinessPayload | null) => void
 
 let OnChangeListeners: (onBusinessDataChange[]) = []
+let OnSelectedChangeListeners: (onSelectedBusinessChange | null) = null;
 
 function ChangeBusinessData(businessData: BusinessDataResponse) {
+
+    console.log("Changing business data " + businessData)
+
+    if (!businessData || !businessData.success || !businessData.businesses) {
+        CurrentPayload = null
+        OnChangeListeners.forEach((fn: onBusinessDataChange) => fn?.([]))
+        return
+    }
+
     CurrentPayload = businessData.businesses
     OnChangeListeners.forEach((fn: onBusinessDataChange) => fn?.(CurrentPayload as BusinessPayload[]))
+}
+
+function ChangeSelectedBusinessData(businessData: BusinessPayload | null) {
+    SelectedPayload = businessData
+    OnSelectedChangeListeners?.(SelectedPayload)
 }
 
 function OnBusinessDataChange(fn: onBusinessDataChange) {
@@ -66,13 +83,20 @@ function OnBusinessDataChange(fn: onBusinessDataChange) {
     }
 }
 
-function getBusinessData(): BusinessPayload | null {
-    return CurrentPayload as BusinessPayload
+function OnSelectedBusinessChange(fn: onSelectedBusinessChange) {
+    OnSelectedChangeListeners = fn
+
+    return () => {
+        OnSelectedChangeListeners = null
+    }
+}
+
+function getBusinessData(): BusinessPayload[] | null {
+    return CurrentPayload as BusinessPayload[]
 }
 
 let connected = false;
 let onMapMoveConnection: Subscription | null = null;
-
 
 onQueryChange(async (query: string) => {
 
@@ -145,4 +169,4 @@ onQueryChange(async (query: string) => {
     connected = false
 })
 
-export { OnBusinessDataChange, ChangeBusinessData, getBusinessData }
+export { OnBusinessDataChange, ChangeBusinessData, getBusinessData, OnSelectedBusinessChange, ChangeSelectedBusinessData }

@@ -8,8 +8,13 @@ import MapView from "../components/Mapview/MapView";
 import PlaceView from "../components/PlaceView/Main";
 import PlaceSearchBar from "../components/PlaceView/Searchbar";
 import SearchResults from "../components/PlaceView/SearchResults";
+import { BusinessPayload } from "./BusinessPage/BusinessStore";
 
-export default function Home() {
+interface props {
+    ChangePage : (newSection : number, data? : BusinessPayload) => void
+}
+
+export default function Home({ChangePage} : props) {
 
     return (
         <>
@@ -23,7 +28,7 @@ export default function Home() {
                 <div
                     className="fixed flex left-[2.25vw] top-[10vh]"
                 >
-                    <PlaceSearchBar />
+                    <PlaceSearchBar changePage={ChangePage} />
                 </div>
 
                 <div
