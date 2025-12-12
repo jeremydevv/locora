@@ -1,4 +1,5 @@
 import { Env } from "../../../src/routes/types";
+import InternalError from "../../../src/routes/utils/InternalError";
 import { FetchUserRecord } from "../../firebaseUserData";
 
 export default async function ModifyFavoriteForUser(uid: string, idToken: string, business_id: string, env : Env) {
@@ -19,6 +20,7 @@ export default async function ModifyFavoriteForUser(uid: string, idToken: string
 
         if (!Request.ok) {
             console.log(Data.error || "no error bruh")
+            return null
         }
 
     } catch (err) {
