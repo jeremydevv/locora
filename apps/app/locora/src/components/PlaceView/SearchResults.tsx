@@ -3,19 +3,27 @@ import { onQueryChange } from "../Mapview/MapStore"
 import SearchResultBox from "./ResultBox"
 
 import loadingSymbol from "../../assets/loading.png"
+import { BusinessPayload, OnBusinessDataChange, OnSelectedBusinessChange } from "../../pages/BusinessPage/BusinessStore"
 
-export default function SearchResults() {
+export default function SearchResults({}) {
 
-    const [query , setNewQuery] = useState<string>()
+    const [query, setNewQuery] = useState<string>()
     const [loading, setLoading] = useState<boolean>(false)
 
+    const [businessDataList, setBusinessDataList] = useState<BusinessPayload[]>([])
+
     useEffect(() => {
-        onQueryChange((newQuery : string) => {
-
+        onQueryChange((newQuery: string) => {
             setNewQuery(newQuery)
-
         })
-    },[])
+
+        OnBusinessDataChange((businessdata : BusinessPayload[]) => {
+            setLoading(true)
+            setBusinessDataList(businessdata)
+            setLoading(false)
+        })
+
+    }, [])
 
     return (
         <>
@@ -23,22 +31,24 @@ export default function SearchResults() {
                 className="flex flex-col rounded-2xl bg-gradient-to-b from-bay-of-many-500 via-bay-of-many-600 to-bay-of-many-600 drop-shadow-9xl shadow-2xl z-2 p-3 gap-5 overflow-y-scroll max-h-[80vh]"
             >
                 {
-                    (!loading) 
-                    ? ([1,2,3,4,5,6,7].map((id) => {
-                            return <SearchResultBox key={id} />
-                    })) 
-                    : (
-                        <div
-                            className="flex flex-col items-center gap-3"
-                        >
-                            <h1
-                                className="font-bold text-white text-center text-xl"
+                    (!loading)
+                        ?
+                        (
+                            businessDataList.map((businessData: BusinessPayload, index: number) => (
+                                <SearchResultBox key={index} data={JSON.stringify(businessData)} />
+                            ))
+                        ) : (
+                            <div
+                                className="flex flex-col items-center gap-3"
                             >
-                                Results are loading...
-                            </h1>
-                            <img src={loadingSymbol} className="w-6 h-6 aspect-square animate-spin" />
-                        </div>
-                    )
+                                <h1
+                                    className="font-bold text-white text-center text-xl"
+                                >
+                                    Results are loading...
+                                </h1>
+                                <img src={loadingSymbol} className="w-6 h-6 aspect-square animate-spin" />
+                            </div>
+                        )
                 }
             </div>
         </>

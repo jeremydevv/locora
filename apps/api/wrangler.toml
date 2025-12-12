@@ -18,3 +18,11 @@ simple = {limit = 5, period = 60}
 binding = "MapKV"
 id = "0fddf6ad46e84195ae9b04645eaec3a2"
 preview_id = "e6b2877779e347d696fffe4058b4827f"
+
+[[d1_databases]]
+binding = "MapDB"
+id = "11f7402f-40b7-43c6-9cd0-00237831bcdd"
+
+[[r2_buckets]]
+binding = "CDN"
+preview_bucket_name = "locora-cdn-preview"

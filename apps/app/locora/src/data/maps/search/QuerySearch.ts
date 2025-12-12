@@ -21,7 +21,7 @@ export default async function GetBusinessesList(idToken : string, query: string,
             return
         }
 
-        console.log(Result)
+        console.log(Data)
 
         return Data
     } catch (err) {

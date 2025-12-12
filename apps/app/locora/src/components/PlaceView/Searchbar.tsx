@@ -2,17 +2,26 @@ import { LngLat, Map, MapTouchEvent } from "maplibre-gl"
 import { useEffect } from "react"
 import * as maplibregl from "maplibre-gl"
 import { onNewMap, setCurrentSearchQuery } from "../Mapview/MapStore"
+import { BusinessPayload, OnSelectedBusinessChange } from "../../pages/BusinessPage/BusinessStore";
 
-export default function PlaceSearchBar() {
+interface props {
+    changePage? : (newSection : number, data? : BusinessPayload) => void
+}
+
+export default function PlaceSearchBar({changePage} : props) {
 
     let QuerySubmitTimeout : NodeJS.Timeout | null = null;
+
+    OnSelectedBusinessChange((businessData : BusinessPayload | null) => {
+        console.log("Selected business changed in SearchResults component")
+        if(businessData && changePage) {
+            changePage(5, businessData)
+        }
+    })
 
     function placeMapMarker(map: Map, location: LngLat) {
         const placedMarker = new maplibregl.Marker({
             color : "#ff0000",
-            scale : 1.2,
-            anchor: "bottom",
-            offset: [0, 15],
         })
             .setLngLat(location)
             .addTo(map)

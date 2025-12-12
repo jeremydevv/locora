@@ -3,20 +3,76 @@ import { onNewMap, onQueryChange } from "../../components/Mapview/MapStore";
 import { GetIdToken } from "../../data/AuthStore";
 import GetBusinessesList from "../../data/maps/search/QuerySearch";
 
-let CurrentPayload: BusinessPayload | null = null;
+let CurrentPayload: BusinessPayload[] | null = null;
+let SelectedPayload : BusinessPayload | null = null;
 
-interface BusinessPayload {
-    placeId: string,
-    rating: number
+export interface BusinessPayload {
+    address : string,
+    category : string,
+    contact : {
+        email : string,
+        phone : string
+    }
+
+    id: string,
+    latitude : number,
+    longitude : number,
+
+    name : string,
+    website? : string,
+
+    rating : Business_Ratings
+    ratings : Record<string, User_Review>
+
+    thumbnail? : string;
+    description? : string,
+
 }
 
-export type onBusinessDataChange = (businessData: BusinessPayload) => void
+export interface Business_Ratings {
+    1 : number,
+    2 : number,
+    3 : number,
+    4 : number,
+    5 : number,
+    
+    average : number;
+}
+
+export interface User_Review {
+    uid : string,
+    rating : number,
+    reviewText : string,
+}
+
+export interface BusinessDataResponse {
+    success : boolean,
+    businesses : BusinessPayload[] | null
+}
+
+export type onBusinessDataChange = (businessData: BusinessPayload[]) => void
+export type onSelectedBusinessChange = (businessData: BusinessPayload | null) => void
 
 let OnChangeListeners: (onBusinessDataChange[]) = []
+let OnSelectedChangeListeners: (onSelectedBusinessChange | null) = null;
 
-function ChangeBusinessData(businessData: BusinessPayload) {
-    CurrentPayload = businessData
-    OnChangeListeners.forEach((fn: onBusinessDataChange) => fn?.(businessData))
+function ChangeBusinessData(businessData: BusinessDataResponse) {
+
+    console.log("Changing business data " + businessData)
+
+    if (!businessData || !businessData.success || !businessData.businesses) {
+        CurrentPayload = null
+        OnChangeListeners.forEach((fn: onBusinessDataChange) => fn?.([]))
+        return
+    }
+
+    CurrentPayload = businessData.businesses
+    OnChangeListeners.forEach((fn: onBusinessDataChange) => fn?.(CurrentPayload as BusinessPayload[]))
+}
+
+function ChangeSelectedBusinessData(businessData: BusinessPayload | null) {
+    SelectedPayload = businessData
+    OnSelectedChangeListeners?.(SelectedPayload)
 }
 
 function OnBusinessDataChange(fn: onBusinessDataChange) {
@@ -27,17 +83,24 @@ function OnBusinessDataChange(fn: onBusinessDataChange) {
     }
 }
 
-function getBusinessData(): BusinessPayload | null {
-    return CurrentPayload
+function OnSelectedBusinessChange(fn: onSelectedBusinessChange) {
+    OnSelectedChangeListeners = fn
+
+    return () => {
+        OnSelectedChangeListeners = null
+    }
 }
 
-let connected = false; 
-let onMapMoveConnection : Subscription | null = null;
+function getBusinessData(): BusinessPayload[] | null {
+    return CurrentPayload as BusinessPayload[]
+}
 
+let connected = false;
+let onMapMoveConnection: Subscription | null = null;
 
 onQueryChange(async (query: string) => {
 
-    if(connected) return
+    if (connected) return
     connected = true;
 
     const idToken = await GetIdToken()
@@ -47,9 +110,9 @@ onQueryChange(async (query: string) => {
         return
     }
 
-    let CurrentMap : Map | null = null;
+    let CurrentMap: Map | null = null;
 
-    onNewMap((map : Map) => {
+    onNewMap((map: Map) => {
         CurrentMap = map
     })
 
@@ -58,32 +121,42 @@ onQueryChange(async (query: string) => {
         return
     }
 
-    const businessListData = await GetBusinessesList(idToken,query, {
-        lat : (CurrentMap as Map).getCenter().lat,
-        lon : (CurrentMap as Map).getCenter().lng,
-        zoom : (CurrentMap as Map).getZoom()
+    const businessListData = await GetBusinessesList(idToken, query, {
+        lat: (CurrentMap as Map).getCenter().lat,
+        lon: (CurrentMap as Map).getCenter().lng,
+        zoom: (CurrentMap as Map).getZoom()
     })
+
+    ChangeBusinessData(businessListData as BusinessDataResponse);
 
     if (onMapMoveConnection) {
         onMapMoveConnection.unsubscribe()
     }
 
-    let panningTimeout : NodeJS.Timeout | null = null;
+    let panningTimeout: NodeJS.Timeout | null = null;
 
-    onMapMoveConnection = (CurrentMap as Map).on("move", (ev) => {
+    onMapMoveConnection = (CurrentMap as Map).on("move", () => {
 
         if (panningTimeout) {
             clearTimeout(panningTimeout)
         }
 
         panningTimeout = setTimeout(async () => {
-            const businessListData = await GetBusinessesList(idToken,query, {
-                lat : (CurrentMap as Map).getCenter().lat,
-                lon : (CurrentMap as Map).getCenter().lng,
-                zoom : (CurrentMap as Map).getZoom()
+            const currentZoom = (CurrentMap as Map).getZoom()
+
+            if (currentZoom == undefined || Math.floor(currentZoom) <= 8 ) {
+                console.log("zoomed out too much")
+                return
+            }
+
+            const businessListData = await GetBusinessesList(idToken, query, {
+                lat: (CurrentMap as Map).getCenter().lat,
+                lon: (CurrentMap as Map).getCenter().lng,
+                zoom: (CurrentMap as Map).getZoom()
             })
 
-            console.log(businessListData)
+            ChangeBusinessData(businessListData as BusinessDataResponse);
+
         }, 1000);
 
     })
@@ -93,9 +166,7 @@ onQueryChange(async (query: string) => {
         return
     }
 
-    console.log(businessListData)
-
     connected = false
 })
 
-export { OnBusinessDataChange, ChangeBusinessData, getBusinessData }
+export { OnBusinessDataChange, ChangeBusinessData, getBusinessData, OnSelectedBusinessChange, ChangeSelectedBusinessData }
