@@ -7,7 +7,6 @@
 import { useEffect, useState } from "react";
 import BaseButton from "../components/button";
 import MapView from "../components/Mapview/MapView";
-import PlaceView from "../components/PlaceView/Main";
 import PlaceSearchBar from "../components/PlaceView/Searchbar";
 import SearchResults from "../components/PlaceView/SearchResults";
 import { BusinessPayload } from "./BusinessPage/BusinessStore";

@@ -1,20 +1,14 @@
-import { useEffect } from "react"
-import EmptyStar from "../../assets/EmptyStar"
 import FilledStar from "../../assets/FilledStar"
 import placeholder from "../../assets/placeholder.png"
 import BaseButton from "../button"
-import maplibregl, { LngLat, MapTouchEvent } from "maplibre-gl"
-import Imagebutton from "../imagebutton"
-import { onNewMap } from "../Mapview/MapStore"
 import RatingBar from "../ratingbar"
-import { Map } from "maplibre-gl"
 
 export default function PlaceView() {
 
     return (
         <>
             <div
-                className="flex flex-col rounded-2xl bg-gradient-to-b from-bay-of-many-500 via-bay-of-many-700 to-bay-of-many-600 drop-shadow-9xl shadow-2xl"
+                className="flex flex-col rounded-2xl bg-linear-to-b from-bay-of-many-500 via-bay-of-many-700 to-bay-of-many-600 drop-shadow-9xl shadow-2xl"
             >
 
                 <div
