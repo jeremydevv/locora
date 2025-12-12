@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import { onQueryChange } from "../Mapview/MapStore"
 import SearchResultBox from "./ResultBox"
 
 import loadingSymbol from "../../assets/loading.png"
