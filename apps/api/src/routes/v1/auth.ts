@@ -16,7 +16,7 @@ const router = Router({ base: "/v1/auth/" });
 router.options("/*", (req : Request) => {
     return Corsify(req, new Response(null, {
         status : 200
-    }));
+    }),true);
 });
 
 router.post("/default/*", async (req : Request, env : Env, context : any) => {

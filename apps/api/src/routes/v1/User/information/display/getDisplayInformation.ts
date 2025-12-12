@@ -1,5 +1,5 @@
 import { FetchUserRecord } from "../../../../../../data/firebaseUserData";
-import { DataPayload, Env } from "../../../../types";
+import { User_DataPayload, Env } from "../../../../types";
 import cleanFirebaseData from "../../../../utils/CleanFirebaseData";
 import getUidFromIdToken from "../../../../utils/GetUIDFromIdToken";
 import InternalError from "../../../../utils/InternalError";
@@ -23,7 +23,7 @@ export default async function GetDisplayInformation(req : Request, env : Env) {
         return InternalError(req)
     }
 
-    const CleanedUserRecordData : DataPayload = cleanFirebaseData(userData);
+    const CleanedUserRecordData : User_DataPayload = cleanFirebaseData(userData);
 
     return JSONResponse(req,{
         success : true,

@@ -122,6 +122,8 @@ export interface Locora_Business {
 
     openingHours? : string;
 
+    favorites? : number;
+
     rating? : {
 
         1 : number,

@@ -22,7 +22,7 @@ export default async function WriteBusinessReview(uid : string , review : string
         reviewText: review,
     }
 
-    const addRatingQuery = await env.MapDB.prepare(
+    await env.MapDB.prepare(
         `UPDATE businesses SET data = ? WHERE id = ?`
     ).bind(JSON.stringify(CurrentBusinessData), businessId).run()
 

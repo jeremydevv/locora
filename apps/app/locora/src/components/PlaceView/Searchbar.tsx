@@ -22,9 +22,6 @@ export default function PlaceSearchBar({changePage} : props) {
     function placeMapMarker(map: Map, location: LngLat) {
         const placedMarker = new maplibregl.Marker({
             color : "#ff0000",
-            scale : 1.2,
-            anchor: "bottom",
-            offset: [0, 15],
         })
             .setLngLat(location)
             .addTo(map)

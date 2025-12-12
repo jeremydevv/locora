@@ -1,0 +1,27 @@
+import { Env } from "../../../types";
+import getUidFromIdToken from "../../../utils/GetUIDFromIdToken";
+import { NotFound } from "../../../utils/NotFound";
+import Unauthorized from "../../../utils/Unauthorized";
+
+export default async function RatingsEndpoint(req: Request, env: Env) {
+
+    const idToken = req.headers.get("Authorization")?.split("Bearer ")[1] || "";
+    const uid = await getUidFromIdToken(idToken, env)
+
+    if ((!uid) || (idToken == "")) {
+        return Unauthorized(req)
+    }
+
+
+    const path = req.url.split("/v1/users/ratings/")[1];
+    const segments = path.split("/");
+
+    if (segments[0] === "new") {
+
+    } else if (segments[0] == "remove") {
+
+    } else {
+        return NotFound(req)
+    }
+
+}

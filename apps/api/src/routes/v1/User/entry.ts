@@ -1,7 +1,9 @@
 import { Env } from "../../types";
 import JSONResponse from "../../utils/JSONResponse";
 import { NotFound } from "../../utils/NotFound";
+import FavoritesEndpoint from "./favorites/FavoritesEndpoint";
 import { InformationEndpoint } from "./information/information";
+import RatingsEndpoint from "./ratings/RatingsEndpoint";
 
 function UserPostEntry(req : Request, env : Env) {
 
@@ -19,6 +21,10 @@ async function UserGetEntry(req : Request, env : Env) {
 
     if (segments[0] === "information") {
         return await InformationEndpoint(req, env);
+    } else if (segments[0] === "favorites") {
+        return await FavoritesEndpoint(req,env)
+    } else if (segments[0] === "ratings") {
+        return await RatingsEndpoint(req,env)
     } else {
         return NotFound(req)
     }
