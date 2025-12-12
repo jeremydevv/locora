@@ -19,9 +19,9 @@ export function setCurrentSearchQuery(query : string) {
 
     searchQuery = query
     queryListeners.forEach((fn : (query : string) => void) => {
-        fn?.(query)
+        fn?.(searchQuery as string)
     })
-    
+
 }
 
 export function onQueryChange(fn : (query : string) => void) {

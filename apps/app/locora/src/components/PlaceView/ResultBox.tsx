@@ -1,6 +1,5 @@
 import RatingBar from "../ratingbar";
 import TemplateThumbnail from "../../assets/placeholder.png"
-import { useState } from "react";
 import { BusinessPayload, ChangeSelectedBusinessData } from "../../pages/BusinessPage/BusinessStore";
 import BaseCDNUrl from "../../utilities/BaseCDNUrl";
 
