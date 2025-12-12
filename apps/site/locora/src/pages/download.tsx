@@ -24,8 +24,8 @@ export default function DownloadPage() {
 
             const url =
                 os === "win"
-                    ? "https://cdn.locora.org/releases/win/Locora.Setup.1.0.0.exe"
-                    : "https://cdn.locora.org/releases/mac/Locora-1.0.0.dmg";
+                    ? "https://cdn.locora.org/releases/win/Locora.Setup.1.1.0.exe"
+                    : "https://cdn.locora.org/releases/mac/Locora-1.1.0-arm64.dmg";
 
             const a = document.createElement("a");
             a.href = url;
