@@ -57,11 +57,11 @@
 
 ::-webkit-scrollbar-thumb {
   border-radius: 9999px;
-  background-color: rgba(100,110,200,0.5);
+  background-color: rgba(66, 72, 130, 0.9);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(100,110,200,0.9);
+  background-color: rgba(66, 72, 130, 0.9);
 }
 
 @theme {

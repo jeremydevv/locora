@@ -9,12 +9,16 @@ import Explore from './pages/Explore'
 import Profile from './pages/Profile'
 import BottomBar from './components/bottombar'
 import Favorites from './pages/Favorites'
+import "./pages/BusinessPage/BusinessStore"
+import BusinessPage from './pages/BusinessPage/Business'
+import { BusinessPayload } from './pages/BusinessPage/BusinessStore'
 
 const SelectionEnum: Record<number, string> = {
   1: "Home",
   2: "Explore",
   3: "Favorites",
   4: "Profile",
+  5: "Business"
 }
 
 type DeviceTypes = "win32" | "darwin" | "linux"
@@ -22,6 +26,7 @@ type DeviceTypes = "win32" | "darwin" | "linux"
 function App() {
   const [curSelection, setSelection] = useState<number>(1)
   const [curPlatform , setPlatform] = useState<DeviceTypes>("win32")
+  const [businessData , setBusinessData] = useState<BusinessPayload | null>(null)
 
   window.electronAPI?.onPlatform((_,platform) => {
     setPlatform(platform as DeviceTypes)
@@ -33,8 +38,11 @@ function App() {
     })
   }, [])
 
-  function SwitchPage(newSection: number) {
+  function SwitchPage(newSection: number , data? : BusinessPayload) {
     setSelection(newSection)
+    if(data) {
+      setBusinessData(data)
+    }
   }
 
   return (
@@ -60,7 +68,7 @@ function App() {
 
           {
             SelectionEnum[curSelection] === "Home" && (
-              <Home />
+              <Home ChangePage={SwitchPage} />
             )
           }
           {
@@ -76,6 +84,16 @@ function App() {
           {
             SelectionEnum[curSelection] === "Favorites" && (
               <Favorites />
+            )
+          }
+          {
+            SelectionEnum[curSelection] === "Business" && (
+              <Favorites />
+            )
+          }
+          {
+            SelectionEnum[curSelection] === "Business" && (
+              <BusinessPage businessData={businessData} />
             )
           }
         </div>

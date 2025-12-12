@@ -1,6 +1,6 @@
-import { DataPayload } from "../types";
+import { User_DataPayload } from "../types";
 
-export default function cleanFirebaseData(fields : Record<string,string>) : DataPayload { 
+export default function cleanFirebaseData(fields : Record<string,string>) : User_DataPayload { 
     const cleaned: Record<string, any> = {};
     for (const key in fields) {
         const valueObj : any = fields[key];
@@ -18,5 +18,5 @@ export default function cleanFirebaseData(fields : Record<string,string>) : Data
             cleaned[key] = valueObj;
         }
     }
-    return cleaned as DataPayload;
+    return cleaned as User_DataPayload;
 }

@@ -4,6 +4,8 @@
     },
     "devDependencies": {
         "concurrently": "^9.2.1",
+        "eslint-config-prettier": "^10.1.8",
+        "prettier": "^3.7.4",
         "wrangler": "^4.50.0"
     }
 }

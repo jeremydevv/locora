@@ -1,6 +1,6 @@
-// src/comps/MapView/MapView.tsx
 import { useEffect, useRef } from "react";
 import maplibregl, { Map } from "maplibre-gl";
+import { setMap } from "./MapStore";
 
 const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_API_KEY;
 
@@ -28,6 +28,8 @@ export default function MapView({ initialCenter = DefaultCenter, initialZoom = D
         })
 
         mapInstance.current = map
+
+        setMap(map)
 
         return () => map.remove()
     }, [initialCenter, initialZoom])
