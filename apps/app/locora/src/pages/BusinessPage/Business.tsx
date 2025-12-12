@@ -13,9 +13,11 @@ interface props {
     businessData: BusinessPayload | null
 }
 
-let locallyFavorited : Record<string, boolean> = {}
+const locallyFavorited : Record<string, boolean> = {}
 
 export default function BusinessPage({ businessData }: props) {
+
+    const [isRatingOpened, setRatingOpened] = useState<boolean>(false)
 
     if (!businessData) {
         return (
@@ -35,8 +37,6 @@ export default function BusinessPage({ businessData }: props) {
             </>
         )
     }
-
-    const [isRatingOpened, setRatingOpened] = useState<boolean>(false)
 
     async function HandleFavorite() {
         if(!businessData) {

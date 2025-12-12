@@ -3,20 +3,15 @@ import { onQueryChange } from "../Mapview/MapStore"
 import SearchResultBox from "./ResultBox"
 
 import loadingSymbol from "../../assets/loading.png"
-import { BusinessPayload, OnBusinessDataChange, OnSelectedBusinessChange } from "../../pages/BusinessPage/BusinessStore"
+import { BusinessPayload, OnBusinessDataChange } from "../../pages/BusinessPage/BusinessStore"
 
-export default function SearchResults({}) {
+export default function SearchResults() {
 
-    const [query, setNewQuery] = useState<string>()
     const [loading, setLoading] = useState<boolean>(false)
 
     const [businessDataList, setBusinessDataList] = useState<BusinessPayload[]>([])
 
     useEffect(() => {
-        onQueryChange((newQuery: string) => {
-            setNewQuery(newQuery)
-        })
-
         OnBusinessDataChange((businessdata : BusinessPayload[]) => {
             setLoading(true)
             setBusinessDataList(businessdata)
@@ -28,7 +23,7 @@ export default function SearchResults({}) {
     return (
         <>
             <div
-                className="flex flex-col rounded-2xl bg-gradient-to-b from-bay-of-many-500 via-bay-of-many-600 to-bay-of-many-600 drop-shadow-9xl shadow-2xl z-2 p-3 gap-5 overflow-y-scroll max-h-[80vh]"
+                className="flex flex-col rounded-2xl bg-linear-to-b from-bay-of-many-500 via-bay-of-many-600 to-bay-of-many-600 drop-shadow-9xl shadow-2xl z-2 p-3 gap-5 overflow-y-scroll max-h-[80vh]"
             >
                 {
                     (!loading)
