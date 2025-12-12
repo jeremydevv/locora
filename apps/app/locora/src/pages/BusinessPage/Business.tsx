@@ -6,6 +6,8 @@ import BaseButton from "../../components/button"
 import FavoriteImage from "../../assets/Bookmark.png"
 import { useState } from "react"
 import FilledStar from "../../assets/FilledStar"
+import request from "../../utilities/fetch"
+import { GetIdToken } from "../../data/AuthStore"
 
 interface props {
     businessData: BusinessPayload | null
@@ -36,7 +38,7 @@ export default function BusinessPage({ businessData }: props) {
 
     const [isRatingOpened, setRatingOpened] = useState<boolean>(false)
 
-    function HandleFavorite() {
+    async function HandleFavorite() {
         if(!businessData) {
             return
         }
@@ -51,9 +53,19 @@ export default function BusinessPage({ businessData }: props) {
             locallyFavorited[businessData.id] = true
         }
 
-        // posting to api to update favorite status
         try {
-            
+
+            const Results = await request(`/v1/users/favorites/modifyfavorite?id=${businessData.id}`, {
+                headers: {
+                    "Authorization" : await GetIdToken() || ""
+                },
+                method : "POST"
+            })
+
+            const data = await Results.json()
+
+            console.log(data)
+
         } catch(err) {
             console.error(err)
         }

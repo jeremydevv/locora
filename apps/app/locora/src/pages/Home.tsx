@@ -12,6 +12,7 @@ import PlaceSearchBar from "../components/PlaceView/Searchbar";
 import SearchResults from "../components/PlaceView/SearchResults";
 import { BusinessPayload } from "./BusinessPage/BusinessStore";
 import { onNewMap } from "../components/Mapview/MapStore";
+import { Map } from "maplibre-gl";
 
 interface props {
     ChangePage: (newSection: number, data?: BusinessPayload) => void
