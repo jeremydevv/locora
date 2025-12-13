@@ -13,9 +13,11 @@ interface props {
     businessData: BusinessPayload | null
 }
 
-let locallyFavorited : Record<string, boolean> = {}
+const locallyFavorited : Record<string, boolean> = {}
 
 export default function BusinessPage({ businessData }: props) {
+
+    const [isRatingOpened, setRatingOpened] = useState<boolean>(false)
 
     if (!businessData) {
         return (
@@ -35,8 +37,6 @@ export default function BusinessPage({ businessData }: props) {
             </>
         )
     }
-
-    const [isRatingOpened, setRatingOpened] = useState<boolean>(false)
 
     async function HandleFavorite() {
         if(!businessData) {
@@ -162,7 +162,7 @@ export default function BusinessPage({ businessData }: props) {
                     </div>
 
                     <div
-                        className="flex flex-col gap-2 p-[15w] p-5 rounded-2xl min-h-1/2 bg-bay-of-many-700"
+                        className="flex flex-col gap-2 p-[15w] rounded-2xl min-h-1/2 bg-bay-of-many-700"
                     >
                         <div
                             className="flex flex-row items-center"

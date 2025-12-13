@@ -10,6 +10,4 @@ export default async function FetchFavorites(id : string, env : Env) {
         throw new Error("The business at id " + id + " does not exist!")
     }
 
-    
-
 }
