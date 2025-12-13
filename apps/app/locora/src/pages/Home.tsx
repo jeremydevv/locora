@@ -7,24 +7,32 @@
 import { useEffect, useState } from "react";
 import BaseButton from "../components/button";
 import MapView from "../components/Mapview/MapView";
-import PlaceView from "../components/PlaceView/Main";
 import PlaceSearchBar from "../components/PlaceView/Searchbar";
 import SearchResults from "../components/PlaceView/SearchResults";
 import { BusinessPayload } from "./BusinessPage/BusinessStore";
-import { onNewMap } from "../components/Mapview/MapStore";
+import { onNewMap, onQueryChange } from "../components/Mapview/MapStore";
 import { Map } from "maplibre-gl";
+import { ChangePage } from "../App";
 
 interface props {
-    ChangePage: (newSection: number, data?: BusinessPayload) => void
+    ChangePage: ChangePage
 }
+
+export type RawQueryChanged = (q : string) => void
 
 export default function Home({ ChangePage }: props) {
 
     const [map, setMap] = useState<Map | null>(null);
+    const [currentQuery , setCurrentQuery] = useState<string>("")
+
+    let onRawQueryChangedListeners : Array<RawQueryChanged> = []
 
     useEffect(() => {
         onNewMap((map) => {
             setMap(map);
+        })
+        onQueryChange((newQuery : string) => {
+            setCurrentQuery(newQuery)
         })
     }, [])
 
@@ -39,6 +47,17 @@ export default function Home({ ChangePage }: props) {
             map.setZoom(map.getZoom() - 1);
         }
     }
+
+    function OnRawQueryChanged(callback : (q : string) => void) {
+        onRawQueryChangedListeners.push(callback)
+    }
+
+    function RawQueryChangedFire(newRawQuery : string) {
+        onRawQueryChangedListeners.forEach((callback) => {
+            callback?.(newRawQuery)
+        })
+    }
+
     return (
         <>
             <div
@@ -51,13 +70,19 @@ export default function Home({ ChangePage }: props) {
                 <div
                     className="fixed flex left-[2.25vw] top-[10vh]"
                 >
-                    <PlaceSearchBar changePage={ChangePage} />
+                    <PlaceSearchBar changePage={ChangePage} rawQueryChange={RawQueryChangedFire} />
                 </div>
 
                 <div
                     className="fixed flex left-[2.25vw] top-[17vh]"
                 >
-                    <SearchResults />
+                    {
+                        currentQuery !== "" && currentQuery !== null ? (
+                            <SearchResults rawQueryChanged={OnRawQueryChanged} />
+                        ) : (
+                            <></>
+                        )
+                    }
                 </div>
 
                 <div

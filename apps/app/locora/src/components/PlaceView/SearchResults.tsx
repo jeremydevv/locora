@@ -5,20 +5,27 @@ import SearchResultBox from "./ResultBox"
 import loadingSymbol from "../../assets/loading.png"
 import { BusinessPayload, OnBusinessDataChange, OnSelectedBusinessChange } from "../../pages/BusinessPage/BusinessStore"
 
-export default function SearchResults({}) {
+interface props {
+    rawQueryChanged : (fn : (q : string) => void) => void
+}
+
+export default function SearchResults({rawQueryChanged} : props) {
 
     const [query, setNewQuery] = useState<string>()
-    const [loading, setLoading] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(true)
 
     const [businessDataList, setBusinessDataList] = useState<BusinessPayload[]>([])
 
     useEffect(() => {
+        rawQueryChanged(() => {
+            setLoading(true)
+        })
+        
         onQueryChange((newQuery: string) => {
             setNewQuery(newQuery)
         })
 
         OnBusinessDataChange((businessdata : BusinessPayload[]) => {
-            setLoading(true)
             setBusinessDataList(businessdata)
             setLoading(false)
         })
@@ -44,7 +51,7 @@ export default function SearchResults({}) {
                                 <h1
                                     className="font-bold text-white text-center text-xl"
                                 >
-                                    Results are loading...
+                                    Results are loading for ...
                                 </h1>
                                 <img src={loadingSymbol} className="w-6 h-6 aspect-square animate-spin" />
                             </div>

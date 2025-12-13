@@ -21,6 +21,9 @@ const SelectionEnum: Record<number, string> = {
   5: "Business"
 }
 
+export type ChangePage_MiscData = {data? : BusinessPayload, scrollTo? : string}
+export type ChangePage = ((newSection : number, miscData? : ChangePage_MiscData) => void)
+
 type DeviceTypes = "win32" | "darwin" | "linux"
 
 function App() {
@@ -38,10 +41,10 @@ function App() {
     })
   }, [])
 
-  function SwitchPage(newSection: number , data? : BusinessPayload) {
+  function SwitchPage(newSection: number , data? : ChangePage_MiscData) {
     setSelection(newSection)
     if(data) {
-      setBusinessData(data)
+      setBusinessData(data.data as BusinessPayload)
     }
   }
 
@@ -68,7 +71,7 @@ function App() {
 
           {
             SelectionEnum[curSelection] === "Home" && (
-              <Home ChangePage={SwitchPage} />
+              <Home ChangePage={SwitchPage as ChangePage} />
             )
           }
           {

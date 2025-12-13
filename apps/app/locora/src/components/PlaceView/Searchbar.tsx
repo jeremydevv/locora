@@ -3,24 +3,28 @@ import { useEffect } from "react"
 import * as maplibregl from "maplibre-gl"
 import { onNewMap, setCurrentSearchQuery } from "../Mapview/MapStore"
 import { BusinessPayload, OnSelectedBusinessChange } from "../../pages/BusinessPage/BusinessStore";
+import { ChangePage } from "../../App";
 
 interface props {
-    changePage? : (newSection : number, data? : BusinessPayload) => void
+    changePage? : ChangePage
+    rawQueryChange : (q : string) => void
 }
 
-export default function PlaceSearchBar({changePage} : props) {
+export default function PlaceSearchBar({changePage, rawQueryChange} : props) {
 
     let QuerySubmitTimeout : NodeJS.Timeout | null = null;
 
     OnSelectedBusinessChange((businessData : BusinessPayload | null) => {
         console.log("Selected business changed in SearchResults component")
         if(businessData && changePage) {
-            changePage(5, businessData)
+            changePage(5, {
+                data : businessData
+            })
         }
     })
 
     function placeMapMarker(map: Map, location: LngLat) {
-        const placedMarker = new maplibregl.Marker({
+        new maplibregl.Marker({
             color : "#ff0000",
         })
             .setLngLat(location)
@@ -28,11 +32,14 @@ export default function PlaceSearchBar({changePage} : props) {
         console.log("Placed a marker at " + location)
     }
 
-    function OnMapClick(map: Map, lng: number, lat: number, lngLat: LngLat) {
+    function OnMapClick(map: Map, lngLat: LngLat) {
         placeMapMarker(map, lngLat)
     }
 
     function QueryChange(newQuery : string) {
+
+        rawQueryChange(newQuery)
+        
         if (QuerySubmitTimeout) clearTimeout(QuerySubmitTimeout)
 
         QuerySubmitTimeout = setTimeout(() => {
@@ -46,7 +53,7 @@ export default function PlaceSearchBar({changePage} : props) {
             function clickHandler(event: MapTouchEvent) {
                 const location = event.lngLat
                 console.log(event.lngLat)
-                OnMapClick(map, location.lng, location.lat, location)
+                OnMapClick(map, location)
             }
 
             map.on("click", clickHandler)
