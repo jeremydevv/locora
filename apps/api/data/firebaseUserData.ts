@@ -16,6 +16,12 @@ async function CreateUserRecord(uid: string, auth: string, info: { email: string
             profilePictureURL: { stringValue: "" },
             bannerPictureURL: { stringValue: "" },
 
+            favorites : { 
+                mapValue : {
+                    fields : {}
+                }
+            },
+
             createdAt: { timestampValue: new Date().toISOString() },
             coins: { integerValue: "0" },
         }
@@ -66,6 +72,7 @@ async function FetchUserRecord(uid : string, idToken : string, env: Env) {
             return null
         }
 
+        console.trace()
         const ResultData : {fields : Record<string,string>} = await Result.json()
 
         return ResultData.fields

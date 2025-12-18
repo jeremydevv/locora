@@ -1,26 +1,35 @@
 import { Env } from "../../../src/routes/types";
+import GetUserFavoritesFolder from "../favorites/GetFavoritesFolder"
+import CreateUserFavoritesFolder from "../favorites/CreatesFavoritesFolder"
 import InternalError from "../../../src/routes/utils/InternalError";
-import { FetchUserRecord } from "../../firebaseUserData";
 
 export default async function ModifyFavoriteForUser(uid: string, idToken: string, business_id: string, env : Env) {
 
     try {
 
-        const Request = await fetch(`https://firestore.googleapis.com/v1/projects/${env.FIREBASE_PROJECT_ID}/databases/locora-user-data/documents/users/${uid}/favorites/${business_id}`,
-            {
-                headers : {
-                    "Authorization" : "Bearer " + idToken 
-                }
+        const FavoriteFolderData = await GetUserFavoritesFolder(uid,idToken,business_id,env)
+
+        if (!FavoriteFolderData || (FavoriteFolderData.error && FavoriteFolderData.error.code == "403")) {
+            // their folder for favorites doesnt exist
+            console.log("favorites folder doesnt exist")
+
+            const newFolderRes = await CreateUserFavoritesFolder(uid,idToken,business_id,env)
+
+            if (!newFolderRes) {
+                return "error"
             }
-        )
+            
+            console.log(newFolderRes.error)
 
-        const Data : {
-            error? : object
-        } = await Request.json()
+            return "added"
+        } else if (FavoriteFolderData && FavoriteFolderData.ok) {
+            // their folder for favorite exists, check if business id is in there, else, add it
 
-        if (!Request.ok) {
-            console.log(Data.error || "no error bruh")
-            return null
+            return "removed"
+
+        } else {
+            
+            return "error"
         }
 
     } catch (err) {

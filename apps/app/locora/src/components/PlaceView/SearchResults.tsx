@@ -11,10 +11,10 @@ interface props {
 export default function SearchResults({rawQueryChanged} : props) {
 
     const [loading, setLoading] = useState<boolean>(true)
-
     const [businessDataList, setBusinessDataList] = useState<BusinessPayload[]>([])
 
     useEffect(() => {
+
         rawQueryChanged(() => {
             setLoading(true)
         })

@@ -1,17 +1,22 @@
 import { Env } from "../../types";
+import { checkForValidAuthorization } from "../../utils/CheckForAuth";
 import JSONResponse from "../../utils/JSONResponse";
 import { NotFound } from "../../utils/NotFound";
+import Unauthorized from "../../utils/Unauthorized";
 import FavoritesEndpoint from "./favorites/FavoritesEndpoint";
 import { InformationEndpoint } from "./information/information";
 import RatingsEndpoint from "./ratings/RatingsEndpoint";
 
 async function UserPostEntry(req : Request, env : Env) {
 
+    if (!(checkForValidAuthorization(req,env))) {
+        return Unauthorized(req)
+    }
+
     const path = req.url.split("/v1/users/")[1];
     const segments = path.split("/");
 
     if (segments[0] === "favorites") {
-        console.log("hit favorites")
         return await FavoritesEndpoint(req,env)
     } else if (segments[0] === "ratings") {
         return await RatingsEndpoint(req,env)
