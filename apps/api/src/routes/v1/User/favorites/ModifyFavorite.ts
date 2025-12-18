@@ -24,7 +24,7 @@ export default async function ModifyUserFavorites(req : Request, env : Env) {
         return MalformedData(req, "No UID or no idToken found for user.")
     }
 
-    const ActionToUser = await ModifyFavoriteForUser(UID,idToken,business_id, env)
+    const ActionToUser = await ModifyFavoriteForUser(UID,business_id,env)
 
     if (ActionToUser == "added") {
         return JSONResponse(req,{

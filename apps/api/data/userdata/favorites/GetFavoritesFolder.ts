@@ -1,4 +1,5 @@
-import { Env } from "../../../src/routes/types";
+import { Env, User_FavoritesFolder } from "../../../src/routes/types";
+import { GetFirebaseServiceAccount } from "../GetFirebaseServiceAccount";
 
 interface GetUserFavoritesFolder_ReturnType {
     error?: {
@@ -6,26 +7,35 @@ interface GetUserFavoritesFolder_ReturnType {
         message: string,
         status: string
     }
-    ok? : boolean
+    
+    documents : User_FavoritesFolder
 }
 
-export default async function GetUserFavoritesFolder(
-    uid: string, idToken: string, business_id : string, env: Env
+export async function GetUserFavoritesFolder(
+    uid: string, business_id : string, env: Env
 ) : Promise<GetUserFavoritesFolder_ReturnType | null> {
 
     try {
 
-        const Request = await fetch(`https://firestore.googleapis.com/v1/projects/${env.FIREBASE_PROJECT_ID}/databases/locora-user-data/documents/users/${uid}/favorites/${business_id}`,
+        const service_acc_jwt = await GetFirebaseServiceAccount(env)
+
+        const Request = await fetch(`https://firestore.googleapis.com/v1/projects/${env.FIREBASE_PROJECT_ID}/databases/locora-user-data/documents/users/${uid}/favorites`,
             {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${idToken}`
+                    "Authorization": `Bearer ${service_acc_jwt}`
                 }
             }
         )
 
         const Data: GetUserFavoritesFolder_ReturnType = await Request.json()
+
+        if (!Request.ok) {
+            console.log("issue with getting the users fav folder!")
+            console.log(Data.error)
+            return null
+        }
 
         return Data
 

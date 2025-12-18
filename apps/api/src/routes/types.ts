@@ -8,6 +8,7 @@ export interface Env {
     GITHUB_TOKEN : string,
     GEO_API_KEY : string, 
     GOOGLE_MAPS_API_KEY : string,
+    FIREBASE_SERVICE_ACCOUNT_JSON : string
     // cf bindings
     WaitlistRatelimiter : RateLimit
     MapKV : KVNamespace
@@ -97,6 +98,17 @@ export interface User_DataPayload {
     createdAt : string;
     coins : string;
 }
+
+export interface User_FavoriteInFolder {
+    name : string,
+    fields : {
+        business_id? : string
+    },
+    createTime : string,
+    updateTime : string
+}
+
+export type User_FavoritesFolder = Array<User_FavoriteInFolder>
 
 export interface User_Review {
     uid : string,
