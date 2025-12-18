@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { GetIdToken, GetUid } from "../data/AuthStore";
 import { DataPayload } from "../../types";
 import { GetUserAttribute } from "../data/user/information/displayInformation";
+import { GetUserFavorites } from "../data/user/favorites/getFavorites";
 
 function ProfileElement({ idToken }: DataPayload) {
 
@@ -17,6 +18,8 @@ function ProfileElement({ idToken }: DataPayload) {
 
     const [Username, setUsername] = useState<string>("")
     const [DisplayUsername, setDisplayUsername] = useState<string>("")
+    const [UserFavorites , setUserFavorites] = useState<Array<object>>([])
+
     const [SuccessfullyFetched , setSuccessfullyFetched] = useState<boolean>(false)
 
     useEffect(() => {
@@ -34,9 +37,15 @@ function ProfileElement({ idToken }: DataPayload) {
             setDisplayUsername(displayName)
         }
 
+        async function LoadUserFavorites() {
+            const FavoritesArray = await GetUserFavorites(idToken!)
+            console.log(FavoritesArray)
+            setUserFavorites(FavoritesArray)
+        }
+
         async function RunAll() {
             try {
-                await Promise.all([LoadUsername(), LoadDisplayUsername()])
+                await Promise.all([LoadUsername(), LoadDisplayUsername(), LoadUserFavorites()])
                 setSuccessfullyFetched(true)
                 console.log("User attributes loaded successfully")
             } catch(err) {

@@ -44,7 +44,7 @@ export default async function ModifyFavoriteForUser(uid: string, business_id: st
 
     try {
 
-        const FavoriteFolderData = await GetUserFavoritesFolder(uid,business_id,env)
+        const FavoriteFolderData = await GetUserFavoritesFolder(uid,env)
 
         if (!FavoriteFolderData || (FavoriteFolderData.error && FavoriteFolderData.error.code == "404")) {
 

@@ -12,7 +12,7 @@ interface GetUserFavoritesFolder_ReturnType {
 }
 
 export async function GetUserFavoritesFolder(
-    uid: string, business_id : string, env: Env
+    uid: string, env: Env
 ) : Promise<GetUserFavoritesFolder_ReturnType | null> {
 
     try {

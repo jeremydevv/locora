@@ -22,6 +22,10 @@ export default async function getUidFromIdToken(idToken: string, env : Env) {
         )
 
         if (!Result.ok) {
+            const data : {
+                error : object
+            } = await Result.json()
+            console.log("issue occured when getting user uid", data.error)
             return false
         }
 
