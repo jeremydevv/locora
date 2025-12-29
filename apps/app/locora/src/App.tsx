@@ -8,7 +8,6 @@ import Home from './pages/Home'
 import Explore from './pages/Explore'
 import Profile from './pages/Profile'
 import BottomBar from './components/bottombar'
-import Favorites from './pages/Favorites'
 import "./pages/BusinessPage/BusinessStore"
 import BusinessPage from './pages/BusinessPage/Business'
 import { BusinessPayload } from './pages/BusinessPage/BusinessStore'
@@ -86,12 +85,7 @@ function App() {
           }
           {
             SelectionEnum[curSelection] === "Favorites" && (
-              <Favorites />
-            )
-          }
-          {
-            SelectionEnum[curSelection] === "Business" && (
-              <Favorites />
+              <Profile />
             )
           }
           {

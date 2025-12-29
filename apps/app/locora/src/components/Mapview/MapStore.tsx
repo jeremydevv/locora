@@ -8,9 +8,7 @@ let queryListeners : ((query : string) => void)[] = []
 
 export function setMap(newMap : Map) {
     currMap = newMap
-    console.log("map was set")
     listeners.forEach((fn) => {
-        console.log("gives map in listeners")
         fn(currMap as Map)
     })
 }
@@ -33,7 +31,6 @@ export function onQueryChange(fn : (query : string) => void) {
 
 export function onNewMap(fn : (map : Map) => void) {
     if (currMap) {
-        console.log("gives map")
         fn(currMap)
     }
     listeners.push(fn)

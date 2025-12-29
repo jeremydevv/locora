@@ -4,10 +4,13 @@ import BaseCDNUrl from "../../utilities/BaseCDNUrl"
 import RatingBar from "../../components/ratingbar"
 import BaseButton from "../../components/button"
 import FavoriteImage from "../../assets/Bookmark.png"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import FilledStar from "../../assets/FilledStar"
 import request from "../../utilities/fetch"
 import { GetIdToken } from "../../data/AuthStore"
+import { EmptyBookmark } from "../../assets/EmptyBookmark"
+import { IsBusinessFavorited } from "../../data/user/favorites/getFavorites"
+import FilledBookmark from "../../assets/FilledBookmark"
 
 interface props {
     businessData: BusinessPayload | null
@@ -73,6 +76,24 @@ export default function BusinessPage({ businessData }: props) {
 
     const imageDir = businessData.thumbnail ? businessData.thumbnail.trim()
         .replace("https://cdn.locora.org/business_images", BaseCDNUrl()) : TemplateThumbnail
+
+    const [isBusinessFavorited, setBusinessFavorited] = useState<boolean>(false)
+
+    useEffect(() => {
+
+        async function IsFavorited() {
+            if (!businessData || !businessData.id) {
+                return false
+            }
+
+            const isFaved : boolean = await IsBusinessFavorited(businessData.id) as boolean
+            setBusinessFavorited(isFaved)
+            
+        }
+
+        IsFavorited()
+
+    },[businessData])
 
     return (
         <>
@@ -150,8 +171,8 @@ export default function BusinessPage({ businessData }: props) {
                                     <BaseButton onClick={() => {
                                         HandleFavorite()
                                     }} preChildren={
-                                        <img src={FavoriteImage} className="w-6 invert p-0.5" />
-                                    } />
+                                        
+                                    }} />
                                 </div>
                             </div>
 

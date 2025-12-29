@@ -28,12 +28,14 @@ export default function Home({ ChangePage }: props) {
     let onRawQueryChangedListeners : Array<RawQueryChanged> = []
 
     useEffect(() => {
-        onNewMap((map) => {
+        const conn1 = onNewMap((map) => {
             setMap(map);
         })
-        onQueryChange((newQuery : string) => {
+        const conn2 = onQueryChange((newQuery : string) => {
             setCurrentQuery(newQuery)
         })
+
+        
     }, [])
 
     function ZoomIn() {

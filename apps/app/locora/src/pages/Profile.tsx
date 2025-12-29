@@ -6,7 +6,8 @@ import { useEffect, useState } from "react";
 import { GetIdToken, GetUid } from "../data/AuthStore";
 import { DataPayload } from "../../types";
 import { GetUserAttribute } from "../data/user/information/displayInformation";
-import { GetUserFavorites } from "../data/user/favorites/getFavorites";
+import { GetUserFavorites, User_FavoriteElement } from "../data/user/favorites/getFavorites";
+import FavoritedPlace from "../components/favoritedplace";
 
 function ProfileElement({ idToken }: DataPayload) {
 
@@ -18,12 +19,14 @@ function ProfileElement({ idToken }: DataPayload) {
 
     const [Username, setUsername] = useState<string>("")
     const [DisplayUsername, setDisplayUsername] = useState<string>("")
-    const [UserFavorites , setUserFavorites] = useState<Array<object>>([])
 
-    const [SuccessfullyFetched , setSuccessfullyFetched] = useState<boolean>(false)
+    const [currentTab, setCurrentTab] = useState<"Favorites" | "Ratings">("Favorites")
+    const [UserFavorites, SetFavorites] = useState<Array<string>>([])
+
+    const [SuccessfullyFetched, setSuccessfullyFetched] = useState<boolean>(false)
 
     useEffect(() => {
-        if(SuccessfullyFetched) return
+        if (SuccessfullyFetched) return
 
         async function LoadUsername() {
             const username = await GetUserAttribute(idToken!, "username")
@@ -38,9 +41,17 @@ function ProfileElement({ idToken }: DataPayload) {
         }
 
         async function LoadUserFavorites() {
-            const FavoritesArray = await GetUserFavorites(idToken!)
-            console.log(FavoritesArray)
-            setUserFavorites(FavoritesArray)
+            const FavoritesArray: User_FavoriteElement[] | null = await GetUserFavorites(idToken!)
+
+            if (!FavoritesArray) {
+                throw new Error("Issue when loading users favorite!")
+            }
+
+            const businessIds = FavoritesArray
+                .map((value) => value?.fields?.business_id?.stringValue)
+                .filter((id): id is string => Boolean(id))
+
+            SetFavorites(businessIds)
         }
 
         async function RunAll() {
@@ -48,8 +59,8 @@ function ProfileElement({ idToken }: DataPayload) {
                 await Promise.all([LoadUsername(), LoadDisplayUsername(), LoadUserFavorites()])
                 setSuccessfullyFetched(true)
                 console.log("User attributes loaded successfully")
-            } catch(err) {
-                console.log("Error loading user attributes",err)
+            } catch (err) {
+                console.log("Error loading user attributes", err)
             }
         }
 
@@ -59,7 +70,7 @@ function ProfileElement({ idToken }: DataPayload) {
 
     return (
         <div
-            className="relative flex flex-col bg-bay-of-many-500 gap-3 pb-5 items-center w-[135vh] min-h-screen h-fit"
+            className="relative flex flex-col bg-bay-of-many-500 gap-3 pb-5 px-10 items-center w-[135vh] min-h-screen h-fit"
         >
 
             {/* top side with banner + profile picture */}
@@ -134,7 +145,7 @@ function ProfileElement({ idToken }: DataPayload) {
                     <p
                         className="text-white/70"
                     >
-                        Bio: Software developer. Music lover. Tech enthusiast. Always exploring new horizons and pushing boundaries.
+                        Bio: placeholder placeholder placeholder
                     </p>
                 </div>
 
@@ -145,6 +156,7 @@ function ProfileElement({ idToken }: DataPayload) {
             >
                 <BaseButton
                     text="Reviews"
+                    onClick={() => { setCurrentTab("Ratings") }}
                     preChildren={
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-7 pr-2">
                             <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clipRule="evenodd" />
@@ -155,6 +167,7 @@ function ProfileElement({ idToken }: DataPayload) {
                 <BaseButton
                     text="Favorites"
                     type="black"
+                    onClick={() => { setCurrentTab("Favorites") }}
                     preChildren={
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-7 pr-2">
                             <path fillRule="evenodd" d="M6.32 2.577a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 0 1-1.085.67L12 18.089l-7.165 3.583A.75.75 0 0 1 3.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93Z" clipRule="evenodd" />
@@ -165,8 +178,26 @@ function ProfileElement({ idToken }: DataPayload) {
             </div>
 
             <div
-                className="flex flex-col bg-bay-of-many-400 w-[95%] rounded-3xl px-5 pt-5 min-h-[120vh]"
+                className="grid grid-cols-3 auto-rows-[38vh] gap-5 bg-bay-of-many-400 rounded-3xl w-full px-5 pt-5 min-h-[60vh]"
             >
+
+                {
+                    currentTab === "Favorites" ? (
+                        <>
+                            {/*favorites tab*/}
+
+                            {
+                                UserFavorites.map((businessId) => {
+                                    return (<FavoritedPlace key={businessId} business_id={businessId} />)
+                                })
+                            }
+                        </>
+                    ) : (
+                        <>
+                            {/*ratings tab*/}
+                        </>
+                    )
+                }
 
             </div>
 

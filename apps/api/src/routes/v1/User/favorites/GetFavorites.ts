@@ -7,7 +7,7 @@ import JSONResponse from "../../../utils/JSONResponse";
 export default async function GetUsersFavorites(req : Request, env : Env) {
     // todo: get the list from the users firebase data
 
-    const UID = await getUidFromIdToken(req.headers.get("Authorization") || "", env)
+    const UID = await getUidFromIdToken(req.headers.get("Authorization")?.replace("Bearer ","") || "", env)
 
     console.log("user uid" , UID)
 
@@ -17,13 +17,14 @@ export default async function GetUsersFavorites(req : Request, env : Env) {
     }
 
     try {
-        const FavoritesData = GetUserFavoritesFolder(UID,env)
+        const FavoritesData = await GetUserFavoritesFolder(UID,env)
 
         console.log(FavoritesData)
 
         return JSONResponse(req,{
             success : true,
-            message: "endpoint was hit right"
+            data : FavoritesData?.documents,
+            message: "Favorites were returned."
         },200)
 
     } catch(err) {

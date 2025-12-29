@@ -6,7 +6,6 @@ import InternalError from "../../../utils/InternalError";
 import JSONResponse from "../../../utils/JSONResponse";
 
 export default async function ModifyUserFavorites(req : Request, env : Env) {
-    // todo: add the favorite to the users firebase
     // todo: add the favorite to the business's favorites num
 
     const url = new URL(req.url)

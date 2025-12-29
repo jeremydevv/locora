@@ -55,7 +55,7 @@ export default async function ModifyFavoriteForUser(uid: string, business_id: st
                 return "error"
             }
             
-            console.log("new folder made: " , newFolderRes)
+            await ExecuteFavoriteAction(uid,business_id,"add",env)
 
             return "added"
         } else if (FavoriteFolderData && FavoriteFolderData.documents) {
@@ -67,13 +67,13 @@ export default async function ModifyFavoriteForUser(uid: string, business_id: st
             if (isBusinessFavorited != false) {
                 // the user did not favorite the business
 
-                const result = await ExecuteFavoriteAction(uid,business_id,"remove",env)
+                await ExecuteFavoriteAction(uid,business_id,"remove",env)
 
                 return "added"
             } else {
                 // the user did favorite this business, finna unfavorite
 
-                const result = await ExecuteFavoriteAction(uid, business_id ,"add",env)
+                await ExecuteFavoriteAction(uid, business_id ,"add",env)
 
                 return "removed"
             }

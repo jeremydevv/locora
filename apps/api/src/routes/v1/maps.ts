@@ -55,7 +55,7 @@ router.get("/getplaceinfo", async (req: Request, env: Env) => {
         }, 401)
     }
 
-    return idSearch(req, env)
+    return await idSearch(req, env)
 })
 
 router.all("/*", (req: Request) => {

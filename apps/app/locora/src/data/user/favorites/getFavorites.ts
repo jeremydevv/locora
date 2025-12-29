@@ -1,7 +1,17 @@
 import request from "../../../utilities/fetch"
+import { GetIdToken } from "../../AuthStore"
 
 let UserFavoritesCached = false
-let UserFavoritesArray = []
+let UserFavoritesArray : Array<User_FavoriteElement> = []
+
+export interface User_FavoriteElement {
+    name: string,
+    updateTime : string,
+    fields : {
+        business_id: { stringValue: string },
+        timeCreated: { stringValue: string },
+    }      
+}
 
 async function GetUserFavorites(idToken: string) {
 
@@ -26,6 +36,8 @@ async function GetUserFavorites(idToken: string) {
             return null
         }
 
+        localStorage.setItem("UserData-Favorites",JSON.stringify(UserFavoritesArray))
+
         UserFavoritesCached = true
         UserFavoritesArray = Res.data
 
@@ -33,13 +45,27 @@ async function GetUserFavorites(idToken: string) {
 
     } catch (err) {
         console.log("failed to get the users favorites!")
+        console.log(err)
         throw new Error("Failed to get user's favorites!")
     }
 
 }
 
-async function IsBusinessFavorited(business_id: string): Promise<boolean> {
-    return false
+async function IsBusinessFavorited(business_id: string): Promise<boolean | unknown> {
+    
+    const cachedUserFavorites = localStorage.getItem("UserData-Favorites")
+
+    if (cachedUserFavorites) {
+
+        console.log(cachedUserFavorites)
+
+        return true
+
+    } else {
+        GetUserFavorites(await GetIdToken() || "")
+        return await IsBusinessFavorited(business_id)
+    }
+
 }
 
-export {GetUserFavorites}
+export {GetUserFavorites, IsBusinessFavorited}
