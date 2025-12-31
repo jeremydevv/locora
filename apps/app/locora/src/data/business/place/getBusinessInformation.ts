@@ -1,25 +1,8 @@
+import { BusinessPayload } from "../../../pages/BusinessPage/BusinessStore";
 import request from "../../../utilities/fetch";
 import { GetIdToken } from "../../AuthStore";
 
-export interface Business_InformationData {
-    name : string,
-    id : string,
-    description : string,
-    address : string,
-    thumbnail : string,
-    website : string,
-    rating : {
-        "1" : number,
-        "2" : number,
-        "3" : number,
-        "4" : number,
-        "5" : number,
-        "average" : number
-    }
-    ratings : Array<unknown>
-}
-
-async function GetBusinessInformation(business_id : string) : Promise<Business_InformationData | null>  {
+async function GetBusinessInformation(business_id : string) : Promise<BusinessPayload | null>  {
     
     try {
 
@@ -36,7 +19,7 @@ async function GetBusinessInformation(business_id : string) : Promise<Business_I
         })
 
         const Data : {
-            data : Business_InformationData,
+            data : BusinessPayload,
             id : string
         } = await Results.json()
 

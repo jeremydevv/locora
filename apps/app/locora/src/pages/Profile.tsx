@@ -8,8 +8,15 @@ import { DataPayload } from "../../types";
 import { GetUserAttribute } from "../data/user/information/displayInformation";
 import { GetUserFavorites, User_FavoriteElement } from "../data/user/favorites/getFavorites";
 import FavoritedPlace from "../components/favoritedplace";
+import { ChangePage } from "../App";
 
-function ProfileElement({ idToken }: DataPayload) {
+interface ElementProps {
+    idToken : string
+    uid : string
+    SwitchPage : ChangePage
+}
+
+function ProfileElement({ idToken, SwitchPage }: ElementProps) {
 
     function Logout() {
         if (idToken === "") return
@@ -27,16 +34,17 @@ function ProfileElement({ idToken }: DataPayload) {
 
     useEffect(() => {
         if (SuccessfullyFetched) return
+        if (idToken == "" || !idToken) {
+            return
+        }
 
         async function LoadUsername() {
             const username = await GetUserAttribute(idToken!, "username")
-            console.log(username)
             setUsername(username)
         }
 
         async function LoadDisplayUsername() {
             const displayName = await GetUserAttribute(idToken!, "displayName")
-            console.log(displayName)
             setDisplayUsername(displayName)
         }
 
@@ -58,7 +66,6 @@ function ProfileElement({ idToken }: DataPayload) {
             try {
                 await Promise.all([LoadUsername(), LoadDisplayUsername(), LoadUserFavorites()])
                 setSuccessfullyFetched(true)
-                console.log("User attributes loaded successfully")
             } catch (err) {
                 console.log("Error loading user attributes", err)
             }
@@ -188,7 +195,7 @@ function ProfileElement({ idToken }: DataPayload) {
 
                             {
                                 UserFavorites.map((businessId) => {
-                                    return (<FavoritedPlace key={businessId} business_id={businessId} />)
+                                    return (<FavoritedPlace key={businessId} business_id={businessId} SwitchPage={SwitchPage} />)
                                 })
                             }
                         </>
@@ -251,7 +258,11 @@ function NotLoggedInElement() {
     )
 }
 
-export default function Profile() {
+interface props {
+    SwitchPage : ChangePage
+}
+
+export default function Profile({SwitchPage} : props) {
 
     const [idToken, setIdToken] = useState<string>("")
     const [uid, setUID] = useState<string>("")
@@ -280,7 +291,7 @@ export default function Profile() {
                 className="w-full min-h-screen flex justify-center overflow-x-hidden"
             >
                 <img src={Clouds} className="absolute top-0 left-0 opacity-5 w-full z-0 animate-float select:none" />
-                {idToken !== "" ? <ProfileElement key={idToken} idToken={idToken} uid={uid} refreshToken={""} expiresIn={""} /> : <NotLoggedInElement />}
+                {idToken !== "" ? <ProfileElement key={idToken} SwitchPage={SwitchPage} idToken={idToken} uid={uid} /> : <NotLoggedInElement />}
             </div>
         </>
     )

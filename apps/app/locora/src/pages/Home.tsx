@@ -9,7 +9,6 @@ import BaseButton from "../components/button";
 import MapView from "../components/Mapview/MapView";
 import PlaceSearchBar from "../components/PlaceView/Searchbar";
 import SearchResults from "../components/PlaceView/SearchResults";
-import { BusinessPayload } from "./BusinessPage/BusinessStore";
 import { onNewMap, onQueryChange } from "../components/Mapview/MapStore";
 import { Map } from "maplibre-gl";
 import { ChangePage } from "../App";
