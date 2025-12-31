@@ -82,12 +82,21 @@ export default function BusinessPage({ businessData }: props) {
     useEffect(() => {
 
         async function IsFavorited() {
-            if (!businessData || !businessData.id) {
+            if (!businessData || !businessData.id || businessData.id === "") {
+                setBusinessFavorited(false)
                 return false
             }
 
+            if (locallyFavorited[businessData.id]) {
+                setBusinessFavorited(true)
+                return true
+            }
+
             const isFaved : boolean = await IsBusinessFavorited(businessData.id) as boolean
+
             setBusinessFavorited(isFaved)
+
+            return isFaved
             
         }
 
@@ -164,15 +173,29 @@ export default function BusinessPage({ businessData }: props) {
                                     className="flex flex-row gap-2 justify-center items-center"
                                 >
                                     <BaseButton onClick={() => {
+                                        
                                         setRatingOpened(!isRatingOpened)
+
                                     }} preChildren={
+                                        
                                         <FilledStar color={"white"}/>
+
                                     } />
                                     <BaseButton onClick={() => {
                                         HandleFavorite()
                                     }} preChildren={
-                                        
-                                    }} />
+
+                                        <>
+                                            {
+                                                isBusinessFavorited === true ? (
+                                                    <FilledBookmark />
+                                                ) : (
+                                                    <EmptyBookmark />
+                                                )
+                                            }
+                                        </>
+
+                                    } />
                                 </div>
                             </div>
 

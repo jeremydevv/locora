@@ -178,7 +178,7 @@ function ProfileElement({ idToken }: DataPayload) {
             </div>
 
             <div
-                className="grid grid-cols-3 auto-rows-[38vh] gap-5 bg-bay-of-many-400 rounded-3xl w-full px-5 pt-5 min-h-[60vh]"
+                className="grid grid-cols-3 auto-rows-[38vh] gap-3 bg-bay-of-many-400 rounded-3xl w-full px-5 pt-5 pb-5 min-h-[75vh]"
             >
 
                 {

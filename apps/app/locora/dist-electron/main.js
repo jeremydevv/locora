@@ -16583,36 +16583,37 @@ ipcMain$1.handle("refresh-session-data", async () => {
   try {
     const RefreshToken = await Keytar.getPassword(`org.locora.app`, `${userStorage.get("uid")}-refreshToken`);
     const idToken = await Keytar.getPassword(`org.locora.app`, `${userStorage.get("uid")}-idToken`);
-    const Data = await fetch(baseAPIUrl() + "/v1/auth/refresh", {
-      body: JSON.stringify({
-        RefreshToken
-      }),
+    const Result = await fetch(baseAPIUrl() + "/v1/auth/refresh", {
+      body: JSON.stringify({ RefreshToken }),
       headers: {
-        "Authorization": `Bearer ${idToken}`
+        "Authorization": `Bearer ${idToken}`,
+        "Content-Type": "application/json"
       },
       method: "POST"
     });
-    const Results = await Data.json();
-    if (!Data.ok) {
+    const contentType = Result.headers.get("content-type");
+    if (!Result.ok || !contentType?.includes("application/json")) {
+      const Data2 = await Result.text();
       console.log("the refresh failed to occur");
-      console.log(Results);
-      return;
+      console.log(Data2);
+      return null;
     }
-    console.log(Results);
-    userStorage.set("uid", Results.uid || "");
-    if (!Results.expiresIn) {
+    const Data = await Result.json();
+    console.log(Data);
+    userStorage.set("uid", Data.uid || "");
+    if (!Data.expiresIn) {
       userStorage.set("expiresIn", +Date.now() + 0 || "");
     } else {
-      userStorage.set("expiresIn", +Date.now() + +Results.expiresIn * 1e3 || "");
+      userStorage.set("expiresIn", +Date.now() + +Data.expiresIn * 1e3 || "");
     }
     await Promise.all([
-      Keytar.setPassword("org.locora.app", `${Results.uid}-idToken` || "", Results.idToken || ""),
-      Keytar.setPassword("org.locora.app", `${Results.uid}-refreshToken` || "", Results.refreshToken || "")
+      Keytar.setPassword("org.locora.app", `${Data.uid}-idToken` || "", Data.idToken || ""),
+      Keytar.setPassword("org.locora.app", `${Data.uid}-refreshToken` || "", Data.refreshToken || "")
     ]);
-    data.uid = Results.uid;
-    data.refreshToken = Results.refreshToken;
-    data.idToken = Results.idToken;
-    return Results;
+    data.uid = Data.uid;
+    data.refreshToken = Data.refreshToken;
+    data.idToken = Data.idToken;
+    return Data;
   } catch (err) {
     console.log(err);
   }

@@ -245,45 +245,47 @@ ipcMain.handle("refresh-session-data", async () => {
     const RefreshToken = await Keytar.getPassword(`org.locora.app`,`${userStorage.get("uid")}-refreshToken`)
     const idToken = await Keytar.getPassword(`org.locora.app`,`${userStorage.get("uid")}-idToken`)
 
-    const Data = await fetch(baseAPIUrl() + "/v1/auth/refresh", {
-      body : JSON.stringify({
-        RefreshToken : RefreshToken
-      }),
+    const Result = await fetch(baseAPIUrl() + "/v1/auth/refresh", {
+      body : JSON.stringify({RefreshToken : RefreshToken}),
       headers : {
-        "Authorization" : `Bearer ${idToken}`
+        "Authorization" : `Bearer ${idToken}`,
+        "Content-Type" : "application/json"
       },
       method : "POST"
     })
 
-    const Results : DataPayload = await Data.json()
+    const contentType = Result.headers.get("content-type")
 
-    if (!Data.ok) {
+    if (!Result.ok || (!contentType?.includes("application/json"))) {
+      const Data = await Result.text()
       console.log("the refresh failed to occur")
-      console.log(Results)
-      return
+      console.log(Data)
+      return null
     }
 
-    console.log(Results)
+    const Data = await Result.json()
 
-    userStorage.set("uid", Results.uid || "")
+    console.log(Data)
 
-    if (!Results.expiresIn) {
+    userStorage.set("uid", Data.uid || "")
+
+    if (!Data.expiresIn) {
       userStorage.set("expiresIn", (+Date.now() + 0) || "")
     } else {
-      userStorage.set("expiresIn", (+Date.now() + (+Results.expiresIn)*1000) || "")
+      userStorage.set("expiresIn", (+Date.now() + (+Data.expiresIn)*1000) || "")
 
     }
 
     await Promise.all([
-      Keytar.setPassword("org.locora.app", `${Results.uid}-idToken` || "" , Results.idToken || ""),
-      Keytar.setPassword("org.locora.app", `${Results.uid}-refreshToken` || "" , Results.refreshToken || "")
+      Keytar.setPassword("org.locora.app", `${Data.uid}-idToken` || "" , Data.idToken || ""),
+      Keytar.setPassword("org.locora.app", `${Data.uid}-refreshToken` || "" , Data.refreshToken || "")
     ])
 
-    data.uid = Results.uid
-    data.refreshToken = Results.refreshToken
-    data.idToken = Results.idToken
+    data.uid = Data.uid
+    data.refreshToken = Data.refreshToken
+    data.idToken = Data.idToken
 
-    return Results
+    return Data
 
   } catch(err) {
     console.log(err)

@@ -1,9 +1,6 @@
 import request from "../../../utilities/fetch"
 import { GetIdToken } from "../../AuthStore"
 
-let UserFavoritesCached = false
-let UserFavoritesArray : Array<User_FavoriteElement> = []
-
 export interface User_FavoriteElement {
     name: string,
     updateTime : string,
@@ -13,7 +10,19 @@ export interface User_FavoriteElement {
     }      
 }
 
+let CachedUserFavorites : {
+    favorites : Array<User_FavoriteElement> | null
+    ttl : number
+} = {
+    favorites : [],
+    ttl : -1
+}
+
 async function GetUserFavorites(idToken: string) {
+
+    if (CachedUserFavorites.favorites && CachedUserFavorites.favorites.length > 0 && Date.now() < CachedUserFavorites.ttl) {
+        return CachedUserFavorites.favorites
+    }
 
     try {
 
@@ -32,16 +41,13 @@ async function GetUserFavorites(idToken: string) {
 
         if (!Res.data) {
             console.log("no data was provided!")
-            UserFavoritesCached = true;
             return null
         }
 
-        localStorage.setItem("UserData-Favorites",JSON.stringify(UserFavoritesArray))
+        CachedUserFavorites.favorites = Res.data ?? []
+        CachedUserFavorites.ttl = Date.now() + 6000
 
-        UserFavoritesCached = true
-        UserFavoritesArray = Res.data
-
-        return UserFavoritesArray
+        return CachedUserFavorites.favorites
 
     } catch (err) {
         console.log("failed to get the users favorites!")
@@ -52,20 +58,37 @@ async function GetUserFavorites(idToken: string) {
 }
 
 async function IsBusinessFavorited(business_id: string): Promise<boolean | unknown> {
-    
-    const cachedUserFavorites = localStorage.getItem("UserData-Favorites")
 
-    if (cachedUserFavorites) {
+    if (!business_id || business_id === "") {
+        return false
+    }
 
-        console.log(cachedUserFavorites)
+    let isFavorited = false
+    const favData : Array<User_FavoriteElement> | null = await GetUserFavorites(await GetIdToken() || "")
 
-        return true
+    favData?.map((value : User_FavoriteElement) => {
+        if (!value || !value.fields || !value.fields.business_id) {
+            return
+        }
 
-    } else {
-        GetUserFavorites(await GetIdToken() || "")
-        return await IsBusinessFavorited(business_id)
+        if (value.fields.business_id.stringValue == business_id) {
+            isFavorited = true
+        }
+    })
+
+    return isFavorited
+}
+
+async function RemoveFavoriteLocally(business_id : string) {
+
+    if (!IsBusinessFavorited(business_id)) {
+        throw new Error("Cannot locally remove a favorite that isnt favorited!")
+    }
+
+    if (!business_id || business_id === "") {
+        return
     }
 
 }
 
-export {GetUserFavorites, IsBusinessFavorited}
+export {GetUserFavorites, IsBusinessFavorited, RemoveFavoriteLocally}

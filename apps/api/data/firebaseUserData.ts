@@ -72,7 +72,6 @@ async function FetchUserRecord(uid : string, idToken : string, env: Env) {
             return null
         }
 
-        console.trace()
         const ResultData : {fields : Record<string,string>} = await Result.json()
 
         return ResultData.fields

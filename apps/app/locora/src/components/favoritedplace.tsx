@@ -34,7 +34,10 @@ export default function FavoritedPlace({ business_id }: props) {
         async function GetBusinessFavoritedStatus() {
 
             const isFavorited = await IsBusinessFavorited(business_id)
-            setBusinessFavoritedStatus(isFavorited ? true : false)
+
+            console.log(isFavorited+"is the status of the place with id " + business_id)
+
+            setBusinessFavoritedStatus(isFavorited == true ? true : false)
 
         }
 
