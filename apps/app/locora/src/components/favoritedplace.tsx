@@ -78,13 +78,13 @@ export default function FavoritedPlace({ business_id, SwitchPage }: props) {
 
                 <div>
                     <h1
-                        className="font-black text-xl text-white"
+                        className="font-bold text-xl text-white"
                     >
                         {businessData?.name || "No business data found!"}
                     </h1>
 
                     <h2
-                        className="font-bold text-sm text-white/30"
+                        className="font-semibold text-sm text-white/30"
                     >
                         {businessData?.address}
                     </h2>

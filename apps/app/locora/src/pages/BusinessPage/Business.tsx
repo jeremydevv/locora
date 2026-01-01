@@ -15,11 +15,23 @@ interface props {
     businessData: BusinessPayload | null
 }
 
-const locallyFavorited : Record<string, boolean> = {}
+export interface User_RatingData {
+    header: string,
+    text: string,
+    rating: 1 | 2 | 3 | 4 | 5
+}
+
+const locallyFavorited: Record<string, boolean> = {}
 
 export default function BusinessPage({ businessData }: props) {
 
     const [isRatingOpened, setRatingOpened] = useState<boolean>(false)
+
+    const [ratingInputData, setRatingInputData] = useState<User_RatingData>({
+        header: "",
+        text: "",
+        rating: 1,
+    })
 
     if (!businessData) {
         return (
@@ -40,37 +52,73 @@ export default function BusinessPage({ businessData }: props) {
         )
     }
 
+    async function HandleRating() {
+
+        if (!businessData || !businessData.id) {
+            return
+        }
+
+        if (!ratingInputData.rating) {
+            console.log("invalid rating data")
+            return
+        }
+
+        const cachedRatings = localStorage.getItem("BusinessData-CachedRatings")
+
+        // check if we already rated this place
+        if (cachedRatings) {
+
+            const parsedCachedRatings = JSON.parse(cachedRatings)
+
+            if (parsedCachedRatings[businessData.id]) {
+                console.log("already rated this, just returning")
+                return
+            }
+
+        }
+
+        try {
+
+            const Result = await request("/v1/business/ratings", {
+                method : "POST"
+            })
+
+            const Data = await Result.json()
+
+            if (!Result.ok) {
+                console.log("Errored when trying to rate the business", Data)
+            }
+
+            console.log(Data)
+
+        } catch(err) {
+            console.log("Erroring when trying to rate this business", err)
+        }
+
+    }
+
     async function HandleFavorite() {
-        if(!businessData) {
+        if (!businessData || !businessData.id) {
             return
-        }
-
-        if(!businessData.id) {
-            return
-        }
-
-        if(locallyFavorited[businessData.id]) {
-            delete locallyFavorited[businessData.id]
-        } else {
-            locallyFavorited[businessData.id] = true
         }
 
         try {
 
             const Results = await request(`/v1/users/favorites/modifyfavorite?id=${businessData.id}`, {
                 headers: {
-                    "Authorization" : await GetIdToken() || ""
+                    "Authorization": await GetIdToken() || ""
                 },
-                method : "POST"
+                method: "POST"
             })
 
             const data = await Results.json()
 
             console.log(data)
 
-        } catch(err) {
+        } catch (err) {
             console.error(err)
         }
+
     }
 
     const imageDir = businessData.thumbnail ? businessData.thumbnail.trim()
@@ -91,17 +139,17 @@ export default function BusinessPage({ businessData }: props) {
                 return true
             }
 
-            const isFaved : boolean = await IsBusinessFavorited(businessData.id) as boolean
+            const isFaved: boolean = await IsBusinessFavorited(businessData.id) as boolean
 
             setBusinessFavorited(isFaved)
 
             return isFaved
-            
+
         }
 
         IsFavorited()
 
-    },[businessData])
+    }, [businessData])
 
     return (
         <>
@@ -109,96 +157,163 @@ export default function BusinessPage({ businessData }: props) {
                 className="flex flex-col items-center justify-center w-screen h-full overflow-x-hidden"
             >
                 <div
-                    className="flex flex-col gap-10 w-full min-h-full p-[15vw] overflow-x-hidden"
+                    className="flex flex-col items-center gap-10 w-full min-h-full p-[15vw] overflow-x-hidden"
                 >
 
                     <div
-                        className="flex flex-row gap-2"
+                        className="flex flex-row bg-bay-of-many-700 p-5 rounded-2xl justify-between"
                     >
                         <div
-                            className="flex flex-row bg-bay-of-many-700 p-5 rounded-2xl justify-between"
+                            className="flex flex-col justify-between gap-2"
                         >
                             <div
-                                className="flex flex-col justify-between gap-2"
+                                className="flex flex-col"
                             >
-                                <div
-                                    className="flex flex-col"
+                                <h1
+                                    className="text-3xl text-white font-bold text-left"
                                 >
-                                    <h1
-                                        className="text-3xl text-white font-bold text-left"
-                                    >
-                                        {businessData.name}
-                                    </h1>
-                                    <h2
-                                        className="text-xl text-white/80 font-bold text-left"
-                                    >
-                                        {businessData.address}
-                                    </h2>
-                                    <div
-                                        className="flex flex-row gap-2"
-                                    >
-                                        <RatingBar style="white" rating={businessData.rating.average} />
-
-                                        <p
-                                            className="font-bold text-white"
-                                        >
-                                            {businessData.rating.average}/5
-                                        </p>
-                                    </div>
-
-                                    <a 
-                                        href={businessData.website || "#"} 
-                                        target="_blank" 
-                                        rel="noopener noreferrer"
-                                        className="pt-[10vh]"
-                                    >
-                                        <p
-                                            className="text-white/80"
-                                        >
-                                            {businessData.name}'s website
-                                        </p>
-                                    </a>
+                                    {businessData.name}
+                                </h1>
+                                <h2
+                                    className="text-xl text-white/80 font-bold text-left"
+                                >
+                                    {businessData.address}
+                                </h2>
+                                <div
+                                    className="flex flex-row gap-2"
+                                >
+                                    <RatingBar style="white" rating={businessData.rating.average} />
 
                                     <p
-                                        className="text-white"
+                                        className="font-bold text-white"
                                     >
-                                        Contact Number: {businessData.contact.phone}
+                                        {businessData.rating.average}/5
                                     </p>
-
                                 </div>
 
-                                {/*action bar*/}
-                                <div
-                                    className="flex flex-row gap-2 justify-center items-center"
+                                <a
+                                    href={businessData.website || "#"}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="pt-[10vh]"
                                 >
-                                    <BaseButton onClick={() => {
-                                        
-                                        setRatingOpened(!isRatingOpened)
+                                    <p
+                                        className="text-white/80 underline"
+                                    >
+                                        {businessData.name}'s website
+                                    </p>
+                                </a>
 
-                                    }} preChildren={
-                                        
-                                        <FilledStar color={"white"}/>
+                                <p
+                                    className="text-white"
+                                >
+                                    Contact Number: {businessData.contact.phone}
+                                </p>
 
-                                    } />
-                                    <BaseButton onClick={() => {
-                                        HandleFavorite()
-                                    }} preChildren={
-
-                                        <>
-                                            {
-                                                isBusinessFavorited === true ? (
-                                                    <FilledBookmark />
-                                                ) : (
-                                                    <EmptyBookmark />
-                                                )
-                                            }
-                                        </>
-
-                                    } />
-                                </div>
                             </div>
 
-                            <img className="p-2 w-[35vw] rounded-2xl" src={imageDir} />
+                            {/*action bar*/}
+                            <div
+                                className="flex flex-row gap-2 justify-center items-center"
+                            >
+                                <BaseButton onClick={() => {
+                                    setRatingOpened(!isRatingOpened)
+                                }} preChildren={
+
+                                    <FilledStar color={"white"} />
+
+                                } />
+                                <BaseButton onClick={() => {
+                                    HandleFavorite()
+                                }} preChildren={
+
+                                    <>
+                                        {
+                                            isBusinessFavorited === true ? (
+                                                <FilledBookmark />
+                                            ) : (
+                                                <EmptyBookmark />
+                                            )
+                                        }
+                                    </>
+
+                                } />
+                            </div>
+                        </div>
+
+                        <img className="p-2 pl-5 w-[35vw] rounded-2xl" src={imageDir} />
+
+                    </div>
+
+                    <div
+                        className={"flex flex-col gap-2 w-[60%] p-5 bg-linear-to-b from-bay-of-many-500 to-bay-of-many-700 py-5 rounded-2xl " + (isRatingOpened ? "hidden" : "")}
+                    >
+
+                        <h2
+                            className="font-bold text-white text-2xl"
+                        >
+                            Write a Review!
+                        </h2>
+
+                        <div
+                            className="flex flex-col gap-2"
+                        >
+                            <div
+                                className="flex flex-row justify-between px-2"
+                            >
+
+                                <input
+                                    className="bg-bay-of-many-800 rounded-xl p-2 text-bold text-wrap text-white px-5 text-left"
+                                    placeholder="Header for your Review (optional)"
+                                    onChange={(e) => {
+                                        setRatingInputData((prev: User_RatingData) => ({
+                                            ...prev,
+                                            header: e.target.value
+                                        }))
+                                    }}
+                                    value={ratingInputData.header}
+                                />
+
+                                <RatingBar 
+                                    rating={ratingInputData.rating}
+                                    onRatingClicked={(rating) => {
+                                        setRatingInputData((prev : User_RatingData) => ({
+                                            ...prev,
+                                            rating : rating
+                                        }))
+                                    }}
+                                    style={"white"}
+                                />
+
+                            </div>
+
+                            <input
+                                className="bg-bay-of-many-800 rounded-xl text-semibold p-2 py-10 text-left text-white"
+                                placeholder="Text for your review (optional)"
+                                onChange={(e) => {
+                                    setRatingInputData((prev: User_RatingData) => ({
+                                        ...prev,
+                                        text: e.target.value
+                                    }))
+                                }}
+                                value={ratingInputData.text}
+                            />
+                        </div>
+
+                        <div
+                            className="flex flex-row justify-end gap-3"
+                        >
+
+                            <BaseButton text={"Reset"} onClick={() => {
+                                setRatingInputData({
+                                    header : "",
+                                    text : "",
+                                    rating : 1,
+                                })
+                            }} />
+                            <BaseButton text={"Post"} onClick={async () => {
+                                await HandleRating()
+                            }}/>
 
                         </div>
 
