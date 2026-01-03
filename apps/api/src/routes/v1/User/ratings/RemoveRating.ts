@@ -4,6 +4,8 @@ import getUidFromIdToken from "../../../utils/GetUIDFromIdToken";
 import Unauthorized from "../../../utils/Unauthorized";
 import InternalError from "../../../utils/InternalError";
 import MalformedData from "../../../utils/MalformedRequest";
+import DoesUserRatingExist from "../../../../../data/userdata/ratings/DoesRatingExist";
+import JSONResponse from "../../../utils/JSONResponse";
 
 export default async function RemoveRating(
     req : Request,
@@ -12,10 +14,10 @@ export default async function RemoveRating(
 
     const requestURL = new URL(req.url)
 
-    const Token = req.headers.get("Authorization")?.replace("Bearer ","")
+    const idToken = req.headers.get("Authorization")?.split("Bearer ")[1] || "";
     const business_id = requestURL.searchParams.get('businessId')
 
-    if (!Token || Token === "") {
+    if (!idToken || idToken === "") {
         return Unauthorized(req)
     }
 
@@ -23,7 +25,7 @@ export default async function RemoveRating(
         return MalformedData(req,"No business ID was provided!")
     }
 
-    const UID = await getUidFromIdToken(Token,env)
+    const UID = await getUidFromIdToken(idToken,env)
 
     if (!UID || UID == "") {
         return Unauthorized(req)
@@ -39,6 +41,17 @@ export default async function RemoveRating(
         return MalformedData(req,"Missing information for the rating!")
     }
 
+    const PreexistingRatingOnBusiness : boolean | null = await DoesUserRatingExist(UID,business_id,env)
+    
+        if (PreexistingRatingOnBusiness === false) {
+            return JSONResponse(req,{
+                message : "This business was never rated!",
+                success : false
+            },404)
+        }
+
     const userRatingRemoved = await DeleteUserRating(UID,business_id,env)
+
+    return userRatingRemoved
 
 }

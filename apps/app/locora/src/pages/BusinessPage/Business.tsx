@@ -79,8 +79,16 @@ export default function BusinessPage({ businessData }: props) {
 
         try {
 
-            const Result = await request("/v1/business/ratings", {
-                method : "POST"
+            const Result = await request(`/v1/business/ratings?businessId=${businessData.id}`, {
+                method : "POST",
+                body : JSON.stringify({
+                    header : ratingInputData.header,
+                    text : ratingInputData.text,
+                    rating : ratingInputData.rating
+                }),
+                headers : {
+                    "Authorization" : `Bearer ${await GetIdToken()}`
+                }
             })
 
             const Data = await Result.json()

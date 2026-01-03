@@ -265,15 +265,12 @@ ipcMain.handle("refresh-session-data", async () => {
 
     const Data = await Result.json()
 
-    console.log(Data)
-
     userStorage.set("uid", Data.uid || "")
 
     if (!Data.expiresIn) {
       userStorage.set("expiresIn", (+Date.now() + 0) || "")
     } else {
       userStorage.set("expiresIn", (+Date.now() + (+Data.expiresIn)*1000) || "")
-
     }
 
     await Promise.all([

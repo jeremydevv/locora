@@ -5,6 +5,7 @@ import { VerifyIdToken } from "../../../data/firebaseAuth";
 import { Env } from "../types";
 import { UserGetEntry, UserPostEntry } from "./User/entry";
 import { checkForValidAuthorization } from "../utils/CheckForAuth";
+import Unauthorized from "../utils/Unauthorized";
 
 const router = Router({ base: "/v1/users/" });
 
@@ -19,10 +20,8 @@ router.post("*", async (req : Request, env : Env) => {
     const Authorized = await checkForValidAuthorization(req,env)
     
     if (!Authorized) {
-        return JSONResponse(req, {
-            success : false,
-            message : "Unauthorized"
-        },401)
+        console.log("user isnt authroized at the top level")
+        return Unauthorized(req)
     }
 
     return await UserPostEntry(req,env)
@@ -33,10 +32,8 @@ router.get("*", async (req : Request, env : Env) => {
     const Authorized = await checkForValidAuthorization(req,env)
     
     if (!Authorized) {
-        return JSONResponse(req, {
-            success : false,
-            message : "Unauthorized"
-        },401)
+        console.log("user isnt authroized at the top level")
+        return Unauthorized(req)
     }
 
     return await UserGetEntry(req,env)

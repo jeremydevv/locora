@@ -9,6 +9,8 @@ import { GetUserAttribute } from "../data/user/information/displayInformation";
 import { GetUserFavorites, User_FavoriteElement } from "../data/user/favorites/getFavorites";
 import FavoritedPlace from "../components/favoritedplace";
 import { ChangePage } from "../App";
+import GetUserRatings, { UserRating } from "../data/user/ratings/getUserRatings";
+import RatedPlace from "../components/ratedplace";
 
 interface ElementProps {
     idToken : string
@@ -29,6 +31,7 @@ function ProfileElement({ idToken, SwitchPage }: ElementProps) {
 
     const [currentTab, setCurrentTab] = useState<"Favorites" | "Ratings">("Favorites")
     const [UserFavorites, SetFavorites] = useState<Array<string>>([])
+    const [UserRatings, SetRatings] = useState<UserRating[]>([])
 
     const [SuccessfullyFetched, setSuccessfullyFetched] = useState<boolean>(false)
 
@@ -62,9 +65,21 @@ function ProfileElement({ idToken, SwitchPage }: ElementProps) {
             SetFavorites(businessIds)
         }
 
+        async function LoadUserRatings() {
+            const UserRatings : UserRating[] | null = await GetUserRatings()
+
+            if (!UserRatings) {
+                throw new Error("Issue when loading the users ratings!")
+            }
+
+            console.log(UserRatings)
+
+            SetRatings(UserRatings)
+        }
+
         async function RunAll() {
             try {
-                await Promise.all([LoadUsername(), LoadDisplayUsername(), LoadUserFavorites()])
+                await Promise.all([LoadUsername(), LoadDisplayUsername(), LoadUserFavorites(),LoadUserRatings()])
                 setSuccessfullyFetched(true)
             } catch (err) {
                 console.log("Error loading user attributes", err)
@@ -202,6 +217,11 @@ function ProfileElement({ idToken, SwitchPage }: ElementProps) {
                     ) : (
                         <>
                             {/*ratings tab*/}
+                            {
+                                UserRatings.map((ratingObject) => {
+                                    return (<RatedPlace key={ratingObject.fields.business_id.stringValue} data={ratingObject} SwitchPage={SwitchPage} />)
+                                })
+                            }
                         </>
                     )
                 }

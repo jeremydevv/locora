@@ -53,13 +53,13 @@ export default function FavoritedPlace({ business_id, SwitchPage }: props) {
 
     async function ViewMoreDetails() {
 
-        console.log(SwitchPage)
-
         const businessData = await GetBusinessInformation(business_id)
 
         if (!businessData) {
             return
         }
+
+        console.log(businessData.thumbnail)
 
         SwitchPage(5, {
             data: businessData

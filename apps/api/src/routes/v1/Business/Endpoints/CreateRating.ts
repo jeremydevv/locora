@@ -1,27 +1,25 @@
 import { Business_Rating, Env, Locora_Business } from "../../../types";
 
-export default async function CreateBusinessRating(req : Request, env : Env) {
+export default async function CreateBusinessRating(
+    business_id : string,
+    uid : string,
+    header : string,
+    text : string,
+    rating : string,
+    username : string,
+    env : Env
+) {
 
-    // todo: create the rating in the users data
-
-    const body = await req.json() as {
-        business_id?: string;
-        uid?: string;
-        header?: string;
-        text?: string;
-        rating?: number | string;
-    };
-
-    if (!body.business_id || !body.uid || body.rating === undefined) {
+    if (business_id === undefined || uid === undefined ||rating === undefined) {
         throw new Error("Missing data needed to create business rating.");
     }
 
     const business: { data: string } | null = await env.MapDB.prepare(
         `SELECT data FROM businesses WHERE id = ?`
-    ).bind(body.business_id).first();
+    ).bind(business_id).first();
 
     if (!business) {
-        throw new Error("Business not found at ID: " + body.business_id);
+        throw new Error("Business not found at ID: " + business_id);
     }
 
     const businessData: Locora_Business = JSON.parse(business.data);
@@ -30,17 +28,22 @@ export default async function CreateBusinessRating(req : Request, env : Env) {
         businessData.ratings = {};
     }
 
-    const ratingValue = Math.min(5, Math.max(1, Number(body.rating)));
+    const ratingValue = Math.min(5, Math.max(1, Number(rating)));
 
     const ratingEntry: Business_Rating = {
-        uid: body.uid,
-        business_id: body.business_id,
-        header: body.header || "",
-        text: body.text || "",
+        uid: uid,
+        username : username,
+        business_id: business_id,
+        header: header || "",
+        text: text || "",
         rating: ratingValue.toString()
     };
 
-    businessData.ratings[body.uid] = ratingEntry;
+    if (businessData.ratings[uid]) {
+        return false 
+    } 
+
+    businessData.ratings[uid] = ratingEntry;
 
     const ratingCounts: Record<1 | 2 | 3 | 4 | 5, number> = {
         1: 0,
@@ -74,8 +77,8 @@ export default async function CreateBusinessRating(req : Request, env : Env) {
 
     await env.MapDB.prepare(
         `UPDATE businesses SET data = ? WHERE id = ?`
-    ).bind(JSON.stringify(businessData), body.business_id).run();
+    ).bind(JSON.stringify(businessData), business_id).run();
 
-    return businessData.rating;
+    return businessData;
 
 }

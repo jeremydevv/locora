@@ -120,6 +120,7 @@ export type User_RatingsFolder = Array<User_RatingInFolder>
 
 export interface Business_Rating {
     uid : string,
+    username : string
     business_id : string
     header : string,
     text : string,

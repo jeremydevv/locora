@@ -7,8 +7,7 @@ interface GetUserRatingsFolder_ReturnType {
         message: string,
         status: string
     }
-    
-    documents : User_RatingInFolder
+    documents : User_RatingInFolder[]
 }
 
 export async function GetUserRatingsFolder(

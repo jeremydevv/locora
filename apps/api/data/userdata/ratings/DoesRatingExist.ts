@@ -7,7 +7,7 @@ export default async function DoesUserRatingExist(
     env : Env
 ) : Promise<boolean | null> {
     
-    const service_acc_jwt = GetFirebaseServiceAccount(env)
+    const service_acc_jwt = await GetFirebaseServiceAccount(env)
 
     try {
 
@@ -18,6 +18,8 @@ export default async function DoesUserRatingExist(
                     "Authorization": `Bearer ${service_acc_jwt}`,
                 },
             })
+
+        console.log(Result)
 
         if (!Result.ok) {
             if (Result.status == 404) {
@@ -32,7 +34,5 @@ export default async function DoesUserRatingExist(
         console.log("Issue with checking if a rating existed under a user", err)
         return null
     }
-
-    return null
 
 }

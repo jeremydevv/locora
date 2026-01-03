@@ -16599,7 +16599,6 @@ ipcMain$1.handle("refresh-session-data", async () => {
       return null;
     }
     const Data = await Result.json();
-    console.log(Data);
     userStorage.set("uid", Data.uid || "");
     if (!Data.expiresIn) {
       userStorage.set("expiresIn", +Date.now() + 0 || "");

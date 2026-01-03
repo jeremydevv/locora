@@ -7,6 +7,8 @@ export default async function CreateUserRating(
     uid : string,
     business_id : string,
     ratingData : {
+        name : string,
+        uid : string,
         header : string,
         text : string,
         rating : string
@@ -39,10 +41,12 @@ export default async function CreateUserRating(
                 },
                 body: JSON.stringify({
                     fields: {
+                        name : { stringValue : ratingData.name },
+                        uid : { stringValue : ratingData.uid },
                         header : { stringValue : ratingData.header },
                         text : { stringValue : ratingData.text },
-                        rating : { numberValue : ratingData.rating },
-                        business_id: { stringValue: location },
+                        rating : { integerValue : ratingData.rating },
+                        business_id: { stringValue: business_id },
                         timeCreated: { timestampValue: new Date().toISOString() }
                     }
                 })
@@ -54,11 +58,14 @@ export default async function CreateUserRating(
 
         if (!Result.ok) {
             console.log("issue with adding business to ratings", Data.error)
-            return null
+            return false
         }
 
-    } catch (err) {
+        return true
 
+    } catch (err) {
+        console.log("issue with creating a rating in the user's data",err)
+        return false
     }
 
 }
