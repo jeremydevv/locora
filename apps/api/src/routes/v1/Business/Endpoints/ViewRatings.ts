@@ -1,4 +1,4 @@
-export default async function ViewRatings() {
+export default async function ViewBusinessRatings() {
     
     // todo: get all the ratings under the business
 

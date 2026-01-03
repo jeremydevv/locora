@@ -108,12 +108,22 @@ export interface User_FavoriteInFolder {
     updateTime : string
 }
 
-export type User_FavoritesFolder = Array<User_FavoriteInFolder>
+export interface User_RatingInFolder {
+    name : string,
+    fields : Business_Rating,
+    createTime : string,
+    updateTime : string,
+}
 
-export interface User_Review {
+export type User_FavoritesFolder = Array<User_FavoriteInFolder>
+export type User_RatingsFolder = Array<User_RatingInFolder>
+
+export interface Business_Rating {
     uid : string,
-    rating : number,
-    reviewText : string,
+    business_id : string
+    header : string,
+    text : string,
+    rating : string
 }
 
 export interface Locora_Business {
@@ -147,7 +157,7 @@ export interface Locora_Business {
         average : number;
     };
 
-    ratings? : Record<string, User_Review>
+    ratings? : Record<string, Business_Rating>
 
     thumbnail? : string;
 

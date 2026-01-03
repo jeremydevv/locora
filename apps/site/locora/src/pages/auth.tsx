@@ -288,11 +288,6 @@ function AuthenticationPage() {
                                             Log in
                                         </h1>
 
-                                        <SocialConnectors
-                                            GoogleConnector={() => { LoginViaSocialConnector("google") }}
-                                            MicrosoftConnector={() => { LoginViaSocialConnector("microsoft") }}
-                                        />
-
                                     </div>
 
                                     <Divider />

@@ -37,7 +37,6 @@ async function DoesBusinessExistInData(uid : string, search_id : string, env : E
         return false
     }
 
-    return false
 }
 
 export default async function ModifyFavoriteForUser(uid: string, business_id: string, env : Env) {

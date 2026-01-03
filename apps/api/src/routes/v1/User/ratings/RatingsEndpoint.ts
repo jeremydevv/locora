@@ -17,7 +17,7 @@ export default async function RatingsEndpoint(req: Request, env: Env) {
     const segments = path.split("/");
 
     if (segments[0] === "new") {
-
+        return 
     } else if (segments[0] == "remove") {
 
     } else {
