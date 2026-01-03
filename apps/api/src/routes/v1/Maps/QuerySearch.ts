@@ -5,7 +5,6 @@ import MalformedData from "../../utils/MalformedRequest";
 import CreateBusinessDataEntry from "../Business/D1Interactions/Whole/CreateBusinessData";
 import getBusinessData from "../Business/D1Interactions/Whole/GetBusinessData";
 import getStoreFrontImage from "../Business/R2Interactions/Images/GetStoreFront";
-import { PlaceDetails } from "./SharedMap";
 
 async function RunBusiness(business : GeoAPI_QueryResults, env : Env) {
     let endResult = null;
@@ -68,11 +67,11 @@ async function RunBusiness(business : GeoAPI_QueryResults, env : Env) {
                 ttl: 0
             };
 
-            endResult = CreateBusinessDataEntry(googlePlaceId, JSON.stringify(ConstructedBusiness), env)
-
-            return endResult
+            endResult = await CreateBusinessDataEntry(googlePlaceId, JSON.stringify(ConstructedBusiness), env)
 
         }
+
+        return endResult
 
     } catch (err) {
         console.log(err)
@@ -144,6 +143,7 @@ export default async function QuerySearchEndpoint(req: Request, env: Env) {
                 }
 
                 const businessData = await RunBusiness(business, env)
+                
                 if (businessData != null) {
                     businessesWithData.push(businessData as Locora_Business)
                 }

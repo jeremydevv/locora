@@ -6,16 +6,19 @@ import BaseButton from "../../components/button"
 import { useEffect, useState } from "react"
 import FilledStar from "../../assets/FilledStar"
 import request from "../../utilities/fetch"
-import { GetIdToken } from "../../data/AuthStore"
+import { GetIdToken, GetUid } from "../../data/AuthStore"
 import { EmptyBookmark } from "../../assets/EmptyBookmark"
 import { IsBusinessFavorited } from "../../data/user/favorites/getFavorites"
 import FilledBookmark from "../../assets/FilledBookmark"
+import GetBusinessRatings from "../../data/business/ratings/getBusinessRatings"
 
 interface props {
     businessData: BusinessPayload | null
 }
 
 export interface User_RatingData {
+    username?: string,
+    uid?: string,
     header: string,
     text: string,
     rating: 1 | 2 | 3 | 4 | 5
@@ -25,13 +28,17 @@ const locallyFavorited: Record<string, boolean> = {}
 
 export default function BusinessPage({ businessData }: props) {
 
-    const [isRatingOpened, setRatingOpened] = useState<boolean>(false)
+    const [isRatingOpened, setRatingOpened] = useState<boolean>(true)
 
     const [ratingInputData, setRatingInputData] = useState<User_RatingData>({
         header: "",
         text: "",
         rating: 1,
     })
+
+    const [uid, setUid] = useState<string | null>(null)
+
+    const [listedRatings, setListedRatings] = useState<Record<string, User_RatingData> | null>(null)
 
     if (!businessData) {
         return (
@@ -80,14 +87,14 @@ export default function BusinessPage({ businessData }: props) {
         try {
 
             const Result = await request(`/v1/business/ratings?businessId=${businessData.id}`, {
-                method : "POST",
-                body : JSON.stringify({
-                    header : ratingInputData.header,
-                    text : ratingInputData.text,
-                    rating : ratingInputData.rating
+                method: "POST",
+                body: JSON.stringify({
+                    header: ratingInputData.header,
+                    text: ratingInputData.text,
+                    rating: ratingInputData.rating
                 }),
-                headers : {
-                    "Authorization" : `Bearer ${await GetIdToken()}`
+                headers: {
+                    "Authorization": `Bearer ${await GetIdToken()}`
                 }
             })
 
@@ -99,7 +106,7 @@ export default function BusinessPage({ businessData }: props) {
 
             console.log(Data)
 
-        } catch(err) {
+        } catch (err) {
             console.log("Erroring when trying to rate this business", err)
         }
 
@@ -132,9 +139,25 @@ export default function BusinessPage({ businessData }: props) {
     const imageDir = businessData.thumbnail ? businessData.thumbnail.trim()
         .replace("https://cdn.locora.org/business_images", BaseCDNUrl()) : TemplateThumbnail
 
-    const [isBusinessFavorited, setBusinessFavorited] = useState<boolean>(false)
+    const [isBusinessFavorited, setBusinessFavorited] = useState<boolean>(true)
 
     useEffect(() => {
+
+        async function GetUIDForLocal() {
+
+            const uid = await GetUid()
+
+            if (!uid) {
+                return
+            }
+
+            if (listedRatings && listedRatings[uid]) {
+                setRatingOpened(false)
+            }
+
+            setUid(uid)
+
+        }
 
         async function IsFavorited() {
             if (!businessData || !businessData.id || businessData.id === "") {
@@ -155,7 +178,23 @@ export default function BusinessPage({ businessData }: props) {
 
         }
 
-        IsFavorited()
+        async function GetRatings() {
+
+            if (!businessData || !businessData.id || businessData.id === "") {
+                return false
+            }
+
+            const businessRatings = await GetBusinessRatings(businessData.id)
+
+            setListedRatings(businessRatings)
+
+        }
+
+        async function DoAll() {
+            await Promise.all([GetRatings(), IsFavorited(),GetUIDForLocal()])
+        }
+
+        DoAll()
 
     }, [businessData])
 
@@ -225,6 +264,17 @@ export default function BusinessPage({ businessData }: props) {
                                 className="flex flex-row gap-2 justify-center items-center"
                             >
                                 <BaseButton onClick={() => {
+
+                                    if (!listedRatings || !uid) {
+                                        setRatingOpened(!isRatingOpened)
+                                        return
+                                    }
+
+                                    if (listedRatings[uid]) {
+                                        setRatingOpened(false)
+                                        return
+                                    }
+
                                     setRatingOpened(!isRatingOpened)
                                 }} preChildren={
 
@@ -254,7 +304,7 @@ export default function BusinessPage({ businessData }: props) {
                     </div>
 
                     <div
-                        className={"flex flex-col gap-2 w-[60%] p-5 bg-linear-to-b from-bay-of-many-500 to-bay-of-many-700 py-5 rounded-2xl " + (isRatingOpened ? "hidden" : "")}
+                        className={"flex flex-col gap-2 w-[60%] p-5 bg-linear-to-b from-bay-of-many-500 to-bay-of-many-700 py-5 rounded-2xl " + (isRatingOpened ? "" : "hidden")}
                     >
 
                         <h2
@@ -282,12 +332,12 @@ export default function BusinessPage({ businessData }: props) {
                                     value={ratingInputData.header}
                                 />
 
-                                <RatingBar 
+                                <RatingBar
                                     rating={ratingInputData.rating}
                                     onRatingClicked={(rating) => {
-                                        setRatingInputData((prev : User_RatingData) => ({
+                                        setRatingInputData((prev: User_RatingData) => ({
                                             ...prev,
-                                            rating : rating
+                                            rating: rating
                                         }))
                                     }}
                                     style={"white"}
@@ -314,43 +364,93 @@ export default function BusinessPage({ businessData }: props) {
 
                             <BaseButton text={"Reset"} onClick={() => {
                                 setRatingInputData({
-                                    header : "",
-                                    text : "",
-                                    rating : 1,
+                                    header: "",
+                                    text: "",
+                                    rating: 1,
                                 })
                             }} />
                             <BaseButton text={"Post"} onClick={async () => {
                                 await HandleRating()
-                            }}/>
+                            }} />
 
                         </div>
 
                     </div>
 
                     <div
-                        className="flex flex-col gap-2 p-[15w] rounded-2xl min-h-1/2 bg-bay-of-many-700"
+                        className="flex flex-col gap-2 rounded-2xl bg-linear-to-b from-bay-of-many-700 to-bay-of-many-800"
                     >
                         <div
-                            className="flex flex-row items-center"
+                            className="flex flex-row items-center text-center p-2 gap-3"
                         >
                             <span>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="size-12">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="size-10">
                                     <path fillRule="evenodd" d="M4.848 2.771A49.144 49.144 0 0 1 12 2.25c2.43 0 4.817.178 7.152.52 1.978.292 3.348 2.024 3.348 3.97v6.02c0 1.946-1.37 3.678-3.348 3.97a48.901 48.901 0 0 1-3.476.383.39.39 0 0 0-.297.17l-2.755 4.133a.75.75 0 0 1-1.248 0l-2.755-4.133a.39.39 0 0 0-.297-.17 48.9 48.9 0 0 1-3.476-.384c-1.978-.29-3.348-2.024-3.348-3.97V6.741c0-1.946 1.37-3.68 3.348-3.97ZM6.75 8.25a.75.75 0 0 1 .75-.75h9a.75.75 0 0 1 0 1.5h-9a.75.75 0 0 1-.75-.75Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H7.5Z" clipRule="evenodd" />
                                 </svg>
                             </span>
                             <h1
-                                className="font-bold text-white text-5xl pb-10"
+                                className="font-bold text-white text-5xl"
                             >
                                 Reviews
                             </h1>
                         </div>
 
                         <div
-                            className="bg-bay-of-many-500 "
+                            className="min-w-[15w] p-5"
                         >
-                            <div>
-                                Review
-                            </div>
+                            {
+                                listedRatings && Object.values(listedRatings).map((value) => {
+                                    return (
+                                        <>
+                                            <div
+                                                key={value.uid + businessData.id}
+                                                className="bg-bay-of-many-600 rounded-2xl p-2 px-2 max-w-[50vw]"
+                                            >
+                                                <h1
+                                                    className="text-white text-xl"
+                                                >
+                                                    {value.username || "No name"}
+                                                </h1>
+
+                                                <div className="flex flex-row gap-2">
+                                                    <p className="text-white font-semibold">{value.rating}/5</p>
+                                                    <RatingBar style={"white"} rating={value.rating} />
+                                                </div>
+
+                                                <div
+                                                    className="flex flex-col pt-5"
+                                                >
+                                                    <h2
+                                                        className="text-white text-2xl font-semibold"
+                                                    >
+                                                        {value.header}
+                                                    </h2>
+
+                                                    <p
+                                                        className="text-white text-xl font-medium"
+                                                    >
+                                                        {value.text}
+                                                    </p>
+                                                </div>
+
+                                            </div>
+                                        </>
+                                    )
+                                })
+                            }
+
+                            {
+                                (listedRatings && Object.values(listedRatings).length <= 0)
+                                && (
+                                    <>
+                                        <h1
+                                            className="text-center text-white font-black text-3xl"
+                                        >
+                                            No one has reviewed this place so far!
+                                        </h1>
+                                    </>
+                                )
+                            }
                         </div>
                     </div>
 

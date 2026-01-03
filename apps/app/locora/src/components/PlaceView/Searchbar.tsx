@@ -64,7 +64,6 @@ export default function PlaceSearchBar({changePage, rawQueryChange} : props) {
         })
 
         return () => {
-            console.log("disconnected")
             Unsubscribe?.()
         }
     }, [])

@@ -21,8 +21,6 @@ export default function RatedPlace({ data, SwitchPage }: props) {
             return
         }
 
-        console.log(businessData.thumbnail)
-
         SwitchPage(5, {
             data: businessData
         })

@@ -72,8 +72,6 @@ function ProfileElement({ idToken, SwitchPage }: ElementProps) {
                 throw new Error("Issue when loading the users ratings!")
             }
 
-            console.log(UserRatings)
-
             SetRatings(UserRatings)
         }
 

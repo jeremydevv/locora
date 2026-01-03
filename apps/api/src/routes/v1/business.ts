@@ -25,9 +25,30 @@ router.get("/ratings", async (request : Request, env : Env) => {
         return Unauthorized(request)
     }
 
-    const ViewedRatings = await ViewBusinessRatings()
-    
-    console.log(ViewedRatings)
+    const requestURL = new URL(request.url)
+    const businessId = requestURL.searchParams.get("businessId")
+
+    if (!businessId) {
+        return JSONResponse(request,{
+            success : false,
+            message : "No business ID was provided!"
+        },400)
+    }
+
+    const ViewedRatings = await ViewBusinessRatings(businessId, env)
+
+    if (!ViewedRatings) {
+        return JSONResponse(request,{
+            success : false,
+            message : "Business not found or has no ratings!"
+        },404)
+    }
+
+    return JSONResponse(request,{
+        success : true,
+        message : "Ratings were correctly fetched!",
+        data : ViewedRatings
+    })
 
 }) 
 

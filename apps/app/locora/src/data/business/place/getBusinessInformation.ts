@@ -9,7 +9,19 @@ async function GetBusinessInformation(business_id : string) : Promise<BusinessPa
         const cachedPlaceInfo = localStorage.getItem("placeinfo-"+business_id)
 
         if (cachedPlaceInfo) {
-            return  JSON.parse(JSON.parse(cachedPlaceInfo).data)
+            const parsedPlaceInfo = JSON.parse(cachedPlaceInfo)
+
+            if (!parsedPlaceInfo.data || !parsedPlaceInfo.ttl) {
+                localStorage.removeItem("placeinfo-"+business_id)
+                return await GetBusinessInformation(business_id) 
+            }
+
+            if (parsedPlaceInfo.ttl < Date.now()) {
+                localStorage.removeItem("placeinfo-"+business_id)
+                return await GetBusinessInformation(business_id)
+            } else {
+                return JSON.parse(JSON.parse(parsedPlaceInfo.data).data)
+            }
         }
 
         const Results = await request(`/v1/maps/getplaceinfo?placeId=${business_id}`,{
@@ -23,7 +35,10 @@ async function GetBusinessInformation(business_id : string) : Promise<BusinessPa
             id : string
         } = await Results.json()
 
-        localStorage.setItem("placeinfo-"+business_id,JSON.stringify(Data.data))
+        localStorage.setItem("placeinfo-"+business_id,JSON.stringify({
+            data : JSON.stringify(Data.data),
+            ttl : Date.now() * 5 * 60 * 1000
+        }))
 
         if (!Results.ok) {
             console.log("Issue happened when trying to get business data!", Data)

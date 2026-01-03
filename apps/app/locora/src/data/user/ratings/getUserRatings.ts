@@ -42,8 +42,6 @@ export default async function GetUserRatings() {
             return null
         }
 
-        console.log(Data)
-
         return Data.data
 
     } catch(err) {
