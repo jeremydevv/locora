@@ -34,7 +34,10 @@ export default function Home({ ChangePage }: props) {
             setCurrentQuery(newQuery)
         })
 
-        
+        return () => {
+            conn1?.()
+            conn2?.()
+        }
     }, [])
 
     function ZoomIn() {

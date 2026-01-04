@@ -1,16 +1,8 @@
 import { useEffect, useState } from "react"
 import { GetBusinessInformation } from "../data/business/place/getBusinessInformation"
-
 import TemplateThumbnail from "../assets/placeholder.png"
-
 import BaseCDNUrl from "../utilities/BaseCDNUrl"
-import BaseButton from "./button"
-import { IsBusinessFavorited } from "../data/user/favorites/getFavorites"
-import FilledBookmark from "../assets/FilledBookmark"
-import { EmptyBookmark } from "../assets/EmptyBookmark"
-import FilledStar from "../assets/FilledStar"
-import usePageSwitch from "../hooks/usePageSwitch"
-import { BusinessPayload, getBusinessData } from "../pages/BusinessPage/BusinessStore"
+import { BusinessPayload } from "../pages/BusinessPage/BusinessStore"
 import { ChangePage } from "../App"
 
 interface props {
@@ -21,7 +13,6 @@ interface props {
 export default function FavoritedPlace({ business_id, SwitchPage }: props) {
 
     const [businessData, setBusinessData] = useState<BusinessPayload>()
-    const [isBusinessFavorited, setBusinessFavoritedStatus] = useState<boolean>(false)
 
     useEffect(() => {
 
@@ -35,16 +26,8 @@ export default function FavoritedPlace({ business_id, SwitchPage }: props) {
             setBusinessData(businessInfo)
         }
 
-        async function GetBusinessFavoritedStatus() {
-
-            const isFavorited = await IsBusinessFavorited(business_id)
-
-            setBusinessFavoritedStatus(isFavorited == true ? true : false)
-
-        }
-
         async function RunAll() {
-            await Promise.all([GetBusinessInfo(), GetBusinessFavoritedStatus()])
+            await Promise.all([GetBusinessInfo()])
         }
 
         RunAll()
