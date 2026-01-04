@@ -8,6 +8,7 @@ export interface Env {
     GITHUB_TOKEN : string,
     GEO_API_KEY : string, 
     GOOGLE_MAPS_API_KEY : string,
+    FIREBASE_SERVICE_ACCOUNT_JSON : string
     // cf bindings
     WaitlistRatelimiter : RateLimit
     MapKV : KVNamespace
@@ -98,10 +99,32 @@ export interface User_DataPayload {
     coins : string;
 }
 
-export interface User_Review {
+export interface User_FavoriteInFolder {
+    name : string,
+    fields : {
+        business_id? : string
+    },
+    createTime : string,
+    updateTime : string
+}
+
+export interface User_RatingInFolder {
+    name : string,
+    fields : Business_Rating,
+    createTime : string,
+    updateTime : string,
+}
+
+export type User_FavoritesFolder = Array<User_FavoriteInFolder>
+export type User_RatingsFolder = Array<User_RatingInFolder>
+
+export interface Business_Rating {
     uid : string,
-    rating : number,
-    reviewText : string,
+    username : string
+    business_id : string
+    header : string,
+    text : string,
+    rating : string
 }
 
 export interface Locora_Business {
@@ -135,7 +158,7 @@ export interface Locora_Business {
         average : number;
     };
 
-    ratings? : Record<string, User_Review>
+    ratings? : Record<string, Business_Rating>
 
     thumbnail? : string;
 

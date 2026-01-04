@@ -1,9 +1,11 @@
 import { Env } from "../types"
+import { checkForValidAuthorization } from "./CheckForAuth"
 import JSONResponse from "./JSONResponse"
 
 export default async function getUidFromIdToken(idToken: string, env : Env) {
 
     try {
+
         const body = JSON.stringify({
             "idToken" : idToken
         })
@@ -20,14 +22,16 @@ export default async function getUidFromIdToken(idToken: string, env : Env) {
         )
 
         if (!Result.ok) {
+            const data : {
+                error : object
+            } = await Result.json()
+            console.log("issue occured when getting user uid", data.error)
             return false
         }
 
         const tokenData : {
             users : Array<{localId : string}>
         } = await Result.json()
-
-        console.log(tokenData.users[0])
 
         if (!(tokenData.users) || (tokenData.users.length === 0)) {
             console.log("no user data was returned")

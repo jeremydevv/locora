@@ -3,8 +3,9 @@ import { Router } from "itty-router";
 import Corsify from "../utils/Corsify";
 import JSONResponse from "../utils/JSONResponse";
 import { Env } from "../types";
-import { addToEmails, addToPhoneNumbers, isInSheet } from "./Waitlist/Spreadsheet";
+import { addToEmails, isInSheet } from "./Waitlist/Spreadsheet";
 import { checkForValidEmail, checkForValidPhone } from "./Waitlist/inputValidation";
+import InternalError from "../utils/InternalError";
 
 const router = Router({ base: "/v1/waitlist/" });
 
@@ -81,11 +82,10 @@ async function Add_To_Waitlist(req: Request, env: Env) {
     const IP: string = req.headers.get("CF-Connecting-IP")!;
 
     const EmailValid = await checkForValidEmail(req,userInfo);
-    const PhoneValid = await checkForValidPhone(req,userInfo);
 
     // tests input against both info types, if neither, send it back
-    if ((EmailValid !== true) && (PhoneValid !== true)) {
-        return JSONResponse(req, {status: "error",message: "Invalid email or phone number.",}, 400);
+    if ((EmailValid !== true)) {
+        return JSONResponse(req, {status: "error",message: "Invalid email.",}, 400);
     }
 
     const InputType : "email" | "phone" = EmailValid === true ? "email" : "phone";
@@ -108,8 +108,8 @@ async function Add_To_Waitlist(req: Request, env: Env) {
     
     if (InputType == "email") {
         InfoAdded = await addToEmails(req,userInfo);
-    } else if (InputType == "phone") {
-        InfoAdded = await addToPhoneNumbers(req,userInfo);
+    } else {
+        return InternalError(req)
     }
 
     if (!(InfoAdded)) {

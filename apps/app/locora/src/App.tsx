@@ -8,12 +8,12 @@ import Home from './pages/Home'
 import Explore from './pages/Explore'
 import Profile from './pages/Profile'
 import BottomBar from './components/bottombar'
-import Favorites from './pages/Favorites'
 import "./pages/BusinessPage/BusinessStore"
 import BusinessPage from './pages/BusinessPage/Business'
 import { BusinessPayload } from './pages/BusinessPage/BusinessStore'
+import usePageSwitch from './hooks/usePageSwitch'
 
-const SelectionEnum: Record<number, string> = {
+const SelectionEnum = {
   1: "Home",
   2: "Explore",
   3: "Favorites",
@@ -21,16 +21,14 @@ const SelectionEnum: Record<number, string> = {
   5: "Business"
 }
 
+export type ChangePage_MiscData = {data? : BusinessPayload, scrollTo? : string}
+export type ChangePage = ((newSection : number, miscData? : ChangePage_MiscData) => void)
+
 type DeviceTypes = "win32" | "darwin" | "linux"
 
 function App() {
-  const [curSelection, setSelection] = useState<number>(1)
+  const {currentPage, setCurrentPage, currentData, setCurrentData} = usePageSwitch()
   const [curPlatform , setPlatform] = useState<DeviceTypes>("win32")
-  const [businessData , setBusinessData] = useState<BusinessPayload | null>(null)
-
-  window.electronAPI?.onPlatform((_,platform) => {
-    setPlatform(platform as DeviceTypes)
-  }) 
 
   useEffect(() => {
     window.electronAPI?.getDeviceType().then((platform) => {
@@ -38,10 +36,14 @@ function App() {
     })
   }, [])
 
-  function SwitchPage(newSection: number , data? : BusinessPayload) {
-    setSelection(newSection)
+  useEffect(() => {
+
+  },[currentPage])
+
+  function SwitchPage(newSection: 1 | 2 | 3 | 4 | 5 , data? : ChangePage_MiscData) {
+    setCurrentPage(newSection)
     if(data) {
-      setBusinessData(data)
+      setCurrentData(data.data as BusinessPayload)
     }
   }
 
@@ -67,33 +69,28 @@ function App() {
           </div>
 
           {
-            SelectionEnum[curSelection] === "Home" && (
-              <Home ChangePage={SwitchPage} />
+            SelectionEnum[currentPage] === "Home" && (
+              <Home ChangePage={SwitchPage as ChangePage} />
             )
           }
           {
-            SelectionEnum[curSelection] === "Explore" && (
+            SelectionEnum[currentPage] === "Explore" && (
               <Explore />
             )
           }
           {
-            SelectionEnum[curSelection] === "Profile" && (
-              <Profile />
+            SelectionEnum[currentPage] === "Profile" && (
+              <Profile SwitchPage={SwitchPage as ChangePage} />
             )
           }
           {
-            SelectionEnum[curSelection] === "Favorites" && (
-              <Favorites />
+            SelectionEnum[currentPage] === "Favorites" && (
+              <Profile SwitchPage={SwitchPage as ChangePage}/>
             )
           }
           {
-            SelectionEnum[curSelection] === "Business" && (
-              <Favorites />
-            )
-          }
-          {
-            SelectionEnum[curSelection] === "Business" && (
-              <BusinessPage businessData={businessData} />
+            SelectionEnum[currentPage] === "Business" && (
+              <BusinessPage businessData={currentData} />
             )
           }
         </div>

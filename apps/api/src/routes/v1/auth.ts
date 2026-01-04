@@ -4,8 +4,6 @@ import Corsify from "../utils/Corsify";
 import JSONResponse from "../utils/JSONResponse";
 import { Env } from "../types";
 
-import GoogleEntry from "./Auth/Google/entry";
-import MicrosoftEntry from "./Auth/Microsoft/entry"
 import DefaultEntry from "./Auth/Default/entry"
 import MalformedData from "../utils/MalformedRequest";
 import { RefreshIdToken } from "../../../data/firebaseAuth";
@@ -21,14 +19,6 @@ router.options("/*", (req : Request) => {
 
 router.post("/default/*", async (req : Request, env : Env, context : any) => {
     return await DefaultEntry(req,env,context)
-})
-
-router.post("/google/*", async (req : Request) => {
-    return GoogleEntry(req)
-})
-
-router.post("/microsoft/*", async (req : Request) => {
-    return MicrosoftEntry(req)
 })
 
 router.post("/refresh", async (req : Request, env : Env) => {

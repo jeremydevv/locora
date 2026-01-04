@@ -1,4 +1,3 @@
-import Template from "../assets/pfptemp.png"
 import BaseButton from "../components/button";
 
 import Clouds from "../assets/Clouds3.png"
@@ -6,8 +5,19 @@ import { useEffect, useState } from "react";
 import { GetIdToken, GetUid } from "../data/AuthStore";
 import { DataPayload } from "../../types";
 import { GetUserAttribute } from "../data/user/information/displayInformation";
+import { GetUserFavorites, User_FavoriteElement } from "../data/user/favorites/getFavorites";
+import FavoritedPlace from "../components/favoritedplace";
+import { ChangePage } from "../App";
+import GetUserRatings, { UserRating } from "../data/user/ratings/getUserRatings";
+import RatedPlace from "../components/ratedplace";
 
-function ProfileElement({ idToken }: DataPayload) {
+interface ElementProps {
+    idToken : string
+    uid : string
+    SwitchPage : ChangePage
+}
+
+function ProfileElement({ idToken, SwitchPage }: ElementProps) {
 
     function Logout() {
         if (idToken === "") return
@@ -17,30 +27,59 @@ function ProfileElement({ idToken }: DataPayload) {
 
     const [Username, setUsername] = useState<string>("")
     const [DisplayUsername, setDisplayUsername] = useState<string>("")
-    const [SuccessfullyFetched , setSuccessfullyFetched] = useState<boolean>(false)
+
+    const [currentTab, setCurrentTab] = useState<"Favorites" | "Ratings">("Favorites")
+    const [UserFavorites, SetFavorites] = useState<Array<string>>([])
+    const [UserRatings, SetRatings] = useState<UserRating[]>([])
+
+    const [SuccessfullyFetched, setSuccessfullyFetched] = useState<boolean>(false)
 
     useEffect(() => {
-        if(SuccessfullyFetched) return
+        if (SuccessfullyFetched) return
+        if (idToken == "" || !idToken) {
+            return
+        }
 
         async function LoadUsername() {
             const username = await GetUserAttribute(idToken!, "username")
-            console.log(username)
             setUsername(username)
         }
 
         async function LoadDisplayUsername() {
             const displayName = await GetUserAttribute(idToken!, "displayName")
-            console.log(displayName)
             setDisplayUsername(displayName)
+        }
+
+        async function LoadUserFavorites() {
+            const FavoritesArray: User_FavoriteElement[] | null = await GetUserFavorites(idToken!)
+
+            if (!FavoritesArray) {
+                throw new Error("Issue when loading users favorite!")
+            }
+
+            const businessIds = FavoritesArray
+                .map((value) => value?.fields?.business_id?.stringValue)
+                .filter((id): id is string => Boolean(id))
+
+            SetFavorites(businessIds)
+        }
+
+        async function LoadUserRatings() {
+            const UserRatings : UserRating[] | null = await GetUserRatings()
+
+            if (!UserRatings) {
+                throw new Error("Issue when loading the users ratings!")
+            }
+
+            SetRatings(UserRatings)
         }
 
         async function RunAll() {
             try {
-                await Promise.all([LoadUsername(), LoadDisplayUsername()])
+                await Promise.all([LoadUsername(), LoadDisplayUsername(), LoadUserFavorites(),LoadUserRatings()])
                 setSuccessfullyFetched(true)
-                console.log("User attributes loaded successfully")
-            } catch(err) {
-                console.log("Error loading user attributes",err)
+            } catch (err) {
+                console.log("Error loading user attributes", err)
             }
         }
 
@@ -50,29 +89,16 @@ function ProfileElement({ idToken }: DataPayload) {
 
     return (
         <div
-            className="relative flex flex-col bg-bay-of-many-500 gap-3 pb-5 items-center w-[135vh] min-h-screen h-fit"
+            className="relative flex flex-col bg-bay-of-many-500 gap-3 pb-5 px-10 items-center w-[135vh] min-h-screen h-fit"
         >
-
-            {/* top side with banner + profile picture */}
-            <div
-                className="flex flex-col gap-4 items-center z-10 pr-[50vw] pt-[30vh] justify-center w-full h-[25vh] bg-bay-of-many-600/40"
-            >
-
-                <div
-                    className="flex w-[35vh] h-[35vh] rounded-full p-1 bg-white/30 border-2 border-white/50"
-                >
-                    <img src={Template} className="w-full h-full rounded-full" />
-                </div>
-
-            </div>
 
             {/* under pictures, user info (name + handle + social media + bio) */}
             <div
-                className="flex flex-col ml-[23vw] z-10 gap-4 p-10 text-white"
+                className="flex flex-col w-full z-10 gap-4 p-10 text-white"
             >
 
                 <div
-                    className="flex flex-row gap-2 justify-end"
+                    className="right-10 flex flex-row gap-2 justify-end"
                 >
                     <BaseButton
                         type="white"
@@ -121,12 +147,6 @@ function ProfileElement({ idToken }: DataPayload) {
                     >
                         @{Username}
                     </h2>
-
-                    <p
-                        className="text-white/70"
-                    >
-                        Bio: Software developer. Music lover. Tech enthusiast. Always exploring new horizons and pushing boundaries.
-                    </p>
                 </div>
 
             </div>
@@ -136,6 +156,7 @@ function ProfileElement({ idToken }: DataPayload) {
             >
                 <BaseButton
                     text="Reviews"
+                    onClick={() => { setCurrentTab("Ratings") }}
                     preChildren={
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-7 pr-2">
                             <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clipRule="evenodd" />
@@ -146,6 +167,7 @@ function ProfileElement({ idToken }: DataPayload) {
                 <BaseButton
                     text="Favorites"
                     type="black"
+                    onClick={() => { setCurrentTab("Favorites") }}
                     preChildren={
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-7 pr-2">
                             <path fillRule="evenodd" d="M6.32 2.577a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 0 1-1.085.67L12 18.089l-7.165 3.583A.75.75 0 0 1 3.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93Z" clipRule="evenodd" />
@@ -156,8 +178,31 @@ function ProfileElement({ idToken }: DataPayload) {
             </div>
 
             <div
-                className="flex flex-col bg-bay-of-many-400 w-[95%] rounded-3xl px-5 pt-5 min-h-[120vh]"
+                className="grid grid-cols-3 auto-rows-[38vh] gap-3 bg-bay-of-many-400 rounded-3xl w-full px-5 pt-5 pb-5 min-h-[75vh]"
             >
+
+                {
+                    currentTab === "Favorites" ? (
+                        <>
+                            {/*favorites tab*/}
+
+                            {
+                                UserFavorites.map((businessId) => {
+                                    return (<FavoritedPlace key={businessId} business_id={businessId} SwitchPage={SwitchPage} />)
+                                })
+                            }
+                        </>
+                    ) : (
+                        <>
+                            {/*ratings tab*/}
+                            {
+                                UserRatings.map((ratingObject) => {
+                                    return (<RatedPlace key={ratingObject.fields.business_id.stringValue} data={ratingObject} SwitchPage={SwitchPage} />)
+                                })
+                            }
+                        </>
+                    )
+                }
 
             </div>
 
@@ -211,7 +256,11 @@ function NotLoggedInElement() {
     )
 }
 
-export default function Profile() {
+interface props {
+    SwitchPage : ChangePage
+}
+
+export default function Profile({SwitchPage} : props) {
 
     const [idToken, setIdToken] = useState<string>("")
     const [uid, setUID] = useState<string>("")
@@ -240,7 +289,7 @@ export default function Profile() {
                 className="w-full min-h-screen flex justify-center overflow-x-hidden"
             >
                 <img src={Clouds} className="absolute top-0 left-0 opacity-5 w-full z-0 animate-float select:none" />
-                {idToken !== "" ? <ProfileElement key={idToken} idToken={idToken} uid={uid} refreshToken={""} expiresIn={""} /> : <NotLoggedInElement />}
+                {idToken !== "" ? <ProfileElement key={idToken} SwitchPage={SwitchPage} idToken={idToken} uid={uid} /> : <NotLoggedInElement />}
             </div>
         </>
     )

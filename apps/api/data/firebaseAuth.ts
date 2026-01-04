@@ -199,7 +199,7 @@ async function RefreshIdToken(req : Request, env : Env) {
         } = await Data.json()
 
         if (!Data.ok) {
-            console.log(Results, Results.error)
+            console.log("Issue with Refresh ID: ",Results, Results.error)
             return InternalError(req)
         }
 

@@ -23,6 +23,7 @@ export default async function GetDisplayInformation(req : Request, env : Env) {
         return InternalError(req)
     }
 
+    //@ts-ignore
     const CleanedUserRecordData : User_DataPayload = cleanFirebaseData(userData);
 
     return JSONResponse(req,{

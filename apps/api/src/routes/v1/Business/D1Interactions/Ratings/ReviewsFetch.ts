@@ -1,6 +1,6 @@
-import { Env, Locora_Business, User_Review } from "../../../../types";
+import { Business_Rating, Env, Locora_Business, User_RatingInFolder } from "../../../../types";
 
-export default async function GetBusinessReviews(id: string, env: Env): Promise<Record<string,User_Review> | null> {
+export default async function GetBusinessReviews(id: string, env: Env): Promise<Record<string,Business_Rating> | null> {
 
     const query: { data: string } | null = await env.MapDB.prepare(
         `SELECT data FROM businesses WHERE id = ?`
@@ -16,5 +16,5 @@ export default async function GetBusinessReviews(id: string, env: Env): Promise<
         return null;
     }
 
-    return businessData.ratings ;
+    return businessData.ratings as Record<string,Business_Rating> ;
 }   
