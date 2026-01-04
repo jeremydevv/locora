@@ -30,25 +30,6 @@ const locallyFavorited: Record<string, boolean> = {}
 
 export default function BusinessPage({ businessData }: props) {
 
-    if (!businessData) {
-        return (
-            <>
-                <div
-                    className="flex flex-col items-center justify-center w-full h-full"
-                >
-                    <h1
-                        className="font-bold text-white text-2xl"
-                    >
-                        No business data found.
-                    </h1>
-                    <h2>
-                        Please select a business from the home page.
-                    </h2>
-                </div>
-            </>
-        )
-    }
-
     const [isRatingOpened, setRatingOpened] = useState<boolean>(false)
 
     const [ratingInputData, setRatingInputData] = useState<User_RatingData>({
@@ -138,7 +119,7 @@ export default function BusinessPage({ businessData }: props) {
 
     }
 
-    const imageDir = businessData.thumbnail ? businessData.thumbnail.trim()
+    const imageDir = businessData?.thumbnail ? businessData?.thumbnail.trim()
         .replace("https://cdn.locora.org/business_images", BaseCDNUrl()) : TemplateThumbnail
 
     const [isBusinessFavorited, setBusinessFavorited] = useState<boolean>(false)
@@ -201,6 +182,25 @@ export default function BusinessPage({ businessData }: props) {
         DoAll()
 
     }, [businessData])
+
+    if (!businessData) {
+        return (
+            <>
+                <div
+                    className="flex flex-col items-center justify-center w-full h-full"
+                >
+                    <h1
+                        className="font-bold text-white text-2xl"
+                    >
+                        No business data found.
+                    </h1>
+                    <h2>
+                        Please select a business from the home page.
+                    </h2>
+                </div>
+            </>
+        )
+    }
 
     return (
         <>
