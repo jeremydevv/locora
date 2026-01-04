@@ -11,6 +11,8 @@ import { EmptyBookmark } from "../../assets/EmptyBookmark"
 import { IsBusinessFavorited } from "../../data/user/favorites/getFavorites"
 import FilledBookmark from "../../assets/FilledBookmark"
 import GetBusinessRatings from "../../data/business/ratings/getBusinessRatings"
+import Deal from "../../components/deal"
+import GetLintedCategory from "../../utilities/GetLintedCategory"
 
 interface props {
     businessData: BusinessPayload | null
@@ -260,10 +262,10 @@ export default function BusinessPage({ businessData }: props) {
                                     </h2>
 
                                     <div
-                                        className="bg-bay-of-many-950 min-w-full min-h-[84%] overflow-scroll overflow-y-hidden rounded-2xl"
+                                        className="bg-bay-of-many-950 min-w-full min-h-[84%] overflow-scroll overflow-y-hidden rounded-2xl p-2"
                                     >
 
-
+                                        <Deal storeType={GetLintedCategory(businessData.category)}/>
 
                                     </div>
 
