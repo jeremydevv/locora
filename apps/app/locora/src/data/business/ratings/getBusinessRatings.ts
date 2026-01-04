@@ -83,6 +83,8 @@ export default async function GetBusinessRatings(business_id : string) {
             console.log("Issue when fetching endpoint for business ratings!",Data)
         }
 
+        CacheBusinessRating(business_id,Data.data)
+
         return Data.data
 
     } catch(err) {
