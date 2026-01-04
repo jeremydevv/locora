@@ -1,4 +1,3 @@
-import Template from "../assets/pfptemp.png"
 import BaseButton from "../components/button";
 
 import Clouds from "../assets/Clouds3.png"

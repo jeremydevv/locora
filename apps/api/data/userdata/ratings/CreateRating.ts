@@ -1,4 +1,4 @@
-import { Env, User_RatingInFolder } from "../../../src/routes/types"
+import { Env } from "../../../src/routes/types"
 import MalformedRequest from "../../../src/routes/utils/MalformedRequest"
 import { GetFirebaseServiceAccount } from "../GetFirebaseServiceAccount"
 
