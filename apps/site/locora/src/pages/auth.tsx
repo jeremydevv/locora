@@ -132,21 +132,6 @@ function AuthenticationPage() {
 
     }
 
-    async function LoginViaSocialConnector(connector: "google" | "microsoft") {
-
-        const Data = request(`/v1/auth/${connector}/login`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-
-        const Parsed = (await Data).json
-
-        console.log(Parsed)
-
-    }
-
     /*
         return cases:
             social connector? :
