@@ -24,7 +24,7 @@ export default function Home({ ChangePage }: props) {
     const [map, setMap] = useState<Map | null>(null);
     const [currentQuery , setCurrentQuery] = useState<string>("")
 
-    let onRawQueryChangedListeners : Array<RawQueryChanged> = []
+    const onRawQueryChangedListeners : Array<RawQueryChanged> = []
 
     useEffect(() => {
         const conn1 = onNewMap((map) => {
