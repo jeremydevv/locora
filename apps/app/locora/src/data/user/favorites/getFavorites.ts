@@ -10,7 +10,7 @@ export interface User_FavoriteElement {
     }      
 }
 
-let CachedUserFavorites : {
+const CachedUserFavorites : {
     favorites : Array<User_FavoriteElement> | null
     ttl : number
 } = {

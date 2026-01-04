@@ -30,18 +30,6 @@ const locallyFavorited: Record<string, boolean> = {}
 
 export default function BusinessPage({ businessData }: props) {
 
-    const [isRatingOpened, setRatingOpened] = useState<boolean>(false)
-
-    const [ratingInputData, setRatingInputData] = useState<User_RatingData>({
-        header: "",
-        text: "",
-        rating: 1,
-    })
-
-    const [uid, setUid] = useState<string | null>(null)
-
-    const [listedRatings, setListedRatings] = useState<Record<string, User_RatingData> | null>(null)
-
     if (!businessData) {
         return (
             <>
@@ -60,6 +48,18 @@ export default function BusinessPage({ businessData }: props) {
             </>
         )
     }
+
+    const [isRatingOpened, setRatingOpened] = useState<boolean>(false)
+
+    const [ratingInputData, setRatingInputData] = useState<User_RatingData>({
+        header: "",
+        text: "",
+        rating: 1,
+    })
+
+    const [uid, setUid] = useState<string | null>(null)
+
+    const [listedRatings, setListedRatings] = useState<Record<string, User_RatingData> | null>(null)
 
     async function HandleRating() {
 
