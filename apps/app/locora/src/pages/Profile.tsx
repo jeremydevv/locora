@@ -93,26 +93,13 @@ function ProfileElement({ idToken, SwitchPage }: ElementProps) {
             className="relative flex flex-col bg-bay-of-many-500 gap-3 pb-5 px-10 items-center w-[135vh] min-h-screen h-fit"
         >
 
-            {/* top side with banner + profile picture */}
-            <div
-                className="flex flex-col gap-4 items-center z-10 pr-[50vw] pt-[30vh] justify-center w-full h-[25vh] bg-bay-of-many-600/40"
-            >
-
-                <div
-                    className="flex w-[35vh] h-[35vh] rounded-full p-1 bg-white/30 border-2 border-white/50"
-                >
-                    <img src={Template} className="w-full h-full rounded-full" />
-                </div>
-
-            </div>
-
             {/* under pictures, user info (name + handle + social media + bio) */}
             <div
-                className="flex flex-col ml-[23vw] z-10 gap-4 p-10 text-white"
+                className="flex flex-col w-full z-10 gap-4 p-10 text-white"
             >
 
                 <div
-                    className="flex flex-row gap-2 justify-end"
+                    className="right-10 flex flex-row gap-2 justify-end"
                 >
                     <BaseButton
                         type="white"
@@ -161,12 +148,6 @@ function ProfileElement({ idToken, SwitchPage }: ElementProps) {
                     >
                         @{Username}
                     </h2>
-
-                    <p
-                        className="text-white/70"
-                    >
-                        Bio: placeholder placeholder placeholder
-                    </p>
                 </div>
 
             </div>

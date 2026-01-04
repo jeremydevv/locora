@@ -45,7 +45,7 @@ async function GetUserFavorites(idToken: string) {
         }
 
         CachedUserFavorites.favorites = Res.data ?? []
-        CachedUserFavorites.ttl = Date.now() + 6000
+        CachedUserFavorites.ttl = Date.now() * 2 * 60 * 1000
 
         return CachedUserFavorites.favorites
 

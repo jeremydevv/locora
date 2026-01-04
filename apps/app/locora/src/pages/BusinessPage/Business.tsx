@@ -28,7 +28,7 @@ const locallyFavorited: Record<string, boolean> = {}
 
 export default function BusinessPage({ businessData }: props) {
 
-    const [isRatingOpened, setRatingOpened] = useState<boolean>(true)
+    const [isRatingOpened, setRatingOpened] = useState<boolean>(false)
 
     const [ratingInputData, setRatingInputData] = useState<User_RatingData>({
         header: "",
@@ -139,7 +139,7 @@ export default function BusinessPage({ businessData }: props) {
     const imageDir = businessData.thumbnail ? businessData.thumbnail.trim()
         .replace("https://cdn.locora.org/business_images", BaseCDNUrl()) : TemplateThumbnail
 
-    const [isBusinessFavorited, setBusinessFavorited] = useState<boolean>(true)
+    const [isBusinessFavorited, setBusinessFavorited] = useState<boolean>(false)
 
     useEffect(() => {
 
@@ -172,6 +172,8 @@ export default function BusinessPage({ businessData }: props) {
 
             const isFaved: boolean = await IsBusinessFavorited(businessData.id) as boolean
 
+            console.log(businessData)
+
             setBusinessFavorited(isFaved)
 
             return isFaved
@@ -191,7 +193,7 @@ export default function BusinessPage({ businessData }: props) {
         }
 
         async function DoAll() {
-            await Promise.all([GetRatings(), IsFavorited(),GetUIDForLocal()])
+            await Promise.all([GetRatings(), IsFavorited(), GetUIDForLocal()])
         }
 
         DoAll()
@@ -208,54 +210,86 @@ export default function BusinessPage({ businessData }: props) {
                 >
 
                     <div
-                        className="flex flex-row bg-bay-of-many-700 p-5 rounded-2xl justify-between"
+                        className="flex flex-row bg-bay-of-many-700 p-5 rounded-2xl"
                     >
                         <div
                             className="flex flex-col justify-between gap-2"
                         >
                             <div
-                                className="flex flex-col"
+                                className="flex flex-col h-full items-center justify-between"
                             >
-                                <h1
-                                    className="text-3xl text-white font-bold text-left"
-                                >
-                                    {businessData.name}
-                                </h1>
-                                <h2
-                                    className="text-xl text-white/80 font-bold text-left"
-                                >
-                                    {businessData.address}
-                                </h2>
                                 <div
-                                    className="flex flex-row gap-2"
+                                    className="flex flex-col"
                                 >
-                                    <RatingBar style="white" rating={businessData.rating.average} />
-
-                                    <p
-                                        className="font-bold text-white"
+                                    <div
+                                        className="flex flex-col"
                                     >
-                                        {businessData.rating.average}/5
-                                    </p>
+                                        <h1
+                                            className="text-3xl text-white font-bold text-left"
+                                        >
+                                            {businessData.name}
+                                        </h1>
+                                        <h2
+                                            className="text-xl text-white/80 font-bold text-left"
+                                        >
+                                            {businessData.address}
+                                        </h2>
+                                    </div>
+
+                                    <div
+                                        className="flex flex-row gap-2 pb-15"
+                                    >
+                                        <RatingBar style="white" rating={businessData.rating.average} />
+
+                                        <p
+                                            className="font-bold text-white"
+                                        >
+                                            {businessData.rating.average}/5
+                                        </p>
+                                    </div>
                                 </div>
 
-                                <a
-                                    href={businessData.website || "#"}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="pt-[10vh]"
+                                <div
+                                    className="flex flex-col min-h-[24vh] min-w-[20vw] gap-2 bg-linear-to-b from-bay-of-many-800 to-bay-of-many-900 rounded-2xl p-3 items-center"
                                 >
-                                    <p
-                                        className="text-white/80 underline"
-                                    >
-                                        {businessData.name}'s website
-                                    </p>
-                                </a>
 
-                                <p
-                                    className="text-white"
+                                    <h2
+                                        className="text-white text-2xl font-semibold underline"
+                                    >
+                                        Deals
+                                    </h2>
+
+                                    <div
+                                        className="bg-bay-of-many-950 min-w-full min-h-[84%] overflow-scroll overflow-y-hidden rounded-2xl"
+                                    >
+
+
+
+                                    </div>
+
+                                </div>
+
+                                <div
+                                    className="flex flex-col items-center pt-5"
                                 >
-                                    Contact Number: {businessData.contact.phone}
-                                </p>
+                                    <a
+                                        href={businessData.website || "#"}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <p
+                                            className="text-white/80 underline"
+                                        >
+                                            {businessData.name}'s website
+                                        </p>
+                                    </a>
+
+                                    <p
+                                        className="text-white"
+                                    >
+                                        Contact Number: {businessData.contact.phone}
+                                    </p>
+                                </div>
 
                             </div>
 
