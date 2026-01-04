@@ -68,13 +68,13 @@ export default async function ModifyFavoriteForUser(uid: string, business_id: st
 
                 await ExecuteFavoriteAction(uid,business_id,"remove",env)
 
-                return "added"
+                return "removed"
             } else {
                 // the user did favorite this business, finna unfavorite
 
                 await ExecuteFavoriteAction(uid, business_id ,"add",env)
 
-                return "removed"
+                return "added"
             }
 
         } else {

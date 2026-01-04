@@ -17,7 +17,7 @@ dotenv.config({ path: path.join(__dirname, '../.env') })
 process.env.APP_ROOT = path.join(__dirname, '..')
 
 export const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
-export const Environment = process.env['VITE_ENVIRONMENT']
+export const Environment = "development"
 export const MAIN_DIST = path.join(process.env.APP_ROOT, 'dist-electron')
 export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist')
 
@@ -114,9 +114,9 @@ ipcMain.handle("open-authentication-window", async () => {
     }
   })
 
-  if (Environment == "dev") {
+  if (Environment.includes("dev")) {
     authWin.loadURL("http://localhost:3067/auth")
-  } else if(Environment == "main") {
+  } else if(Environment.includes("main")) {
     authWin.loadURL("https://locora.org/auth")
   } else {
     authWin.loadURL(`https://${Environment}.locora.pages.dev/auth`)

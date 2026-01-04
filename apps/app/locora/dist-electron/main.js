@@ -16419,7 +16419,7 @@ const __dirname$1 = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.join(__dirname$1, "../.env") });
 process.env.APP_ROOT = path.join(__dirname$1, "..");
 const VITE_DEV_SERVER_URL = process.env["VITE_DEV_SERVER_URL"];
-const Environment = process.env["VITE_ENVIRONMENT"];
+const Environment = "development";
 const MAIN_DIST = path.join(process.env.APP_ROOT, "dist-electron");
 const RENDERER_DIST = path.join(process.env.APP_ROOT, "dist");
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, "public") : RENDERER_DIST;
@@ -16485,10 +16485,8 @@ ipcMain$1.handle("open-authentication-window", async () => {
       preload: path.join(__dirname$1, "preload.mjs")
     }
   });
-  if (Environment == "dev") {
+  if (Environment.inc === "dev") {
     authWin.loadURL("http://localhost:3067/auth");
-  } else if (Environment == "main") {
-    authWin.loadURL("https://locora.org/auth");
   } else {
     authWin.loadURL(`https://${Environment}.locora.pages.dev/auth`);
   }

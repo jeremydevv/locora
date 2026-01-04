@@ -211,8 +211,6 @@ function AuthenticationPage() {
                 return
             }
 
-            RenderedCloudflare.current = true
-
             // @ts-ignore
             if (window.turnstile) {
                 console.log("Turnstile loaded")
@@ -223,6 +221,7 @@ function AuthenticationPage() {
                     theme: "dark",
                 });
                 setWidgetId(id)
+                RenderedCloudflare.current = true
             } else {
                 setTimeout(attemptTurnstileLoad, 500)
             }
