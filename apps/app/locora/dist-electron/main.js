@@ -16072,9 +16072,10 @@ class ElectronStore extends Conf {
     }
   }
 }
+const ENVIRONMENT = "development";
 function baseAPIUrl() {
   {
-    return "http://localhost:6767";
+    return `https://${ENVIRONMENT}-locora-api.jeremymathew100.workers.dev`;
   }
 }
 var main = { exports: {} };

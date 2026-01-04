@@ -234,7 +234,7 @@ function NotLoggedInElement() {
                     <p
                         className="text-white text-xl font-semibold"
                     >
-                        To use the features such as marking favorites, reviewing, gaining currency, and other personalized features, you must log in with locora.org.
+                        To use the features such as marking favorites, reviewing, and searching up businesses, you must log in with locora.org.
                     </p>
 
                 </div>
