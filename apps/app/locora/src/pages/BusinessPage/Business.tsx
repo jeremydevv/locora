@@ -89,6 +89,12 @@ export default function BusinessPage({ businessData }: props) {
 
             console.log(Data)
 
+            setRatingInputData({
+                header : "",
+                text : "",
+                rating : 1
+            })
+
         } catch (err) {
             console.log("Erroring when trying to rate this business", err)
         }

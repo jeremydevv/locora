@@ -16485,8 +16485,10 @@ ipcMain$1.handle("open-authentication-window", async () => {
       preload: path.join(__dirname$1, "preload.mjs")
     }
   });
-  if (Environment.inc === "dev") {
+  if (Environment.includes("dev")) {
     authWin.loadURL("http://localhost:3067/auth");
+  } else if (Environment.includes("main")) {
+    authWin.loadURL("https://locora.org/auth");
   } else {
     authWin.loadURL(`https://${Environment}.locora.pages.dev/auth`);
   }
