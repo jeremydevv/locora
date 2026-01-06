@@ -7,7 +7,7 @@ port = 6767
 local_protocol = "http"
 
 [vars]
-ENVIRONMENT = "dev"
+ENVIRONMENT = "main"
 
 [[ratelimits]]
 name = "WaitlistRatelimiter"
