@@ -1,5 +1,3 @@
-import Template from "../assets/pfptemp.png"
-
 interface BannerProps {
     OnProfilePageActivate: () => void,
     isExpanded: boolean
