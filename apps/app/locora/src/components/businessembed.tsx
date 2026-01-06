@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { BusinessPayload } from "../pages/BusinessPage/BusinessStore"
 import { GetBusinessInformation } from "../data/business/place/getBusinessInformation"
 import BaseCDNUrl from "../utilities/BaseCDNUrl"
