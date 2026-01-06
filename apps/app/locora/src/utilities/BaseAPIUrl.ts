@@ -1,11 +1,3 @@
-const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT;
-
 export default function baseAPIUrl() {
-    if (ENVIRONMENT === "dev") {
-        return "http://localhost:6767";
-    } else if (ENVIRONMENT == "main") {
-        return "https://api.locora.org";
-    } else {
-        return `https://${ENVIRONMENT}-locora-api.jeremymathew100.workers.dev`
-    }
+    return "https://api.locora.org"
 }
