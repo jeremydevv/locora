@@ -17,7 +17,7 @@ dotenv.config({ path: path.join(__dirname, '../.env') })
 process.env.APP_ROOT = path.join(__dirname, '..')
 
 export const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
-export const Environment = "development"
+export const Environment = "main"
 export const MAIN_DIST = path.join(process.env.APP_ROOT, 'dist-electron')
 export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist')
 
