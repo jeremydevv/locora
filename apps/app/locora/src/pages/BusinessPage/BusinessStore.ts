@@ -3,8 +3,12 @@ import { onNewMap, onQueryChange } from "../../components/Mapview/MapStore";
 import { GetIdToken } from "../../data/AuthStore";
 import GetBusinessesList from "../../data/maps/search/QuerySearch";
 
+// data holders
+
 let CurrentPayload: BusinessPayload[] | null = null;
 let SelectedPayload : BusinessPayload | null = null;
+
+// types
 
 export interface BusinessPayload {
     address : string,
@@ -53,8 +57,10 @@ export interface BusinessDataResponse {
 export type onBusinessDataChange = (businessData: BusinessPayload[]) => void
 export type onSelectedBusinessChange = (businessData: BusinessPayload | null) => void
 
+// actual program
+
 let OnChangeListeners: (onBusinessDataChange[]) = []
-let OnSelectedChangeListeners: (onSelectedBusinessChange | null) = null;
+let OnSelectedChangeListeners: (onSelectedBusinessChange[]) = [];
 
 function ChangeBusinessData(businessData: BusinessDataResponse) {
 
@@ -72,7 +78,10 @@ function ChangeBusinessData(businessData: BusinessDataResponse) {
 
 function ChangeSelectedBusinessData(businessData: BusinessPayload | null) {
     SelectedPayload = businessData
-    OnSelectedChangeListeners?.(SelectedPayload)
+    
+    OnSelectedChangeListeners.forEach((callback : onSelectedBusinessChange | null) => {
+        callback?.(SelectedPayload)
+    })
 }
 
 function OnBusinessDataChange(fn: onBusinessDataChange) {
@@ -84,10 +93,10 @@ function OnBusinessDataChange(fn: onBusinessDataChange) {
 }
 
 function OnSelectedBusinessChange(fn: onSelectedBusinessChange) {
-    OnSelectedChangeListeners = fn
+    OnSelectedChangeListeners.push(fn)
 
     return () => {
-        OnSelectedChangeListeners = null
+        OnSelectedChangeListeners = OnSelectedChangeListeners.filter((val) => val !== fn)
     }
 }
 
@@ -121,6 +130,11 @@ onQueryChange(async (query: string) => {
         return
     }
 
+    if (query === "" || query === null) {
+        ChangeBusinessData({} as BusinessDataResponse)
+        return
+    }
+
     const businessListData = await GetBusinessesList(idToken, query, {
         lat: (CurrentMap as Map).getCenter().lat,
         lon: (CurrentMap as Map).getCenter().lng,
@@ -142,6 +156,10 @@ onQueryChange(async (query: string) => {
         }
 
         panningTimeout = setTimeout(async () => {
+            if (getBusinessData() == {} as BusinessPayload[]) {
+                return
+            }
+
             const currentZoom = (CurrentMap as Map).getZoom()
 
             if (currentZoom == undefined || Math.floor(currentZoom) <= 8 ) {

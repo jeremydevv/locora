@@ -132,21 +132,6 @@ function AuthenticationPage() {
 
     }
 
-    async function LoginViaSocialConnector(connector: "google" | "microsoft") {
-
-        const Data = request(`/v1/auth/${connector}/login`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-
-        const Parsed = (await Data).json
-
-        console.log(Parsed)
-
-    }
-
     /*
         return cases:
             social connector? :
@@ -226,8 +211,6 @@ function AuthenticationPage() {
                 return
             }
 
-            RenderedCloudflare.current = true
-
             // @ts-ignore
             if (window.turnstile) {
                 console.log("Turnstile loaded")
@@ -238,6 +221,7 @@ function AuthenticationPage() {
                     theme: "dark",
                 });
                 setWidgetId(id)
+                RenderedCloudflare.current = true
             } else {
                 setTimeout(attemptTurnstileLoad, 500)
             }
@@ -287,11 +271,6 @@ function AuthenticationPage() {
                                         >
                                             Log in
                                         </h1>
-
-                                        <SocialConnectors
-                                            GoogleConnector={() => { LoginViaSocialConnector("google") }}
-                                            MicrosoftConnector={() => { LoginViaSocialConnector("microsoft") }}
-                                        />
 
                                     </div>
 

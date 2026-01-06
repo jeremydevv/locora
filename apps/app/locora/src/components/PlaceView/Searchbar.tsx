@@ -3,19 +3,23 @@ import { useEffect } from "react"
 import * as maplibregl from "maplibre-gl"
 import { onNewMap, setCurrentSearchQuery } from "../Mapview/MapStore"
 import { BusinessPayload, OnSelectedBusinessChange } from "../../pages/BusinessPage/BusinessStore";
+import { ChangePage } from "../../App";
 
 interface props {
-    changePage? : (newSection : number, data? : BusinessPayload) => void
+    changePage? : ChangePage
+    rawQueryChange : (q : string) => void
 }
 
-export default function PlaceSearchBar({changePage} : props) {
+export default function PlaceSearchBar({changePage, rawQueryChange} : props) {
 
     let QuerySubmitTimeout : NodeJS.Timeout | null = null;
 
     OnSelectedBusinessChange((businessData : BusinessPayload | null) => {
         console.log("Selected business changed in SearchResults component")
         if(businessData && changePage) {
-            changePage(5, businessData)
+            changePage(5, {
+                data : businessData
+            })
         }
     })
 
@@ -33,6 +37,9 @@ export default function PlaceSearchBar({changePage} : props) {
     }
 
     function QueryChange(newQuery : string) {
+
+        rawQueryChange(newQuery)
+        
         if (QuerySubmitTimeout) clearTimeout(QuerySubmitTimeout)
 
         QuerySubmitTimeout = setTimeout(() => {
@@ -57,7 +64,6 @@ export default function PlaceSearchBar({changePage} : props) {
         })
 
         return () => {
-            console.log("disconnected")
             Unsubscribe?.()
         }
     }, [])

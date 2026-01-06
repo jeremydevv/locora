@@ -10,6 +10,7 @@ import { handleUser } from "./routes/v1/user";
 import JSONResponse from "./routes/utils/JSONResponse";
 import { NotFound } from "./routes/utils/NotFound";
 import { handleMaps } from "./routes/v1/maps";
+import { handleBusiness } from "./routes/v1/business";
 
 const router = Router();
 
@@ -22,6 +23,7 @@ router.all("/v1/auth/*", handleAuth)
 router.all("/v1/waitlist/*", handleWaitlist);
 router.all("/v1/users/*", handleUser);
 router.all("/v1/maps/*", handleMaps)
+router.all("/v1/business/*", handleBusiness)
 
 router.all("*", (req : Request) => {
     console.log("couldnt be found in index.ts")

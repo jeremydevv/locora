@@ -45,32 +45,6 @@ async function isInSheet(req: Request, info: string) {
 
 }
 
-async function addToPhoneNumbers(req: Request, phoneNumber: string) {
-
-    const access_token = await getAccessToken();
-    const spreadsheet_id = (env as Env).SPREADSHEET_ID;
-
-    try {
-        const cleanedNumber = phoneNumber.replace(/[\s()-]/g, "").replace(/^\+/, "");
-        await fetch(
-            `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheet_id}/values/A:A:append?valueInputOption=USER_ENTERED`,
-            {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${access_token}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ values: [[`${cleanedNumber}`]] }),
-            }
-        );
-    } catch (error) {
-        return JSONResponse(req, { status: "error", message: "Error adding phone number to spreadsheet." }, 500);
-    }
-
-    return JSONResponse(req, { status: "success", message: "Phone number added to spreadsheet." });
-
-}
-
 async function addToEmails(req: Request, email: string) {
 
     const access_token = await getAccessToken();
@@ -100,4 +74,4 @@ async function addToEmails(req: Request, email: string) {
 
 }
 
-export { addToEmails, addToPhoneNumbers, isInSheet }
+export { addToEmails, isInSheet }

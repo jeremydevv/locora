@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import PageSwitch from "./pageswitch";
 import ProfileOpening from "./profileopening";
 
@@ -13,30 +13,30 @@ export default function BottomBar({homeActivated, exploreActivate, bookmarkActiv
 
     const [expanded, toggleExpansion] = useState<boolean>(false)
 
-    const ProfileActivated = () => {
+    const ProfileActivated = useCallback(() => {
         toggleExpansion(false)
         profileActivate?.()
-    }
+    },[toggleExpansion,profileActivate])
 
-    const HomeActivated = () => {
+    const HomeActivated = useCallback(() => {
         toggleExpansion(false)
         homeActivated?.()
-    }
+    },[toggleExpansion,homeActivated])
 
-    const BookmarkActivated = () => {
+    const BookmarkActivated = useCallback(() => {
         toggleExpansion(false)
         bookmarkActivate?.()
-    }
+    },[toggleExpansion,bookmarkActivate])
 
-    const ExploreActivated = () => {
+    const ExploreActivated = useCallback(() => {
         toggleExpansion(false)
         exploreActivate?.()
-    }
+    },[toggleExpansion,exploreActivate])
 
 
-    const ToggleProfileVisibility = () => {
+    const ToggleProfileVisibility = useCallback(() => {
         toggleExpansion(!expanded)
-    }
+    },[toggleExpansion])
 
     return (
         <>

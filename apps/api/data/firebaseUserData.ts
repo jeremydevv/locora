@@ -16,6 +16,12 @@ async function CreateUserRecord(uid: string, auth: string, info: { email: string
             profilePictureURL: { stringValue: "" },
             bannerPictureURL: { stringValue: "" },
 
+            favorites : { 
+                mapValue : {
+                    fields : {}
+                }
+            },
+
             createdAt: { timestampValue: new Date().toISOString() },
             coins: { integerValue: "0" },
         }
@@ -47,7 +53,7 @@ async function CreateUserRecord(uid: string, auth: string, info: { email: string
 
 }
 
-async function FetchUserRecord(uid : string, idToken : string, env: Env) {
+async function FetchUserRecord(uid : string, idToken : string, env: Env) : Promise<Record<string,object> | null> {
 
     const ProjectID = env.FIREBASE_PROJECT_ID
 
@@ -66,7 +72,7 @@ async function FetchUserRecord(uid : string, idToken : string, env: Env) {
             return null
         }
 
-        const ResultData : {fields : Record<string,string>} = await Result.json()
+        const ResultData : {fields : Record<string,object>} = await Result.json()
 
         return ResultData.fields
     } catch (error) {
