@@ -192,7 +192,11 @@ export default function Explore({
                                         return 
                                     }
 
-                                    return (<BusinessEmbed ShowRating={false} key={data.id} business_id={data.id} SwitchPage={SwitchPage} />)
+                                    try {
+                                        return (<BusinessEmbed ShowRating={false} key={data.id} business_id={data.id} SwitchPage={SwitchPage} />)
+                                    } catch(err) {
+                                        console.log("Issue when loading business!",err)
+                                    }
                                 })
                             }
                         </div>
@@ -224,7 +228,11 @@ export default function Explore({
                         <div className="flex flex-row overflow-x-scroll overflow-y-hidden gap-2 bg-bay-of-many-600 py-5 rounded-2xl pl-5">
                             {
                                 recentlyViewed?.map((business_id) => {
-                                    return (<BusinessEmbed key={business_id+"recentlyviewed"} business_id={business_id} SwitchPage={SwitchPage}/>)
+                                    try {
+                                        return (<BusinessEmbed key={business_id+"recentlyviewed"} business_id={business_id} SwitchPage={SwitchPage}/>)
+                                    } catch(err) {
+                                        console.log("Issue when loading embed!",err)
+                                    }
                                 })
                             }
                         </div>
