@@ -15,7 +15,7 @@ const router = Router({ base: "/v1/business/" });
 router.options("*", async (request : Request, env : Env) => {
     return Corsify(request,JSONResponse(request,{
         success : true
-    },200),false)
+    },200),true)
 })
 
 router.get("/ratings", async (request : Request, env : Env) => { 

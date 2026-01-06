@@ -6,10 +6,10 @@ export default function (req : Request, res : Response, hasAuthHeader? : boolean
 
     const headers = new Headers(res.headers);
 
-    if (!headers.get("Authorization") || hasAuthHeader) {
+    if (hasAuthHeader) {
+        headers.set("Access-Control-Allow-Origin","*")
+    } else if (!headers.get("Authorization") && !hasAuthHeader) {
         headers.set("Access-Control-Allow-Origin", IsAllowedOrigin && origin ? origin : "https://locora.org");
-    } else {
-        headers.set("Access-Control-Allow-Origin", "*");
     }
 
     headers.set("Access-Control-Allow-Methods", "GET,POST,OPTIONS");

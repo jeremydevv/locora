@@ -17,7 +17,7 @@ router.post("add", async (req : Request, env : Env) => {
 router.options("*", (req : Request) => {
     return Corsify(req, new Response(null, {
         status : 200
-    }));
+    }),false);
 });
 
 async function VerifyTurnstileToken(req : Request ,token: string, env : Env, ip?: string,) {
