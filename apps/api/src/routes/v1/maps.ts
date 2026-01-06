@@ -13,7 +13,7 @@ const router = Router({ base: "/v1/maps/" });
 router.options("*", (req: Request) => {
     return Corsify(req, new Response(null, {
         status: 200
-    }));
+    }),true);
 })
 
 router.get("/positionsearch", async (req: Request, env: Env) => {

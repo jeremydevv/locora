@@ -16073,9 +16073,7 @@ class ElectronStore extends Conf {
   }
 }
 function baseAPIUrl() {
-  {
-    return "http://localhost:6767";
-  }
+  return "https://api.locora.org";
 }
 var main = { exports: {} };
 const version = "17.2.3";
@@ -16418,7 +16416,7 @@ const __dirname$1 = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.join(__dirname$1, "../.env") });
 process.env.APP_ROOT = path.join(__dirname$1, "..");
 const VITE_DEV_SERVER_URL = process.env["VITE_DEV_SERVER_URL"];
-const Environment = "development";
+const Environment = "main";
 const MAIN_DIST = path.join(process.env.APP_ROOT, "dist-electron");
 const RENDERER_DIST = path.join(process.env.APP_ROOT, "dist");
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, "public") : RENDERER_DIST;
