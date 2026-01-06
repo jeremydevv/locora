@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { GetBusinessInformation } from "../data/business/place/getBusinessInformation"
 import TemplateThumbnail from "../assets/placeholder.png"
 import BaseCDNUrl from "../utilities/BaseCDNUrl"
 import { BusinessPayload } from "../pages/BusinessPage/BusinessStore"
 import { ChangePage } from "../App"
+import { PushRecentlyViewed } from "../pages/BusinessPage/ViewStore"
 
 interface props {
     business_id: string
@@ -34,7 +35,7 @@ export default function FavoritedPlace({ business_id, SwitchPage }: props) {
 
     }, [business_id])
 
-    async function ViewMoreDetails() {
+    const ViewMoreDetails = useCallback(async () => {
 
         const businessData = await GetBusinessInformation(business_id)
 
@@ -42,13 +43,13 @@ export default function FavoritedPlace({ business_id, SwitchPage }: props) {
             return
         }
 
-        console.log(businessData.thumbnail)
+        PushRecentlyViewed(business_id)
 
         SwitchPage(5, {
             data: businessData
         })
-
-    }
+        
+    },[business_id,businessData])
 
     return (
         <>

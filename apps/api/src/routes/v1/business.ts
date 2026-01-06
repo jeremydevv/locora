@@ -8,6 +8,7 @@ import WriteNewRating from "./User/ratings/WriteRating";
 import ViewBusinessRatings from "./Business/Endpoints/ViewRatings";
 import RemoveRating from "./User/ratings/RemoveRating";
 import Corsify from "../utils/Corsify";
+import BusinessSearch from "./Business/Endpoints/Search";
 
 const router = Router({ base: "/v1/business/" });
 
@@ -67,29 +68,25 @@ router.post("/ratings", async (request : Request, env : Env) => {
 
     return JSONResponse(request,{
         success : true,
-        message : "hello 1"
+        message : "Review was written!"
     })
 
 }) 
 
-router.delete("/ratings", async (request : Request, env : Env) => { 
+router.get("/search", async (request : Request, env : Env) => {
 
     const isRequestValidated = await checkForValidAuthorization(request,env)
 
     if (!isRequestValidated) {
-        console.log("request wasnt validated at secondary")
         return Unauthorized(request)
     }
 
-    const RemovedRating = await RemoveRating(request,env)
+    const SearchData = await BusinessSearch(request,env)
 
-    console.log(RemovedRating)
+    console.log(SearchData)
 
-    return JSONResponse(request,{
-        success : true,
-        message : "hello 2"
-    })
+    return SearchData
 
-}) 
+})
 
 export const handleBusiness = (req: Request, env: Env) => router.handle(req, env);

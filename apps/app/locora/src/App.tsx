@@ -75,7 +75,7 @@ function App() {
           }
           {
             SelectionEnum[currentPage] === "Explore" && (
-              <Explore />
+              <Explore SwitchPage={SwitchPage as ChangePage} />
             )
           }
           {

@@ -297,6 +297,12 @@ export default function BusinessPage({ businessData }: props) {
                                     >
                                         Contact Number: {businessData.contact.phone}
                                     </p>
+
+                                    <p
+                                        className="text-white/10 text-xs"
+                                    >
+                                        {businessData.id}
+                                    </p>
                                 </div>
 
                             </div>

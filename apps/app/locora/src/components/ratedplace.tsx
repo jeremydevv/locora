@@ -1,8 +1,10 @@
+import { useCallback } from "react"
 import { ChangePage } from "../App"
 import { GetBusinessInformation } from "../data/business/place/getBusinessInformation"
 import { UserRating } from "../data/user/ratings/getUserRatings"
 import BaseCDNUrl from "../utilities/BaseCDNUrl"
 import RatingBar from "./ratingbar"
+import { PushRecentlyViewed } from "../pages/BusinessPage/ViewStore"
 
 interface props {
     data: UserRating
@@ -13,19 +15,21 @@ export default function RatedPlace({ data, SwitchPage }: props) {
 
     const baseThumbnailURL = `https://cdn.locora.org/business_images/business_images/storefront_${data.fields.business_id.stringValue}.jpg`
 
-    async function ViewMoreDetails() {
+    const ViewMoreDetails = useCallback(async () => {
+    
+            const businessData = await GetBusinessInformation(data.fields.business_id.stringValue)
+    
+            if (!businessData) {
+                return
+            }
 
-        const businessData = await GetBusinessInformation(data.fields.business_id.stringValue)
-
-        if (!businessData) {
-            return
-        }
-
-        SwitchPage(5, {
-            data: businessData
-        })
-
-    }
+            PushRecentlyViewed(data.fields.business_id.stringValue)
+    
+            SwitchPage(5, {
+                data: businessData
+            })
+            
+    },[data,data.fields.business_id.stringValue])
 
     return (
         <>
