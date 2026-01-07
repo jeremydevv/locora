@@ -5,6 +5,7 @@ import cloud from "../assets/Clouds3.png"
 import BaseButton from "../components/button";
 
 import AppleIcon from "../assets/appleicon.svg"
+import GithubImage from "../assets/github.jpg"
 import MicrosoftIcon from "../assets/Microsoft.png"
 import { useState } from "react";
 
@@ -100,6 +101,15 @@ export default function DownloadPage() {
                                 preChildren={
                                     <img src={MicrosoftIcon} className="w-6 h-6 aspect-square p-0.5" />
                                 }
+                            />
+
+                            <BaseButton 
+                                otherProps="flex gap-2 text-white"
+                                text="Github Page"
+                                type="black"
+                                onClick={()=> {
+                                    window.open("https://github.com/jeremydevv/locora","_blank")
+                                }}
                             />
 
                         </div>
