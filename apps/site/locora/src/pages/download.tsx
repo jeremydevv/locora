@@ -5,7 +5,6 @@ import cloud from "../assets/Clouds3.png"
 import BaseButton from "../components/button";
 
 import AppleIcon from "../assets/appleicon.svg"
-import GithubImage from "../assets/github.jpg"
 import MicrosoftIcon from "../assets/Microsoft.png"
 import { useState } from "react";
 
