@@ -24,8 +24,8 @@ export default function DownloadPage() {
 
             const url =
                 os === "win"
-                    ? "https://cdn.locora.org/releases/win/Locora.Setup.1.1.0.exe"
-                    : "https://cdn.locora.org/releases/mac/Locora-1.1.0-arm64.dmg";
+                    ? "https://cdn.locora.org/releases/win/Locora.Setup.1.3.0.exe"
+                    : "https://cdn.locora.org/releases/mac/Locora-1.3.0.dmg";
 
             const a = document.createElement("a");
             a.href = url;
@@ -100,6 +100,15 @@ export default function DownloadPage() {
                                 preChildren={
                                     <img src={MicrosoftIcon} className="w-6 h-6 aspect-square p-0.5" />
                                 }
+                            />
+
+                            <BaseButton 
+                                otherProps="flex gap-2 text-white"
+                                text="Github Page"
+                                type="black"
+                                onClick={()=> {
+                                    window.open("https://github.com/jeremydevv/locora","_blank")
+                                }}
                             />
 
                         </div>
