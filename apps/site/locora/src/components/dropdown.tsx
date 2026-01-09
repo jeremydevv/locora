@@ -20,7 +20,6 @@ const elementDirectors : {[key : string] : string} = {
 const sectionTranslation : {[key : string] : string} = {
     [`What is this?`] : "info",
     [`AI Search`] : "features-1",
-    [`Waitlist Now!`] : "ending",
     ["Game-Based Experience"] : "features-2",
 }
 

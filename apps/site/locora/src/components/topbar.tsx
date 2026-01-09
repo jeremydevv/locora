@@ -4,7 +4,7 @@ import Locora from "../assets/BorderedLocora.png";
 // Comps
 import BaseButton from "./button";
 import WaitlistButton from "./waitlistbutton";
-import Dropdown from "./dropdown";
+import GithubIcon from "../assets/github-mark-white.png";
 
 // externals
 import { useMotionValueEvent, useScroll } from "framer-motion";
@@ -53,9 +53,17 @@ export default function TopBar({ PageType }: dropdownProps) {
                     </div>
 
                     {/* Middle dropdown */}
-                    <div className="flex-1 md:visible lg:flex xl:flex hidden justify-center items-center gap-2">
-                        <Dropdown label="Info" options={["What is this?", "Waitlist Now!"]} />
-                        <Dropdown label="Features" options={["AI Search", "Game-Based Experience"]} />
+                    <div className="flex-1 md:visible lg:flex xl:flex hidden justify-center items-center gap-4">
+                        <BaseButton 
+                            type="black"
+                            text="Github Page"
+                            onClick={() => {
+                                window.open("https://github.com/jeremydevv/locora")
+                            }}
+                            preChildren={
+                                <img src={GithubIcon} className="w-7 h-7 aspect-square p-1" />
+                            }
+                        />
                     </div>
 
                     {/* Right waitlist */}
